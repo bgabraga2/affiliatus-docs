@@ -53,7 +53,8 @@ A API possui limites de requisições para garantir estabilidade:
 
 | Endpoint | Limite | Período |
 |----------|--------|---------|
-| `/events/api` | 70 requisições | por minuto |
+| `/v1/events` | 70 requisições | por minuto |
+| `/v1/sdk/events` | 70 requisições | por minuto |
 | Outros endpoints | 100 requisições | por minuto |
 
 **Headers de resposta:**
@@ -189,7 +190,7 @@ Todas as respostas são em formato JSON:
 ### Enviar uma Conversão
 
 ```bash
-curl -X POST https://api.affiliatus.io/events/api \
+curl -X POST https://api.affiliatus.io/v1/events \
   -H "Content-Type: application/json" \
   -H "X-API-Key: sua_api_key_aqui" \
   -d '{

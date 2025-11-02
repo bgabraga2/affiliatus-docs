@@ -201,7 +201,7 @@ app.post("/webhook/newsletter", async (req, res) => {
   const sessionId = await getSessionFromEmail(email);
 
   if (affiliateId) {
-    await fetch("https://api.affiliatus.io/events/api", {
+    await fetch("https://api.affiliatus.io/v1/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -268,7 +268,7 @@ def track_lead_capture(lead_data):
     }
 
     response = requests.post(
-        'https://api.affiliatus.io/events/api',
+        'https://api.affiliatus.io/v1/events',
         headers={
             'Content-Type': 'application/json',
             'X-API-Key': os.getenv('AFFILIATUS_API_KEY')
@@ -332,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]]
         ];
 
-        $ch = curl_init('https://api.affiliatus.io/events/api');
+        $ch = curl_init('https://api.affiliatus.io/v1/events');
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'X-API-Key: ' . $_ENV['AFFILIATUS_API_KEY']

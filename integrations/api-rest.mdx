@@ -83,7 +83,7 @@ AFFILIATUS_API_URL=https://api.affiliatus.io
 ### URL Base
 
 ```
-https://api.affiliatus.io/events/api
+https://api.affiliatus.io/v1/events
 ```
 
 ### Autenticação
@@ -91,7 +91,7 @@ https://api.affiliatus.io/events/api
 Envie a API key no header `X-API-Key`:
 
 ```http
-POST https://api.affiliatus.io/events/api
+POST https://api.affiliatus.io/v1/events
 Content-Type: application/json
 X-API-Key: your_api_key_here
 ```
@@ -193,7 +193,7 @@ X-API-Key: your_api_key_here
 
 ```javascript
 const AFFILIATUS_API_KEY = process.env.AFFILIATUS_API_KEY;
-const AFFILIATUS_API_URL = "https://api.affiliatus.io/events/api";
+const AFFILIATUS_API_URL = "https://api.affiliatus.io/v1/events";
 
 async function sendConversion(orderId, orderValue, affiliateCode) {
   try {
@@ -254,7 +254,7 @@ const affiliatusClient = axios.create({
 
 async function sendConversion(orderId, orderValue, affiliateCode) {
   try {
-    const response = await affiliatusClient.post("/events/api", {
+    const response = await affiliatusClient.post("/v1/events", {
       events: [
         {
           event_type: "conversion",
@@ -287,7 +287,7 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
 
 function sendConversion($orderId, $orderValue, $affiliateCode) {
     $apiKey = getenv('AFFILIATUS_API_KEY');
-    $apiUrl = 'https://api.affiliatus.io/events/api';
+    $apiUrl = 'https://api.affiliatus.io/v1/events';
 
     $payload = json_encode([
         'events' => [
@@ -344,7 +344,7 @@ import requests
 from datetime import datetime
 
 AFFILIATUS_API_KEY = os.getenv('AFFILIATUS_API_KEY')
-AFFILIATUS_API_URL = 'https://api.affiliatus.io/events/api'
+AFFILIATUS_API_URL = 'https://api.affiliatus.io/v1/events'
 
 def send_conversion(order_id, order_value, affiliate_code):
     headers = {
@@ -391,7 +391,7 @@ require 'json'
 require 'uri'
 
 AFFILIATUS_API_KEY = ENV['AFFILIATUS_API_KEY']
-AFFILIATUS_API_URL = 'https://api.affiliatus.io/events/api'
+AFFILIATUS_API_URL = 'https://api.affiliatus.io/v1/events'
 
 def send_conversion(order_id, order_value, affiliate_code)
   uri = URI.parse(AFFILIATUS_API_URL)
@@ -470,7 +470,7 @@ type Payload struct {
 
 func sendConversion(orderID string, orderValue float64, affiliateCode string) error {
     apiKey := os.Getenv("AFFILIATUS_API_KEY")
-    apiURL := "https://api.affiliatus.io/events/api"
+    apiURL := "https://api.affiliatus.io/v1/events"
 
     payload := Payload{
         Events: []Event{
@@ -673,7 +673,7 @@ Você pode enviar múltiplos eventos em uma única requisição:
 ### 1. Teste com cURL
 
 ```bash
-curl -X POST https://api.affiliatus.io/events/api \
+curl -X POST https://api.affiliatus.io/v1/events \
   -H "Content-Type: application/json" \
   -H "X-API-Key: sua_api_key_aqui" \
   -d '{
@@ -706,7 +706,7 @@ Importe esta collection:
     {
       "name": "Send Conversion",
       "method": "POST",
-      "url": "https://api.affiliatus.io/events/api",
+      "url": "https://api.affiliatus.io/v1/events",
       "headers": {
         "Content-Type": "application/json",
         "X-API-Key": "{{API_KEY}}"
@@ -750,7 +750,7 @@ Importe esta collection:
 
 ```bash
 # Teste se a API key está válida
-curl -X POST https://api.affiliatus.io/events/api \
+curl -X POST https://api.affiliatus.io/v1/events \
   -H "X-API-Key: sua_api_key" \
   -H "Content-Type: application/json" \
   -d '{"events":[]}'

@@ -167,7 +167,7 @@ app.get("/produto/:id", async (req, res) => {
   const sessionId = req.cookies.session_id;
 
   if (affiliateId) {
-    await fetch("https://api.affiliatus.io/events/api", {
+    await fetch("https://api.affiliatus.io/v1/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -226,7 +226,7 @@ function trackPageView($affiliateId, $sessionId, $pageTitle) {
         ]]
     ];
 
-    $ch = curl_init('https://api.affiliatus.io/events/api');
+    $ch = curl_init('https://api.affiliatus.io/v1/events');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
         'X-API-Key: ' . $_ENV['AFFILIATUS_API_KEY']

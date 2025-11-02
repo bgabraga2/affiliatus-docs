@@ -25,7 +25,7 @@
     }
   ],
   "paths": {
-    "/events/api": {
+    "/v1/events": {
       "post": {
         "summary": "Enviar Eventos",
         "description": "Envia eventos de rastreamento (conversões, leads, page views) para o sistema",
