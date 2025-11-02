@@ -5,36 +5,64 @@ description: "Rastreie conversões manualmente via código JavaScript"
 
 ## Visão Geral
 
-A integração via SDK JavaScript permite que você rastreie conversões manualmente no seu site, colocando um código na página de confirmação de compra ou sucesso.
+A SDK JavaScript é a **base de todas as integrações** do Affiliatus. Ela é responsável por:
 
-**Quando usar:**
-- Você tem controle total do código do seu site
-- Seu checkout é customizado
-- Você não usa Stripe ou Woovi
-- Precisa de flexibilidade máxima
+1. **Capturar o código do afiliado** da URL (`?ref=CODIGO`)
+2. **Salvar em um cookie** que dura 30 dias
+3. **Rastrear page views** automaticamente
+4. **Enviar conversões** (se você usar este método)
+
+<Warning>
+  **A SDK é obrigatória!** Mesmo que você use Stripe, Woovi ou API REST, você PRECISA instalar a SDK primeiro. 
+  Sem ela, o sistema não consegue saber qual afiliado trouxe o cliente.
+</Warning>
+
+**Esta página ensina:**
+- ✅ Como instalar a SDK (obrigatório para todos)
+- ✅ Como usar `trackConversion()` para enviar vendas (opcional se usar Stripe/Woovi/API REST)
 
 ---
 
 ## Como Funciona
 
-1. Cliente acessa seu site com link de afiliado (`?ref=CODIGO`)
-2. SDK salva o código do afiliado em um cookie
-3. Cliente navega pelo site (código permanece salvo)
-4. Cliente finaliza a compra
-5. **Você chama `trackConversion()` na página de sucesso**
-6. SDK envia a conversão com o código do afiliado
+### 1. Rastreamento Automático (Obrigatório)
 
-<Note>O cookie dura 30 dias por padrão. Mesmo que o cliente volte dias depois, a conversão ainda será atribuída ao afiliado!</Note>
+```mermaid
+graph LR
+    A[Cliente clica ?ref=CODIGO] --> B[SDK captura código]
+    B --> C[SDK salva em cookie]
+    C --> D[Cookie dura 30 dias]
+```
+
+**Isso acontece automaticamente quando a SDK está instalada!**
+
+### 2. Conversão Manual (Opcional)
+
+Se você **NÃO** usar Stripe/Woovi/API REST, use este método:
+
+```mermaid
+graph LR
+    A[Cookie com código] --> B[Cliente compra]
+    B --> C[Página de sucesso]
+    C --> D[trackConversion chamado]
+    D --> E[Conversão enviada]
+```
+
+<Note>
+  O cookie dura 30 dias por padrão. Mesmo que o cliente volte dias depois, a conversão ainda será atribuída ao afiliado!
+</Note>
 
 ---
 
-## Instalação
+## Instalação da SDK (Obrigatório)
 
 ### Passo 1: Adicione o SDK no `<head>`
 
-Você já deve ter feito isso no [Passo 4 do Quickstart](/quickstart#passo-4-instale-o-codigo-no-seu-site). 
+<Warning>
+  **Este passo é obrigatório para TODAS as integrações!** Sem a SDK instalada, Stripe, Woovi e API REST não funcionarão.
+</Warning>
 
-Se ainda não fez, adicione este código dentro da tag `<head>` do seu site:
+Adicione este código dentro da tag `<head>` de **todas as páginas** do seu site:
 
 ```html
 <script src="https://cdn.affiliatus.io/latest/affiliatus.min.js"></script>
@@ -50,9 +78,21 @@ Se ainda não fez, adicione este código dentro da tag `<head>` do seu site:
 
 <Warning>Substitua `SEU_ID_DA_CAMPANHA` pelo ID real da sua campanha. Você encontra isso em "Como integrar" no dashboard.</Warning>
 
+**Pronto! A SDK já está funcionando e salvando cookies automaticamente.**
+
+<Tip>
+  Se você vai usar Stripe, Woovi ou API REST para enviar conversões, **pode parar aqui**. 
+  A SDK já está fazendo seu trabalho (salvar cookies). Vá para o guia específico da sua integração.
+</Tip>
+
 ---
 
-## Rastreando Conversões
+## Rastreando Conversões (Opcional)
+
+<Note>
+  Esta seção é apenas se você **NÃO** vai usar Stripe, Woovi ou API REST. 
+  Se vai usar algum deles, pule para o [guia específico](/integrations/introduction).
+</Note>
 
 ### Método Básico
 

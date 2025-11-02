@@ -7,11 +7,16 @@ description: "Automatize conversões via PIX com webhook da Woovi"
 
 A integração com Woovi (OpenPix) cria conversões **automaticamente** quando um pagamento via PIX é confirmado. Perfeito para quem aceita PIX como forma de pagamento!
 
+<Warning>
+  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar instalada no seu site! 
+  Ela é responsável por salvar o cookie com o código do afiliado. Esta integração Woovi é **complementar** à SDK.
+</Warning>
+
 **Quando usar:**
 - Você usa Woovi/OpenPix para processar PIX
-- Quer automação total sem código adicional
+- Quer automação total de conversões
 - Aceita pagamentos instantâneos via PIX
-- Busca integração nativa com pagamentos brasileiros
+- Já tem a SDK instalada
 
 ---
 
@@ -19,21 +24,25 @@ A integração com Woovi (OpenPix) cria conversões **automaticamente** quando u
 
 ```mermaid
 graph LR
-    A[Cliente acessa com ?ref=CODIGO] --> B[Cookie é salvo]
+    A[Cliente acessa com ?ref=CODIGO] --> B[SDK salva cookie]
     B --> C[Cliente gera PIX na Woovi]
-    C --> D[PIX é pago]
-    D --> E[Woovi envia webhook]
-    E --> F[Affiliatus cria conversão automaticamente]
+    C --> D[Código passado via additionalInfo]
+    D --> E[PIX é pago]
+    E --> F[Woovi envia webhook]
+    F --> G[Conversão criada automaticamente]
 ```
 
-1. Cliente acessa site com link de afiliado
-2. Código do afiliado é passado no `additionalInfo` da cobrança
+1. **SDK salva cookie:** Cliente acessa com `?ref=CODIGO`, SDK salva no cookie
+2. **additionalInfo na cobrança:** Seu backend lê o cookie e passa para a Woovi
 3. Cliente escaneia QR Code e paga o PIX
 4. Woovi confirma o pagamento
-5. **Woovi envia webhook para o Affiliatus**
+5. **Woovi envia webhook** com o código do afiliado
 6. **Conversão é criada automaticamente** ✨
 
-<Note>Você não precisa chamar `trackConversion()` manualmente! O webhook faz tudo.</Note>
+<Note>
+  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30 dias. 
+  Seu backend lê esse cookie e passa para a Woovi via additionalInfo.
+</Note>
 
 ---
 

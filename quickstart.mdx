@@ -117,9 +117,13 @@ Agora sim! Com a segurança configurada, é hora de cadastrar as pessoas que vã
 
 ---
 
-## Passo 4: Instale o código no seu site
+## Passo 4: Instale o SDK no seu site
 
-Esta é a parte técnica, mas vamos simplificar ao máximo! É como instalar o Google Analytics no seu site.
+**Este passo é obrigatório para todas as integrações!** A SDK é responsável por rastrear cliques, salvar cookies com o código do afiliado e capturar page views. Mesmo que você use Stripe ou Woovi, precisa da SDK instalada.
+
+<Note>
+  **Importante:** A SDK faz o rastreamento básico (cliques e cookies). Stripe/Woovi/API REST só automatizam o envio de **conversões**.
+</Note>
 
 <AccordionGroup>
   <Accordion icon="code" title="Copie o código de instalação">
@@ -211,13 +215,17 @@ Agora seus afiliados precisam saber como divulgar seu produto!
 
 ---
 
-## Passo 6: Rastreie conversões (vendas)
+## Passo 6: Configure o rastreamento de conversões
 
-Existem 4 formas de rastrear quando alguém compra através do link de um afiliado:
+Agora você precisa escolher **como rastrear as vendas**. A SDK já está instalada (Passo 4) e rastreando cliques. Agora escolha como enviar as conversões:
+
+<Note>
+  **Lembre-se:** A SDK do Passo 4 é obrigatória para TODAS as opções abaixo. Ela gerencia cookies e page views. Aqui você está escolhendo apenas como enviar **conversões (vendas)**.
+</Note>
 
 <AccordionGroup>
-  <Accordion icon="code" title="1. Via SDK JavaScript (Manual)">
-    Adicione um código JavaScript na sua página de confirmação de compra:
+  <Accordion icon="code" title="1. Via SDK JavaScript (Recomendado para começar)">
+    Use a própria SDK para enviar conversões na página de confirmação:
     
     ```javascript
     tracker.trackConversion({
@@ -226,7 +234,10 @@ Existem 4 formas de rastrear quando alguém compra através do link de um afilia
     });
     ```
     
-    **Quando usar:** Se você tem controle total do seu site e checkout.
+    **Quando usar:** 
+    - Você está começando e quer algo simples
+    - Tem controle do código do checkout
+    - Não usa Stripe ou Woovi
     
     <Card title="Ver guia completo" icon="book" href="/integrations/sdk-javascript">
       Aprenda a implementar conversões via SDK JavaScript
@@ -234,12 +245,13 @@ Existem 4 formas de rastrear quando alguém compra através do link de um afilia
   </Accordion>
   
   <Accordion icon="credit-card" title="2. Via Stripe (Automático)">
-    Conecte seu Stripe e as conversões são criadas automaticamente quando um pagamento é aprovado.
+    **Complementar à SDK!** Configure o webhook do Stripe para criar conversões automaticamente.
     
     **Como funciona:**
-    - Configure o webhook do Stripe
-    - Quando alguém compra, o Stripe envia os dados
-    - A conversão é criada automaticamente
+    - SDK salva o código do afiliado no cookie
+    - Cliente faz checkout no Stripe (você passa o código via metadata)
+    - Stripe envia webhook quando pagamento é aprovado
+    - Conversão criada automaticamente
     
     **Quando usar:** Se você usa Stripe para processar pagamentos.
     
@@ -249,12 +261,13 @@ Existem 4 formas de rastrear quando alguém compra através do link de um afilia
   </Accordion>
   
   <Accordion icon="brazilian-real-sign" title="3. Via Woovi/OpenPix (Automático)">
-    Conecte sua conta Woovi (OpenPix) e as conversões via PIX são criadas automaticamente.
+    **Complementar à SDK!** Configure o webhook da Woovi para criar conversões automaticamente.
     
     **Como funciona:**
-    - Configure o webhook da Woovi
-    - Quando um PIX é confirmado, a Woovi envia os dados
-    - A conversão é criada automaticamente
+    - SDK salva o código do afiliado no cookie
+    - Cliente gera PIX na Woovi (você passa o código via additionalInfo)
+    - Woovi envia webhook quando PIX é confirmado
+    - Conversão criada automaticamente
     
     **Quando usar:** Se você usa Woovi/OpenPix para receber pagamentos via PIX.
     
@@ -264,14 +277,15 @@ Existem 4 formas de rastrear quando alguém compra através do link de um afilia
   </Accordion>
   
   <Accordion icon="server" title="4. Via API REST (Backend)">
-    Envie conversões diretamente do seu backend usando API keys.
+    **Complementar à SDK!** Envie conversões do backend usando API keys.
     
     **Como funciona:**
-    - Crie uma API key no dashboard
-    - Após processar o pagamento no backend
-    - Envie um POST para a API com a conversão
+    - SDK salva o código do afiliado no cookie
+    - Cliente compra e seu backend processa
+    - Backend lê o cookie ou metadata e envia POST para API
+    - Conversão criada automaticamente
     
-    **Quando usar:** Integrações server-side ou gateways não suportados.
+    **Quando usar:** Integrações server-side ou gateways não suportados (Mercado Pago, PagSeguro).
     
     <Card title="Ver guia completo" icon="code" href="/integrations/api-rest">
       Aprenda a usar a API REST para conversões
@@ -279,9 +293,14 @@ Existem 4 formas de rastrear quando alguém compra através do link de um afilia
   </Accordion>
 </AccordionGroup>
 
+<Warning>
+  **SDK é obrigatória:** Todas as opções acima precisam da SDK instalada (Passo 4). 
+  Ela gerencia cookies e page views. Você está escolhendo apenas como enviar as **conversões**.
+</Warning>
+
 <Tip>
-  **Recomendação:** Use integrações automáticas (Stripe ou Woovi) sempre que possível. 
-  Para outros gateways, use API REST (backend) ou SDK JavaScript (frontend).
+  **Recomendação:** Comece com SDK JavaScript puro (opção 1) se estiver testando. 
+  Depois adicione Stripe/Woovi/API REST para automação.
 </Tip>
 
 ---

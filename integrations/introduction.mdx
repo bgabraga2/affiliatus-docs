@@ -5,53 +5,79 @@ description: "Conecte seu sistema de pagamento para rastrear conversões automat
 
 ## Visão Geral
 
-O Affiliatus oferece 4 formas principais de rastrear conversões (vendas) no seu programa de afiliados. Escolha a que melhor se adapta ao seu negócio.
+O sistema de rastreamento do Affiliatus funciona em **duas camadas**:
+
+1. **SDK JavaScript (Base obrigatória):** Rastreia cliques, salva cookies e page views
+2. **Método de Conversão (Escolha um):** Define como as vendas são enviadas
+
+<Warning>
+  **A SDK JavaScript é obrigatória para TODAS as integrações!** 
+  Ela gerencia os cookies com o código do afiliado. Sem ela, nenhuma conversão será atribuída corretamente.
+</Warning>
 
 ---
 
-## Métodos Disponíveis
+## 1. Instale a SDK (Obrigatório)
+
+Primeiro, instale a SDK JavaScript no seu site. Ela é a base de tudo:
+
+<Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
+  **Instale primeiro!** Guia completo de instalação da SDK
+</Card>
+
+**O que a SDK faz:**
+- ✅ Captura o código do afiliado da URL (`?ref=CODIGO`)
+- ✅ Salva em um cookie que dura 30 dias
+- ✅ Rastreia visualizações de página (page views)
+- ✅ Pode enviar conversões (se usar método JavaScript)
+
+---
+
+## 2. Escolha o Método de Conversão
+
+Depois da SDK instalada, escolha **como enviar as conversões (vendas)**:
 
 <CardGroup cols={2}>
-  <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
-    **Manual**
+  <Card title="A. Via SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
+    **Manual - Mais simples**
     
-    Rastreie conversões via código JavaScript na sua página de sucesso.
+    Use a própria SDK para enviar conversões na página de sucesso.
     
     **Ideal para:**
+    - Começar rápido
     - Checkout customizado
-    - Controle total do código
-    - Qualquer plataforma web
+    - Não usa Stripe/Woovi
   </Card>
   
-  <Card title="Stripe" icon="credit-card" href="/integrations/stripe">
-    **Automático**
+  <Card title="B. Via Stripe" icon="credit-card" href="/integrations/stripe">
+    **Automático - Webhook**
     
-    Conversões criadas automaticamente via webhook do Stripe.
+    Conversões criadas automaticamente quando pagamento é aprovado.
     
     **Ideal para:**
-    - Pagamentos com cartão
+    - Usa Stripe
     - Assinaturas recorrentes
-    - Público internacional
+    - Zero trabalho manual
   </Card>
   
-  <Card title="Woovi/OpenPix" icon="barcode" href="/integrations/woovi">
-    **Automático**
+  <Card title="C. Via Woovi" icon="barcode" href="/integrations/woovi">
+    **Automático - Webhook**
     
-    Conversões criadas automaticamente quando o PIX é confirmado.
+    Conversões criadas automaticamente quando PIX é confirmado.
     
     **Ideal para:**
+    - Usa Woovi/OpenPix
     - Pagamentos via PIX
-    - Clientes brasileiros
-    - Conversões instantâneas
+    - Mercado brasileiro
   </Card>
   
-  <Card title="API REST" icon="server" href="/integrations/api-rest">
-    **Backend**
+  <Card title="D. Via API REST" icon="server" href="/integrations/api-rest">
+    **Manual - Backend**
     
-    Envie conversões direto do seu servidor usando API keys.
+    Envie conversões do servidor após processar pagamento.
     
     **Ideal para:**
-    - Integrações server-side
+    - Mercado Pago/PagSeguro
     - Gateways não suportados
     - Controle total backend
   </Card>
@@ -59,24 +85,39 @@ O Affiliatus oferece 4 formas principais de rastrear conversões (vendas) no seu
 
 ---
 
-## Comparação
+## Comparação dos Métodos de Conversão
 
-| Característica | SDK JavaScript | Stripe | Woovi | API REST |
-|----------------|----------------|--------|-------|----------|
+<Note>
+  **Lembre-se:** A SDK JavaScript é obrigatória para todos! Esta tabela compara apenas os **métodos de envio de conversões**.
+</Note>
+
+| Característica | A. SDK trackConversion() | B. Stripe Webhook | C. Woovi Webhook | D. API REST |
+|----------------|--------------------------|-------------------|------------------|-------------|
+| **SDK obrigatória?** | ✅ Sim | ✅ Sim | ✅ Sim | ✅ Sim |
 | **Automação** | Manual | Automático | Automático | Manual |
-| **Complexidade** | Média | Baixa | Baixa | Média |
-| **Método de pagamento** | Qualquer | Cartão | PIX | Qualquer |
-| **Onde roda** | Frontend | Webhook | Webhook | Backend |
-| **Velocidade** | Instantâneo | 1-3s | Instantâneo | Instantâneo |
-| **Requer código** | ✅ Sim | ❌ Não | ❌ Não | ✅ Sim |
-| **Webhook** | ❌ Não | ✅ Sim | ✅ Sim | ❌ Não |
-| **Manutenção** | Alta | Baixa | Baixa | Média |
+| **Complexidade** | Baixa | Média | Média | Média |
+| **Gateway** | Qualquer | Stripe | Woovi | Qualquer |
+| **Onde chama** | Página sucesso | Webhook | Webhook | Backend |
+| **Código extra** | ✅ 3 linhas JS | ✅ Config webhook | ✅ Config webhook | ✅ Backend |
+| **Manutenção** | Baixa | Baixa | Baixa | Média |
 
 ---
 
-## Fluxo de Integração
+## Fluxos de Integração
 
-### 1. SDK JavaScript (Manual)
+### Fluxo Base (Obrigatório)
+
+```mermaid
+graph LR
+    A[Cliente clica link ?ref=CODIGO] --> B[SDK salva cookie]
+    B --> C[Cookie dura 30 dias]
+```
+
+**A SDK JavaScript deve estar instalada em TODOS os casos!**
+
+---
+
+### Método A: Conversão via SDK JavaScript
 
 ```mermaid
 graph LR
@@ -88,48 +129,48 @@ graph LR
 ```
 
 **Prós:**
-- ✅ Funciona com qualquer gateway de pagamento
-- ✅ Máxima flexibilidade
-- ✅ Sem dependência de terceiros
+- ✅ Mais simples para começar
+- ✅ Funciona com qualquer gateway
+- ✅ Apenas 3 linhas de código
 
 **Contras:**
-- ❌ Requer implementação manual
-- ❌ Mais sujeito a erros
-- ❌ Precisa atualizar código
+- ❌ Precisa chamar manualmente na página de sucesso
+- ❌ Pode falhar se JavaScript estiver desabilitado
 
 ---
 
-### 2. Stripe (Automático)
+### Método B: Conversão via Stripe
 
 ```mermaid
 graph LR
-    A[Link de afiliado] --> B[Metadata no checkout]
-    B --> C[Pagamento aprovado]
-    C --> D[Stripe envia webhook]
-    D --> E[Conversão criada automaticamente]
+    A[SDK salva cookie] --> B[Backend lê cookie]
+    B --> C[Passa via metadata]
+    C --> D[Pagamento aprovado]
+    D --> E[Stripe webhook]
+    E --> F[Conversão criada]
 ```
 
 **Prós:**
 - ✅ Totalmente automático
-- ✅ Zero trabalho manual
+- ✅ Zero trabalho manual na conversão
 - ✅ Confiável e testado
 - ✅ Suporta assinaturas
 
 **Contras:**
-- ❌ Apenas para Stripe
-- ❌ Depende de webhook
-- ❌ Taxas do Stripe (~4.99%)
+- ❌ Apenas para quem usa Stripe
+- ❌ Requer configuração de webhook
 
 ---
 
-### 3. Woovi/OpenPix (Automático)
+### Método C: Conversão via Woovi
 
 ```mermaid
 graph LR
-    A[Link de afiliado] --> B[additionalInfo na cobrança]
-    B --> C[PIX pago]
-    C --> D[Woovi envia webhook]
-    D --> E[Conversão criada automaticamente]
+    A[SDK salva cookie] --> B[Backend lê cookie]
+    B --> C[Passa via additionalInfo]
+    C --> D[PIX pago]
+    D --> E[Woovi webhook]
+    E --> F[Conversão criada]
 ```
 
 **Prós:**
@@ -139,110 +180,119 @@ graph LR
 - ✅ Perfeito para Brasil
 
 **Contras:**
-- ❌ Apenas para Woovi
-- ❌ Depende de webhook
-- ❌ Limitado ao Brasil
+- ❌ Apenas para quem usa Woovi
+- ❌ Requer configuração de webhook
 
 ---
 
-### 4. API REST (Backend)
+### Método D: Conversão via API REST
 
 ```mermaid
 graph LR
-    A[Link de afiliado] --> B[Cliente compra]
+    A[SDK salva cookie] --> B[Cliente compra]
     B --> C[Backend processa]
-    C --> D[Backend envia POST]
-    D --> E[Conversão criada]
+    C --> D[Backend lê cookie]
+    D --> E[Backend envia POST]
+    E --> F[Conversão criada]
 ```
 
 **Prós:**
-- ✅ Funciona com qualquer gateway
+- ✅ Funciona com qualquer gateway (Mercado Pago, PagSeguro, etc)
 - ✅ Server-side (mais seguro)
 - ✅ Controle total do fluxo
-- ✅ Não depende de JavaScript
+- ✅ Não depende de JavaScript para conversão
 
 **Contras:**
-- ❌ Requer implementação manual
+- ❌ Requer implementação no backend
 - ❌ Precisa gerenciar API keys
 - ❌ Rate limit (70 req/min)
 
 ---
 
-## Qual Escolher?
+## Qual Método de Conversão Escolher?
 
-### Use **SDK JavaScript** se:
+<Note>**Primeiro instale a SDK!** Depois escolha um dos métodos abaixo.</Note>
 
-- Você tem checkout customizado
-- Usa gateway não suportado (PagSeguro, Mercado Pago, etc)
-- Precisa de controle total do fluxo
-- Tem desenvolvedores disponíveis
+### Use **Método A (SDK trackConversion)** se:
 
-### Use **Stripe** se:
+- Você está começando e quer algo rápido
+- Tem controle do código da página de sucesso
+- Não usa Stripe ou Woovi
+- Quer a solução mais simples (3 linhas de código)
+
+### Use **Método B (Stripe)** se:
 
 - Você usa Stripe para processar pagamentos
-- Quer automação total
+- Quer automação total de conversões
 - Aceita cartão de crédito/débito
-- Tem clientes internacionais
+- Não quer chamar `trackConversion()` manualmente
 
-### Use **Woovi** se:
+### Use **Método C (Woovi)** se:
 
 - Você usa Woovi/OpenPix
 - Aceita PIX como pagamento
 - Foca no mercado brasileiro
-- Quer taxas mais baixas
+- Quer automação total com taxas menores
 
-### Use **API REST** se:
+### Use **Método D (API REST)** se:
 
+- Usa Mercado Pago, PagSeguro, Asaas ou outro gateway
 - Processa pagamentos no backend
-- Usa gateway não suportado (PagSeguro, Mercado Pago, etc)
 - Precisa de integração server-to-server
 - Quer máxima segurança (API keys no servidor)
 
 ---
 
-## Posso Usar Mais de Uma?
+## Posso Usar Mais de Um Método?
 
-**Sim!** Você pode combinar múltiplas integrações:
+**Sim!** Você pode combinar múltiplos métodos de conversão:
 
 **Exemplos comuns:**
 
-**Cenário 1:**
-- **Stripe** para assinaturas mensais (cartão)
-- **Woovi** para pagamentos únicos (PIX)
-- **SDK JavaScript** como fallback
+**Cenário 1: E-commerce Multi-Gateway**
+- **SDK instalada** (obrigatória - rastreia cliques)
+- **Método B (Stripe)** para assinaturas mensais (cartão)
+- **Método C (Woovi)** para pagamentos únicos (PIX)
+- **Método A (SDK)** como fallback para outros casos
 
-**Cenário 2:**
-- **API REST** para Mercado Pago/PagSeguro
-- **Stripe** para clientes internacionais
-- **Woovi** para PIX
-
-Cada conversão será criada pelo método que capturou a venda.
+**Cenário 2: SaaS com Diversos Gateways**
+- **SDK instalada** (obrigatória - rastreia cliques)
+- **Método D (API REST)** para Mercado Pago/PagSeguro
+- **Método B (Stripe)** para clientes internacionais
+- **Método C (Woovi)** para PIX brasileiro
 
 <Tip>
-  Recomendamos começar com a integração mais usada no seu negócio e adicionar outras conforme necessário.
+  **Recomendação:** Comece apenas com SDK + Método A (trackConversion). 
+  Depois adicione Stripe/Woovi/API REST conforme seu negócio crescer.
 </Tip>
 
 ---
 
 ## Primeiros Passos
 
-Escolha um método abaixo para começar:
+### 1. Instale a SDK (Obrigatório)
+
+<Card title="Instalar SDK JavaScript" icon="download" href="/integrations/sdk-javascript">
+  **Comece aqui!** Instale a SDK no seu site (5 minutos)
+</Card>
+
+### 2. Escolha o Método de Conversão
 
 <CardGroup cols={2}>
-  <Card title="SDK JavaScript" icon="arrow-right" href="/integrations/sdk-javascript">
-    Ver guia completo
+  <Card title="A. trackConversion()" icon="code" href="/integrations/sdk-javascript#rastreando-conversoes">
+    Mais simples para começar
   </Card>
   
-  <Card title="Stripe" icon="arrow-right" href="/integrations/stripe">
-    Ver guia completo
+  <Card title="B. Stripe" icon="credit-card" href="/integrations/stripe">
+    Se usa Stripe (automático)
   </Card>
   
-  <Card title="Woovi" icon="arrow-right" href="/integrations/woovi">
-    Ver guia completo
+  <Card title="C. Woovi" icon="barcode" href="/integrations/woovi">
+    Se usa Woovi/PIX (automático)
   </Card>
   
-  <Card title="API REST" icon="arrow-right" href="/integrations/api-rest">
-    Ver guia completo
+  <Card title="D. API REST" icon="server" href="/integrations/api-rest">
+    Outros gateways (backend)
   </Card>
 </CardGroup>
 

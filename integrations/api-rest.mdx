@@ -5,13 +5,18 @@ description: "Envie conversões via API REST usando API keys"
 
 ## Visão Geral
 
-A integração via API REST permite que você envie conversões diretamente do seu backend, sem depender de JavaScript no frontend. Perfeito para integrações server-side e sistemas legados.
+A integração via API REST permite que você envie conversões diretamente do seu backend usando API keys. Perfeito para integrações server-side com gateways não suportados.
+
+<Warning>
+  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar instalada no seu site! 
+  Ela é responsável por salvar o cookie com o código do afiliado. Esta integração API REST é **complementar** à SDK.
+</Warning>
 
 **Quando usar:**
 - Você processa conversões no backend
-- Usa gateway de pagamento não suportado
-- Precisa de controle total sobre quando enviar eventos
+- Usa gateway não suportado (Mercado Pago, PagSeguro, Asaas)
 - Quer integração server-to-server
+- Já tem a SDK instalada
 
 ---
 
@@ -19,19 +24,25 @@ A integração via API REST permite que você envie conversões diretamente do s
 
 ```mermaid
 graph LR
-    A[Cliente compra] --> B[Seu backend processa]
-    B --> C[Backend envia POST para API]
-    C --> D[API valida API key]
-    D --> E[Conversão criada automaticamente]
+    A[Cliente acessa com ?ref=CODIGO] --> B[SDK salva cookie]
+    B --> C[Cliente compra]
+    C --> D[Backend processa pagamento]
+    D --> E[Backend lê cookie/session]
+    E --> F[Backend envia POST para API]
+    F --> G[Conversão criada automaticamente]
 ```
 
-1. Cliente finaliza compra no seu sistema
-2. Seu backend processa o pagamento
-3. **Backend envia conversão via API REST**
-4. API valida a API key
-5. **Conversão é criada automaticamente** ✨
+1. **SDK salva cookie:** Cliente acessa com `?ref=CODIGO`, SDK salva no cookie
+2. Cliente finaliza compra no seu sistema
+3. Seu backend processa o pagamento
+4. **Backend lê o código do afiliado** (do cookie ou session)
+5. **Backend envia conversão via API REST**
+6. API valida e cria a conversão ✨
 
-<Note>Essa integração é totalmente server-side - nenhum código JavaScript no frontend!</Note>
+<Note>
+  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30 dias. 
+  Seu backend deve ler esse cookie antes de enviar a conversão via API.
+</Note>
 
 ---
 

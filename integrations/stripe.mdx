@@ -5,13 +5,18 @@ description: "Automatize conversões via webhook do Stripe"
 
 ## Visão Geral
 
-A integração com Stripe cria conversões **automaticamente** quando um pagamento é aprovado no Stripe. Você não precisa escrever código adicional - tudo é feito via webhook.
+A integração com Stripe cria conversões **automaticamente** quando um pagamento é aprovado no Stripe. Você não precisa chamar `trackConversion()` manualmente - tudo é feito via webhook.
+
+<Warning>
+  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar instalada no seu site! 
+  Ela é responsável por salvar o cookie com o código do afiliado. Esta integração Stripe é **complementar** à SDK.
+</Warning>
 
 **Quando usar:**
 - Você usa Stripe para processar pagamentos
-- Quer automação total (zero trabalho manual)
+- Quer automação total de conversões
 - Processa assinaturas recorrentes ou pagamentos únicos
-- Quer reduzir erros de rastreamento
+- Já tem a SDK instalada
 
 ---
 
@@ -19,21 +24,25 @@ A integração com Stripe cria conversões **automaticamente** quando um pagamen
 
 ```mermaid
 graph LR
-    A[Cliente acessa com ?ref=CODIGO] --> B[Cookie é salvo]
+    A[Cliente acessa com ?ref=CODIGO] --> B[SDK salva cookie]
     B --> C[Cliente faz checkout no Stripe]
-    C --> D[Pagamento aprovado]
-    D --> E[Stripe envia webhook]
-    E --> F[Affiliatus cria conversão automaticamente]
+    C --> D[Código passado via metadata]
+    D --> E[Pagamento aprovado]
+    E --> F[Stripe envia webhook]
+    F --> G[Conversão criada automaticamente]
 ```
 
-1. Cliente acessa site com link de afiliado
-2. Código do afiliado é passado no metadata do Stripe
+1. **SDK salva cookie:** Cliente acessa com `?ref=CODIGO`, SDK salva no cookie
+2. **Metadata no checkout:** Seu backend lê o cookie e passa para o Stripe
 3. Cliente finaliza compra no Stripe
 4. Stripe aprova o pagamento
-5. **Stripe envia webhook para o Affiliatus**
+5. **Stripe envia webhook** com o código do afiliado
 6. **Conversão é criada automaticamente** ✨
 
-<Note>Você não precisa chamar `trackConversion()` manualmente! O webhook faz tudo.</Note>
+<Note>
+  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30 dias. 
+  Seu backend lê esse cookie e passa para o Stripe via metadata.
+</Note>
 
 ---
 
