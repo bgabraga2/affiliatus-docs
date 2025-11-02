@@ -64,7 +64,7 @@
     "links": [
       {
         "label": "Dashboard",
-        "href": "https://app.affly.io"
+        "href": "https://app.affiliatus.io"
       },
       {
         "label": "Suporte",
@@ -74,7 +74,7 @@
     "primary": {
       "type": "button",
       "label": "Criar Conta",
-      "href": "https://app.affly.io"
+      "href": "https://app.affiliatus.io"
     }
   },
   "contextual": {

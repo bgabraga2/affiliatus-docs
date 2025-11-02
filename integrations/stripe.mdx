@@ -57,7 +57,7 @@ graph LR
 
 A URL será algo como:
 ```
-https://api.affly.io/api/campaigns/{SEU_ID}/stripe/webhook
+https://api.affiliatus.io/api/campaigns/{SEU_ID}/stripe/webhook
 ```
 
 ---
@@ -368,7 +368,7 @@ brew install stripe/stripe-cli/stripe
 stripe login
 
 # Escutar webhooks localmente
-stripe listen --forward-to https://api.affly.io/api/campaigns/SEU_ID/stripe/webhook
+stripe listen --forward-to https://api.affiliatus.io/api/campaigns/SEU_ID/stripe/webhook
 
 # Disparar evento de teste
 stripe trigger checkout.session.completed
@@ -515,8 +515,8 @@ Se você usa cupons de desconto como identificadores de afiliados:
     A conversão permanece no sistema. Você pode rejeitá-la manualmente se necessário.
   </Accordion>
   
-  <Accordion icon="question" title="Preciso do SDK JavaScript também?">
-    Não é obrigatório, mas recomendado para rastrear page views e leads antes da conversão.
+  <Accordion icon="question" title="Preciso da SDK JavaScript também?">
+    Sim! A SDK é obrigatória para salvar o código do afiliado no cookie. Sem ela, o webhook do Stripe não terá como saber qual afiliado trouxe a venda.
   </Accordion>
 </AccordionGroup>
 
