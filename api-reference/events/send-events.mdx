@@ -12,6 +12,12 @@ POST https://api.affiliatus.io/v1/events
 
 Este endpoint permite enviar eventos de rastreamento (conversões, leads, page views) diretamente do seu backend.
 
+<Info>
+  **Endpoint Flexível:** Este endpoint requer apenas `event_type`, `campaign_id` e `affiliate_id`. 
+  Os campos `session_id`, `properties` e `device_info` são **opcionais** (exceto para conversões que 
+  precisam de `order_id` e `order_value` em `properties`).
+</Info>
+
 ---
 
 ## Autenticação
@@ -47,8 +53,12 @@ Este endpoint permite enviar eventos de rastreamento (conversões, leads, page v
       Código do afiliado (referralId, ex: `JOAO1`)
     </ParamField>
 
-    <ParamField body="properties" type="object" required>
-      Propriedades específicas do evento
+    <ParamField body="session_id" type="string">
+      ID único da sessão do usuário (opcional)
+    </ParamField>
+
+    <ParamField body="properties" type="object">
+      Propriedades específicas do evento. **Obrigatório apenas para conversões** (com `order_id` e `order_value`)
 
       <Expandable title="Conversion Properties">
         <ParamField body="order_id" type="string" required>
@@ -82,7 +92,7 @@ Este endpoint permite enviar eventos de rastreamento (conversões, leads, page v
     </ParamField>
 
     <ParamField body="device_info" type="object">
-      Informações do dispositivo (opcional mas recomendado)
+      Informações do dispositivo (totalmente opcional para integrações backend)
 
       <Expandable title="Device Info Fields">
         <ParamField body="user_agent" type="string">
@@ -121,7 +131,7 @@ Este endpoint permite enviar eventos de rastreamento (conversões, leads, page v
 
 ## Exemplos
 
-### Enviar uma Conversão
+### Enviar uma Conversão (Mínimo)
 
 <CodeGroup>
 
@@ -130,14 +140,14 @@ curl -X POST https://api.affiliatus.io/v1/events \
   -H "Content-Type: application/json" \
   -H "X-API-Key: sua_api_key_aqui" \
   -d '{
+    "batch": true,
     "events": [{
       "event_type": "conversion",
       "campaign_id": "abc-123-def",
       "affiliate_id": "JOAO1",
       "properties": {
         "order_id": "ORDER-12345",
-        "order_value": 99.90,
-        "product": "Plano Premium"
+        "order_value": 99.90
       }
     }]
   }'
@@ -151,14 +161,14 @@ const response = await fetch('https://api.affiliatus.io/v1/events', {
     'X-API-Key': process.env.AFFILIATUS_API_KEY,
   },
   body: JSON.stringify({
+    batch: true,
     events: [{
       event_type: 'conversion',
       campaign_id: 'abc-123-def',
       affiliate_id: 'JOAO1',
       properties: {
         order_id: 'ORDER-12345',
-        order_value: 99.90,
-        product: 'Plano Premium'
+        order_value: 99.90
       }
     }]
   })
@@ -178,14 +188,14 @@ response = requests.post(
         'X-API-Key': 'sua_api_key_aqui',
     },
     json={
+        'batch': True,
         'events': [{
             'event_type': 'conversion',
             'campaign_id': 'abc-123-def',
             'affiliate_id': 'JOAO1',
             'properties': {
                 'order_id': 'ORDER-12345',
-                'order_value': 99.90,
-                'product': 'Plano Premium'
+                'order_value': 99.90
             }
         }]
     }
@@ -205,14 +215,14 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'X-API-Key: sua_api_key_aqui'
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'batch' => true,
     'events' => [[
         'event_type' => 'conversion',
         'campaign_id' => 'abc-123-def',
         'affiliate_id' => 'JOAO1',
         'properties' => [
             'order_id' => 'ORDER-12345',
-            'order_value' => 99.90,
-            'product' => 'Plano Premium'
+            'order_value' => 99.90
         ]
     ]]
 ]));
@@ -224,6 +234,11 @@ echo $response;
 ```
 
 </CodeGroup>
+
+<Note>
+  **Campos Opcionais:** Você pode adicionar campos extras como `product`, `customer_email`, `url`, etc. 
+  em `properties` conforme necessário. O endpoint é flexível e aceita qualquer campo adicional.
+</Note>
 
 ### Resposta de Sucesso
 
@@ -373,6 +388,7 @@ curl -X POST https://api.affiliatus.io/v1/events \
   -H "Content-Type: application/json" \
   -H "X-API-Key: SUA_API_KEY" \
   -d '{
+    "batch": true,
     "events": [{
       "event_type": "conversion",
       "campaign_id": "SEU_CAMPAIGN_ID",
@@ -381,6 +397,22 @@ curl -X POST https://api.affiliatus.io/v1/events \
         "order_id": "TEST-'$(date +%s)'",
         "order_value": 1.00
       }
+    }]
+  }'
+```
+
+### Testando Page View ou Lead (Sem Properties)
+
+```bash
+curl -X POST https://api.affiliatus.io/v1/events \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: SUA_API_KEY" \
+  -d '{
+    "batch": true,
+    "events": [{
+      "event_type": "page_view",
+      "campaign_id": "SEU_CAMPAIGN_ID",
+      "affiliate_id": "TEST01"
     }]
   }'
 ```
@@ -412,6 +444,10 @@ Após enviar, verifique em **Conversões** no dashboard se a conversão apareceu
 
   <Accordion title="Logue erros para debug">
     Mantenha logs de todas as requisições para facilitar troubleshooting.
+  </Accordion>
+
+  <Accordion title="Use apenas campos necessários">
+    O endpoint é flexível: envie apenas os campos que você tem disponível. Para conversões, apenas `order_id` e `order_value` são obrigatórios em `properties`.
   </Accordion>
 </AccordionGroup>
 

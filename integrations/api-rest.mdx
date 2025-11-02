@@ -100,10 +100,18 @@ X-API-Key: your_api_key_here
 
 ## Enviar Conversão
 
+<Info>
+  **Endpoint Flexível:** A API `/v1/events` é muito flexível! Requer apenas
+  `event_type`, `campaign_id` e `affiliate_id`. Os campos `session_id`,
+  `properties` e `device_info` são opcionais (exceto conversões que precisam de
+  `order_id` e `order_value`).
+</Info>
+
 ### Payload Mínimo
 
 ```json
 {
+  "batch": true,
   "events": [
     {
       "event_type": "conversion",
@@ -155,13 +163,14 @@ X-API-Key: your_api_key_here
 
 ### Event Object
 
-| Campo          | Tipo   | Obrigatório                               | Descrição                       |
-| -------------- | ------ | ----------------------------------------- | ------------------------------- |
-| `event_type`   | String | <Icon icon="check" color="#db2777" /> Sim | Sempre `"conversion"`           |
-| `campaign_id`  | String | <Icon icon="check" color="#db2777" /> Sim | ID público da sua campanha      |
-| `affiliate_id` | String | <Icon icon="check" color="#db2777" /> Sim | Código do afiliado (referralId) |
-| `properties`   | Object | <Icon icon="check" color="#db2777" /> Sim | Dados da conversão              |
-| `device_info`  | Object | Recomendado                               | Informações do dispositivo      |
+| Campo          | Tipo   | Obrigatório                               | Descrição                                       |
+| -------------- | ------ | ----------------------------------------- | ----------------------------------------------- |
+| `event_type`   | String | <Icon icon="check" color="#db2777" /> Sim | `"conversion"`, `"lead"` ou `"page_view"`       |
+| `campaign_id`  | String | <Icon icon="check" color="#db2777" /> Sim | ID público da sua campanha                      |
+| `affiliate_id` | String | <Icon icon="check" color="#db2777" /> Sim | Código do afiliado (referralId)                 |
+| `session_id`   | String | Opcional                                  | ID único da sessão do usuário                   |
+| `properties`   | Object | Opcional\*                                | Dados do evento (\*obrigatório para conversões) |
+| `device_info`  | Object | Opcional                                  | Informações do dispositivo                      |
 
 ### Properties Object
 
@@ -204,6 +213,7 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
         "X-API-Key": AFFILIATUS_API_KEY,
       },
       body: JSON.stringify({
+        batch: true,
         events: [
           {
             event_type: "conversion",
@@ -212,8 +222,6 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
             properties: {
               order_id: orderId,
               order_value: orderValue,
-              url: "https://seusite.com/checkout",
-              timestamp: new Date().toISOString(),
             },
           },
         ],
@@ -255,6 +263,7 @@ const affiliatusClient = axios.create({
 async function sendConversion(orderId, orderValue, affiliateCode) {
   try {
     const response = await affiliatusClient.post("/v1/events", {
+      batch: true,
       events: [
         {
           event_type: "conversion",
@@ -263,7 +272,6 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
           properties: {
             order_id: orderId,
             order_value: orderValue,
-            timestamp: new Date().toISOString(),
           },
         },
       ],
@@ -290,6 +298,7 @@ function sendConversion($orderId, $orderValue, $affiliateCode) {
     $apiUrl = 'https://api.affiliatus.io/v1/events';
 
     $payload = json_encode([
+        'batch' => true,
         'events' => [
             [
                 'event_type' => 'conversion',
@@ -298,8 +307,6 @@ function sendConversion($orderId, $orderValue, $affiliateCode) {
                 'properties' => [
                     'order_id' => $orderId,
                     'order_value' => $orderValue,
-                    'url' => 'https://seusite.com/checkout',
-                    'timestamp' => date('c'), // ISO 8601
                 ],
             ],
         ],
@@ -353,6 +360,7 @@ def send_conversion(order_id, order_value, affiliate_code):
     }
 
     payload = {
+        'batch': True,
         'events': [
             {
                 'event_type': 'conversion',
@@ -361,8 +369,6 @@ def send_conversion(order_id, order_value, affiliate_code):
                 'properties': {
                     'order_id': order_id,
                     'order_value': order_value,
-                    'url': 'https://seusite.com/checkout',
-                    'timestamp': datetime.utcnow().isoformat() + 'Z',
                 },
             },
         ],
@@ -397,6 +403,7 @@ def send_conversion(order_id, order_value, affiliate_code)
   uri = URI.parse(AFFILIATUS_API_URL)
 
   payload = {
+    batch: true,
     events: [
       {
         event_type: 'conversion',
@@ -404,9 +411,7 @@ def send_conversion(order_id, order_value, affiliate_code)
         affiliate_id: affiliate_code,
         properties: {
           order_id: order_id,
-          order_value: order_value,
-          url: 'https://seusite.com/checkout',
-          timestamp: Time.now.utc.iso8601
+          order_value: order_value
         }
       }
     ]
@@ -465,6 +470,7 @@ type Properties struct {
 }
 
 type Payload struct {
+    Batch  bool    `json:"batch"`
     Events []Event `json:"events"`
 }
 
@@ -473,6 +479,7 @@ func sendConversion(orderID string, orderValue float64, affiliateCode string) er
     apiURL := "https://api.affiliatus.io/v1/events"
 
     payload := Payload{
+        Batch: true,
         Events: []Event{
             {
                 EventType:   "conversion",
@@ -677,6 +684,7 @@ curl -X POST https://api.affiliatus.io/v1/events \
   -H "Content-Type: application/json" \
   -H "X-API-Key: sua_api_key_aqui" \
   -d '{
+    "batch": true,
     "events": [{
       "event_type": "conversion",
       "campaign_id": "abc-123-def",
@@ -685,6 +693,22 @@ curl -X POST https://api.affiliatus.io/v1/events \
         "order_id": "TEST-'$(date +%s)'",
         "order_value": 99.90
       }
+    }]
+  }'
+```
+
+### Testando Page View ou Lead (Sem Properties)
+
+```bash
+curl -X POST https://api.affiliatus.io/v1/events \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "batch": true,
+    "events": [{
+      "event_type": "page_view",
+      "campaign_id": "abc-123-def",
+      "affiliate_id": "TEST01"
     }]
   }'
 ```
@@ -800,6 +824,8 @@ const client = axios.create({
 - <Icon icon="check" color="#db2777" /> Logue erros para debugging
 - <Icon icon="check" color="#db2777" /> Use `order_id` único para evitar duplicação
 - <Icon icon="check" color="#db2777" /> Envie eventos em lote quando possível
+- <Icon icon="check" color="#db2777" /> Use apenas os campos necessários - o endpoint
+  é flexível
 
 ### <Icon icon="x" /> Não Faça
 
