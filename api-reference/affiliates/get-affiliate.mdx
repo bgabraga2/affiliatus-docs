@@ -1,0 +1,308 @@
+---
+title: 'Consultar Afiliado'
+api: 'GET https://api.affiliatus.io/v1/affiliates/{id}'
+description: 'Obtenha detalhes completos de um afiliado específico'
+---
+
+## Endpoint
+
+```
+GET https://api.affiliatus.io/v1/affiliates/{id}
+```
+
+Este endpoint retorna todos os detalhes de um afiliado específico, incluindo suas estatísticas de conversões e comissões.
+
+<Info>
+  **Escopo:** Você só pode consultar afiliados que pertencem à campanha da sua API Key.
+</Info>
+
+---
+
+## Autenticação
+
+<ParamField header="X-API-Key" type="string" required>
+  Sua API key obtida no dashboard em Configurações → API Keys
+</ParamField>
+
+---
+
+## Path Parameters
+
+<ParamField path="id" type="number" required>
+  ID do afiliado que você deseja consultar
+</ParamField>
+
+---
+
+## Response
+
+<ResponseField name="id" type="number">
+  ID único do afiliado
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Nome do afiliado
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  E-mail do afiliado
+</ResponseField>
+
+<ResponseField name="phone" type="string">
+  Telefone do afiliado
+</ResponseField>
+
+<ResponseField name="referralId" type="string">
+  Código de referência único
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Status do afiliado (`active` ou `inactive`)
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  Data de criação (ISO 8601)
+</ResponseField>
+
+<ResponseField name="totalConversions" type="number">
+  Número total de conversões geradas pelo afiliado
+</ResponseField>
+
+<ResponseField name="totalCommissions" type="number">
+  Valor total de comissões (aprovadas + pagas) em BRL
+</ResponseField>
+
+<ResponseField name="totalPaid" type="number">
+  Valor total já pago ao afiliado em BRL
+</ResponseField>
+
+---
+
+## Exemplos
+
+### Consultar Afiliado por ID
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.affiliatus.io/v1/affiliates/123" \
+  -H "X-API-Key: sua_api_key_aqui"
+```
+
+```javascript Node.js
+const affiliateId = 123;
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates/${affiliateId}`,
+  {
+    method: 'GET',
+    headers: {
+      'X-API-Key': process.env.AFFILIATUS_API_KEY,
+    }
+  }
+);
+
+const affiliate = await response.json();
+console.log(`Nome: ${affiliate.name}`);
+console.log(`Conversões: ${affiliate.totalConversions}`);
+console.log(`Comissões: R$ ${affiliate.totalCommissions.toFixed(2)}`);
+```
+
+```python Python
+import requests
+
+affiliate_id = 123
+
+response = requests.get(
+    f'https://api.affiliatus.io/v1/affiliates/{affiliate_id}',
+    headers={
+        'X-API-Key': 'sua_api_key_aqui',
+    }
+)
+
+affiliate = response.json()
+print(f"Nome: {affiliate['name']}")
+print(f"Conversões: {affiliate['totalConversions']}")
+print(f"Comissões: R$ {affiliate['totalCommissions']:.2f}")
+```
+
+```php PHP
+<?php
+$affiliateId = 123;
+$ch = curl_init("https://api.affiliatus.io/v1/affiliates/{$affiliateId}");
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'X-API-Key: sua_api_key_aqui'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+$affiliate = json_decode($response, true);
+echo "Nome: {$affiliate['name']}\n";
+echo "Conversões: {$affiliate['totalConversions']}\n";
+echo "Comissões: R$ " . number_format($affiliate['totalCommissions'], 2, ',', '.') . "\n";
+```
+
+</CodeGroup>
+
+### Resposta de Sucesso (200 OK)
+
+```json
+{
+  "id": 123,
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "phone": "+55 11 99999-9999",
+  "referralId": "JOAO123",
+  "status": "active",
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "totalConversions": 45,
+  "totalCommissions": 2500.00,
+  "totalPaid": 1200.00
+}
+```
+
+---
+
+## Erros
+
+### 401 - API Key Inválida
+
+```json
+{
+  "statusCode": 401,
+  "message": "Invalid or inactive API Key",
+  "error": "Unauthorized"
+}
+```
+
+**Solução:** Verifique se o header `X-API-Key` está correto e se a chave está ativa.
+
+---
+
+### 404 - Afiliado Não Encontrado
+
+```json
+{
+  "statusCode": 404,
+  "message": "Affiliate not found or does not belong to this campaign",
+  "error": "Not Found"
+}
+```
+
+**Causas possíveis:**
+- O ID do afiliado não existe
+- O afiliado não está associado à campanha da sua API Key
+- O afiliado foi deletado
+
+**Solução:** Verifique se o ID está correto e se o afiliado pertence à sua campanha.
+
+---
+
+### 400 - ID Inválido
+
+```json
+{
+  "statusCode": 400,
+  "message": "Validation failed (numeric string is expected)",
+  "error": "Bad Request"
+}
+```
+
+**Solução:** O ID deve ser um número inteiro válido.
+
+---
+
+### 429 - Rate Limit
+
+```json
+{
+  "statusCode": 429,
+  "message": "ThrottlerException: Too Many Requests",
+  "error": "Too Many Requests"
+}
+```
+
+**Solução:** Aguarde 60 segundos antes de tentar novamente.
+
+---
+
+## Casos de Uso
+
+<AccordionGroup>
+  <Accordion title="Validar se afiliado existe">
+    Antes de enviar conversões, você pode consultar o afiliado para verificar se ele existe e está ativo.
+  </Accordion>
+
+  <Accordion title="Sincronizar dados">
+    Use este endpoint para sincronizar informações do afiliado entre seu sistema e o Affiliatus.
+  </Accordion>
+
+  <Accordion title="Dashboard personalizado">
+    Construa dashboards personalizados com estatísticas detalhadas de cada afiliado.
+  </Accordion>
+
+  <Accordion title="Verificar performance">
+    Consulte regularmente para monitorar conversões e comissões de afiliados específicos.
+  </Accordion>
+
+  <Accordion title="Auditoria">
+    Use para auditar e verificar se os valores de comissões estão corretos antes de efetuar pagamentos.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Entendendo as Estatísticas
+
+### totalConversions
+Conta **todas** as conversões do afiliado nesta campanha, independente do status (pending, approved, rejected, paid).
+
+### totalCommissions
+Soma das comissões apenas de conversões **aprovadas** e **pagas**. Não inclui conversões pendentes ou rejeitadas.
+
+### totalPaid
+Valor já transferido para o afiliado através de payouts com status **paid**. Pode ser menor que `totalCommissions` se há comissões aprovadas ainda não pagas.
+
+### Exemplo de Cálculo
+
+```
+Conversões Totais: 50
+├─ 40 aprovadas → R$ 2.000 em comissões
+├─ 5 pendentes → R$ 250 (não contam)
+└─ 5 rejeitadas → R$ 250 (não contam)
+
+Payouts Realizados:
+├─ Payout #1: R$ 1.000 (pago)
+└─ Payout #2: R$ 500 (pago)
+
+Resultado:
+├─ totalConversions: 50
+├─ totalCommissions: 2000.00
+└─ totalPaid: 1500.00
+```
+
+---
+
+## Próximos Passos
+
+<CardGroup cols={2}>
+  <Card title="Atualizar Afiliado" icon="edit" href="/api-reference/affiliates/update-affiliate">
+    Edite as informações do afiliado
+  </Card>
+  
+  <Card title="Listar Afiliados" icon="list" href="/api-reference/affiliates/list-affiliates">
+    Veja todos os afiliados
+  </Card>
+  
+  <Card title="Enviar Conversões" icon="bolt" href="/api-reference/events/send-events">
+    Rastreie conversões do afiliado
+  </Card>
+  
+  <Card title="Deletar Afiliado" icon="trash" href="/api-reference/affiliates/delete-affiliate">
+    Remova o afiliado da campanha
+  </Card>
+</CardGroup>
+

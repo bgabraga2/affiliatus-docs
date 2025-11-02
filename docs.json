@@ -54,6 +54,17 @@
             "pages": [
               "api-reference/events/send-events"
             ]
+          },
+          {
+            "group": "Afiliados",
+            "pages": [
+              "api-reference/affiliates/introduction",
+              "api-reference/affiliates/create-affiliate",
+              "api-reference/affiliates/list-affiliates",
+              "api-reference/affiliates/get-affiliate",
+              "api-reference/affiliates/update-affiliate",
+              "api-reference/affiliates/delete-affiliate"
+            ]
           }
         ]
       }

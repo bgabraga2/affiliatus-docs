@@ -1,0 +1,499 @@
+---
+title: 'Atualizar Afiliado'
+api: 'PATCH https://api.affiliatus.io/v1/affiliates/{id}'
+description: 'Atualize informações de um afiliado existente'
+---
+
+## Endpoint
+
+```
+PATCH https://api.affiliatus.io/v1/affiliates/{id}
+```
+
+Este endpoint permite atualizar as informações de um afiliado existente. Todos os campos são opcionais - envie apenas os campos que deseja atualizar.
+
+<Info>
+  **Atualização Parcial:** Este é um endpoint PATCH, então você pode enviar apenas os campos que deseja modificar. Os campos não enviados permanecerão inalterados.
+</Info>
+
+---
+
+## Autenticação
+
+<ParamField header="X-API-Key" type="string" required>
+  Sua API key obtida no dashboard em Configurações → API Keys
+</ParamField>
+
+---
+
+## Path Parameters
+
+<ParamField path="id" type="number" required>
+  ID do afiliado que você deseja atualizar
+</ParamField>
+
+---
+
+## Body Parameters
+
+<ParamField body="name" type="string">
+  Nome completo do afiliado
+</ParamField>
+
+<ParamField body="email" type="string">
+  E-mail do afiliado. Deve ser único dentro da campanha.
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Telefone de contato do afiliado
+</ParamField>
+
+<ParamField body="referralId" type="string">
+  Código de referência único. Deve ser único globalmente.
+  
+  <Warning>
+    **Cuidado:** Alterar o referralId pode quebrar integrações existentes que usam o código antigo.
+  </Warning>
+</ParamField>
+
+<ParamField body="password" type="string">
+  Nova senha para o afiliado. Mínimo de 6 caracteres.
+  
+  A senha será armazenada com hash bcrypt seguro.
+</ParamField>
+
+<ParamField body="status" type="string">
+  Status do afiliado
+  
+  **Valores possíveis:**
+  - `active` - Afiliado ativo (pode gerar conversões)
+  - `inactive` - Afiliado inativo (não gera novas conversões)
+</ParamField>
+
+---
+
+## Response
+
+<ResponseField name="id" type="number">
+  ID único do afiliado
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Nome atualizado do afiliado
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  E-mail atualizado do afiliado
+</ResponseField>
+
+<ResponseField name="phone" type="string">
+  Telefone atualizado do afiliado
+</ResponseField>
+
+<ResponseField name="referralId" type="string">
+  Código de referência atualizado
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Status atualizado do afiliado
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  Data de criação original (não muda)
+</ResponseField>
+
+<ResponseField name="totalConversions" type="number">
+  Total de conversões
+</ResponseField>
+
+<ResponseField name="totalCommissions" type="number">
+  Total de comissões em BRL
+</ResponseField>
+
+<ResponseField name="totalPaid" type="number">
+  Total pago em BRL
+</ResponseField>
+
+---
+
+## Exemplos
+
+### Atualizar Nome e Telefone
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.affiliatus.io/v1/affiliates/123" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "name": "João Silva Santos",
+    "phone": "+55 11 98888-8888"
+  }'
+```
+
+```javascript Node.js
+const affiliateId = 123;
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates/${affiliateId}`,
+  {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.AFFILIATUS_API_KEY,
+    },
+    body: JSON.stringify({
+      name: 'João Silva Santos',
+      phone: '+55 11 98888-8888'
+    })
+  }
+);
+
+const affiliate = await response.json();
+console.log('Afiliado atualizado:', affiliate);
+```
+
+```python Python
+import requests
+
+affiliate_id = 123
+
+response = requests.patch(
+    f'https://api.affiliatus.io/v1/affiliates/{affiliate_id}',
+    headers={
+        'Content-Type': 'application/json',
+        'X-API-Key': 'sua_api_key_aqui',
+    },
+    json={
+        'name': 'João Silva Santos',
+        'phone': '+55 11 98888-8888'
+    }
+)
+
+affiliate = response.json()
+print('Afiliado atualizado:', affiliate)
+```
+
+```php PHP
+<?php
+$affiliateId = 123;
+$ch = curl_init("https://api.affiliatus.io/v1/affiliates/{$affiliateId}");
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'X-API-Key: sua_api_key_aqui'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'name' => 'João Silva Santos',
+    'phone' => '+55 11 98888-8888'
+]));
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+$affiliate = json_decode($response, true);
+print_r($affiliate);
+```
+
+</CodeGroup>
+
+### Resposta de Sucesso (200 OK)
+
+```json
+{
+  "id": 123,
+  "name": "João Silva Santos",
+  "email": "joao@example.com",
+  "phone": "+55 11 98888-8888",
+  "referralId": "JOAO123",
+  "status": "active",
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "totalConversions": 45,
+  "totalCommissions": 2500.00,
+  "totalPaid": 1200.00
+}
+```
+
+---
+
+### Alterar Status (Desativar Afiliado)
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.affiliatus.io/v1/affiliates/123" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "status": "inactive"
+  }'
+```
+
+```javascript Node.js
+const affiliateId = 123;
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates/${affiliateId}`,
+  {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.AFFILIATUS_API_KEY,
+    },
+    body: JSON.stringify({
+      status: 'inactive'
+    })
+  }
+);
+
+const affiliate = await response.json();
+console.log(`Afiliado ${affiliate.name} desativado`);
+```
+
+</CodeGroup>
+
+---
+
+### Atualizar Senha
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.affiliatus.io/v1/affiliates/123" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "password": "nova_senha_segura_123"
+  }'
+```
+
+```javascript Node.js
+const affiliateId = 123;
+const newPassword = 'nova_senha_segura_123';
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates/${affiliateId}`,
+  {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.AFFILIATUS_API_KEY,
+    },
+    body: JSON.stringify({ password: newPassword })
+  }
+);
+
+if (response.ok) {
+  console.log('Senha atualizada com sucesso');
+}
+```
+
+</CodeGroup>
+
+<Note>
+  A senha é armazenada com hash bcrypt e nunca é retornada pela API.
+</Note>
+
+---
+
+### Atualizar Múltiplos Campos
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.affiliatus.io/v1/affiliates/123" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "name": "João Silva Santos",
+    "email": "joao.novo@example.com",
+    "phone": "+55 11 98888-8888",
+    "status": "active"
+  }'
+```
+
+```javascript Node.js
+const affiliateId = 123;
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates/${affiliateId}`,
+  {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.AFFILIATUS_API_KEY,
+    },
+    body: JSON.stringify({
+      name: 'João Silva Santos',
+      email: 'joao.novo@example.com',
+      phone: '+55 11 98888-8888',
+      status: 'active'
+    })
+  }
+);
+```
+
+</CodeGroup>
+
+---
+
+## Erros
+
+### 400 - Dados Inválidos
+
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "email must be a valid email",
+    "password must be at least 6 characters long"
+  ],
+  "error": "Bad Request"
+}
+```
+
+**Solução:** Corrija os dados conforme as mensagens de erro.
+
+---
+
+### 401 - API Key Inválida
+
+```json
+{
+  "statusCode": 401,
+  "message": "Invalid or inactive API Key",
+  "error": "Unauthorized"
+}
+```
+
+**Solução:** Verifique se o header `X-API-Key` está correto.
+
+---
+
+### 404 - Afiliado Não Encontrado
+
+```json
+{
+  "statusCode": 404,
+  "message": "Affiliate not found or does not belong to this campaign",
+  "error": "Not Found"
+}
+```
+
+**Solução:** Verifique se o ID está correto e se o afiliado pertence à sua campanha.
+
+---
+
+### 409 - E-mail ou Referral ID Duplicado
+
+```json
+{
+  "statusCode": 409,
+  "message": "Email already exists for this campaign",
+  "error": "Conflict"
+}
+```
+
+ou
+
+```json
+{
+  "statusCode": 409,
+  "message": "Referral ID already exists",
+  "error": "Conflict"
+}
+```
+
+**Solução:** Use um e-mail ou referralId diferente.
+
+---
+
+### 429 - Rate Limit
+
+```json
+{
+  "statusCode": 429,
+  "message": "ThrottlerException: Too Many Requests",
+  "error": "Too Many Requests"
+}
+```
+
+**Solução:** Aguarde 60 segundos.
+
+---
+
+## Casos de Uso
+
+<AccordionGroup>
+  <Accordion title="Sincronizar dados de CRM">
+    Mantenha os dados do afiliado sincronizados com seu CRM atualizando automaticamente quando houver mudanças.
+  </Accordion>
+
+  <Accordion title="Atualizar informações de contato">
+    Permita que afiliados atualizem seus próprios dados de contato via sua interface.
+  </Accordion>
+
+  <Accordion title="Gerenciar status">
+    Ative ou desative afiliados conforme necessário sem perder o histórico de conversões.
+  </Accordion>
+
+  <Accordion title="Reset de senha">
+    Implemente funcionalidade de "esqueci minha senha" atualizando a senha via API.
+  </Accordion>
+
+  <Accordion title="Corrigir dados">
+    Corrija rapidamente informações incorretas de afiliados.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Boas Práticas
+
+<AccordionGroup>
+  <Accordion title="Envie apenas campos necessários">
+    Como é um PATCH, envie apenas os campos que realmente mudaram. Isso economiza banda e é mais eficiente.
+  </Accordion>
+
+  <Accordion title="Valide antes de atualizar">
+    Consulte o afiliado antes de atualizar para verificar se ele existe e obter os dados atuais.
+  </Accordion>
+
+  <Accordion title="Cuidado ao alterar referralId">
+    Alterar o referralId pode quebrar links de rastreamento existentes. Considere isso antes de mudar.
+  </Accordion>
+
+  <Accordion title="Use status ao invés de deletar">
+    Prefira desativar afiliados (status: inactive) ao invés de deletá-los para manter o histórico.
+  </Accordion>
+
+  <Accordion title="Senhas fortes">
+    Ao atualizar senhas, garanta que atendem critérios de segurança adequados.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Próximos Passos
+
+<CardGroup cols={2}>
+  <Card title="Consultar Afiliado" icon="user" href="/api-reference/affiliates/get-affiliate">
+    Veja os dados atualizados
+  </Card>
+  
+  <Card title="Listar Afiliados" icon="list" href="/api-reference/affiliates/list-affiliates">
+    Liste todos os afiliados
+  </Card>
+  
+  <Card title="Deletar Afiliado" icon="trash" href="/api-reference/affiliates/delete-affiliate">
+    Remova o afiliado da campanha
+  </Card>
+  
+  <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
+    Gerencie via dashboard
+  </Card>
+</CardGroup>
+

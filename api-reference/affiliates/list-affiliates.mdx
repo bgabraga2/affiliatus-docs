@@ -1,0 +1,463 @@
+---
+title: 'Listar Afiliados'
+api: 'GET https://api.affiliatus.io/v1/affiliates'
+description: 'Liste todos os afiliados da campanha com filtros e paginação'
+---
+
+## Endpoint
+
+```
+GET https://api.affiliatus.io/v1/affiliates
+```
+
+Este endpoint retorna uma lista paginada de todos os afiliados associados à campanha da sua API Key.
+
+<Info>
+  **Performance:** A API retorna até 100 afiliados por requisição. Use paginação para grandes listas.
+</Info>
+
+---
+
+## Autenticação
+
+<ParamField header="X-API-Key" type="string" required>
+  Sua API key obtida no dashboard em Configurações → API Keys
+</ParamField>
+
+---
+
+## Query Parameters
+
+<ParamField query="status" type="string">
+  Filtrar por status do afiliado
+  
+  **Valores possíveis:**
+  - `active` - Apenas afiliados ativos
+  - `inactive` - Apenas afiliados inativos
+  
+  Se não fornecido, retorna todos os status.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Buscar por nome, e-mail ou referralId
+  
+  A busca é case-insensitive e busca correspondências parciais.
+  
+  **Exemplo:** `search=joao` encontra "João Silva", "joao@example.com", "JOAO123"
+</ParamField>
+
+<ParamField query="page" type="number" default="1">
+  Número da página para paginação (começa em 1)
+</ParamField>
+
+<ParamField query="limit" type="number" default="50">
+  Número de afiliados por página
+  
+  **Limites:**
+  - Mínimo: 1
+  - Máximo: 100
+  - Padrão: 50
+</ParamField>
+
+---
+
+## Response
+
+<ResponseField name="affiliates" type="array">
+  Array de objetos de afiliados
+  
+  <Expandable title="Affiliate Object">
+    <ResponseField name="id" type="number">
+      ID único do afiliado
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      Nome do afiliado
+    </ResponseField>
+
+    <ResponseField name="email" type="string">
+      E-mail do afiliado
+    </ResponseField>
+
+    <ResponseField name="phone" type="string">
+      Telefone do afiliado
+    </ResponseField>
+
+    <ResponseField name="referralId" type="string">
+      Código de referência único
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Status (`active` ou `inactive`)
+    </ResponseField>
+
+    <ResponseField name="createdAt" type="string">
+      Data de criação (ISO 8601)
+    </ResponseField>
+
+    <ResponseField name="totalConversions" type="number">
+      Total de conversões geradas
+    </ResponseField>
+
+    <ResponseField name="totalCommissions" type="number">
+      Total de comissões em BRL
+    </ResponseField>
+
+    <ResponseField name="totalPaid" type="number">
+      Total já pago em BRL
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total" type="number">
+  Número total de afiliados (sem paginação)
+</ResponseField>
+
+<ResponseField name="page" type="number">
+  Página atual
+</ResponseField>
+
+<ResponseField name="limit" type="number">
+  Limite por página
+</ResponseField>
+
+<ResponseField name="totalPages" type="number">
+  Número total de páginas
+</ResponseField>
+
+---
+
+## Exemplos
+
+### Listar Todos os Afiliados
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.affiliatus.io/v1/affiliates" \
+  -H "X-API-Key: sua_api_key_aqui"
+```
+
+```javascript Node.js
+const response = await fetch('https://api.affiliatus.io/v1/affiliates', {
+  method: 'GET',
+  headers: {
+    'X-API-Key': process.env.AFFILIATUS_API_KEY,
+  }
+});
+
+const data = await response.json();
+console.log(`Total: ${data.total} afiliados`);
+console.log(`Página: ${data.page}/${data.totalPages}`);
+data.affiliates.forEach(affiliate => {
+  console.log(`- ${affiliate.name} (${affiliate.referralId})`);
+});
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.affiliatus.io/v1/affiliates',
+    headers={
+        'X-API-Key': 'sua_api_key_aqui',
+    }
+)
+
+data = response.json()
+print(f"Total: {data['total']} afiliados")
+for affiliate in data['affiliates']:
+    print(f"- {affiliate['name']} ({affiliate['referralId']})")
+```
+
+```php PHP
+<?php
+$ch = curl_init('https://api.affiliatus.io/v1/affiliates');
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'X-API-Key: sua_api_key_aqui'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+$data = json_decode($response, true);
+echo "Total: {$data['total']} afiliados\n";
+foreach ($data['affiliates'] as $affiliate) {
+    echo "- {$affiliate['name']} ({$affiliate['referralId']})\n";
+}
+```
+
+</CodeGroup>
+
+### Resposta de Sucesso (200 OK)
+
+```json
+{
+  "affiliates": [
+    {
+      "id": 123,
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "phone": "+55 11 99999-9999",
+      "referralId": "JOAO123",
+      "status": "active",
+      "createdAt": "2024-01-15T10:30:00.000Z",
+      "totalConversions": 45,
+      "totalCommissions": 2500.00,
+      "totalPaid": 1200.00
+    },
+    {
+      "id": 124,
+      "name": "Maria Santos",
+      "email": "maria@example.com",
+      "phone": "+55 21 98888-8888",
+      "referralId": "MARIA456",
+      "status": "active",
+      "createdAt": "2024-01-16T14:20:00.000Z",
+      "totalConversions": 32,
+      "totalCommissions": 1800.00,
+      "totalPaid": 800.00
+    }
+  ],
+  "total": 2,
+  "page": 1,
+  "limit": 50,
+  "totalPages": 1
+}
+```
+
+---
+
+### Filtrar por Status
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.affiliatus.io/v1/affiliates?status=active" \
+  -H "X-API-Key: sua_api_key_aqui"
+```
+
+```javascript Node.js
+const params = new URLSearchParams({ status: 'active' });
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates?${params}`,
+  {
+    headers: { 'X-API-Key': process.env.AFFILIATUS_API_KEY }
+  }
+);
+
+const data = await response.json();
+console.log(`${data.total} afiliados ativos`);
+```
+
+```python Python
+response = requests.get(
+    'https://api.affiliatus.io/v1/affiliates',
+    headers={'X-API-Key': 'sua_api_key_aqui'},
+    params={'status': 'active'}
+)
+```
+
+</CodeGroup>
+
+---
+
+### Buscar por Nome ou E-mail
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.affiliatus.io/v1/affiliates?search=joao" \
+  -H "X-API-Key: sua_api_key_aqui"
+```
+
+```javascript Node.js
+const params = new URLSearchParams({ search: 'joao' });
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates?${params}`,
+  {
+    headers: { 'X-API-Key': process.env.AFFILIATUS_API_KEY }
+  }
+);
+```
+
+```python Python
+response = requests.get(
+    'https://api.affiliatus.io/v1/affiliates',
+    headers={'X-API-Key': 'sua_api_key_aqui'},
+    params={'search': 'joao'}
+)
+```
+
+</CodeGroup>
+
+---
+
+### Paginação
+
+<CodeGroup>
+
+```bash cURL
+# Página 2, 20 afiliados por página
+curl -X GET "https://api.affiliatus.io/v1/affiliates?page=2&limit=20" \
+  -H "X-API-Key: sua_api_key_aqui"
+```
+
+```javascript Node.js
+const params = new URLSearchParams({
+  page: '2',
+  limit: '20'
+});
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates?${params}`,
+  {
+    headers: { 'X-API-Key': process.env.AFFILIATUS_API_KEY }
+  }
+);
+
+const data = await response.json();
+console.log(`Página ${data.page} de ${data.totalPages}`);
+```
+
+```python Python
+response = requests.get(
+    'https://api.affiliatus.io/v1/affiliates',
+    headers={'X-API-Key': 'sua_api_key_aqui'},
+    params={'page': 2, 'limit': 20}
+)
+
+data = response.json()
+print(f"Página {data['page']} de {data['totalPages']}")
+```
+
+</CodeGroup>
+
+---
+
+### Combinar Filtros
+
+<CodeGroup>
+
+```bash cURL
+# Afiliados ativos que contenham "silva" no nome, página 1, 10 por página
+curl -X GET "https://api.affiliatus.io/v1/affiliates?status=active&search=silva&page=1&limit=10" \
+  -H "X-API-Key: sua_api_key_aqui"
+```
+
+```javascript Node.js
+const params = new URLSearchParams({
+  status: 'active',
+  search: 'silva',
+  page: '1',
+  limit: '10'
+});
+
+const response = await fetch(
+  `https://api.affiliatus.io/v1/affiliates?${params}`,
+  {
+    headers: { 'X-API-Key': process.env.AFFILIATUS_API_KEY }
+  }
+);
+```
+
+</CodeGroup>
+
+---
+
+## Erros
+
+### 401 - API Key Inválida
+
+```json
+{
+  "statusCode": 401,
+  "message": "Invalid or inactive API Key",
+  "error": "Unauthorized"
+}
+```
+
+**Solução:** Verifique se o header `X-API-Key` está correto.
+
+---
+
+### 400 - Parâmetros Inválidos
+
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "limit must not be greater than 100"
+  ],
+  "error": "Bad Request"
+}
+```
+
+**Solução:** Ajuste os parâmetros de acordo com os limites.
+
+---
+
+### 429 - Rate Limit
+
+```json
+{
+  "statusCode": 429,
+  "message": "ThrottlerException: Too Many Requests",
+  "error": "Too Many Requests"
+}
+```
+
+**Solução:** Aguarde 60 segundos.
+
+---
+
+## Dicas de Uso
+
+<AccordionGroup>
+  <Accordion title="Paginação eficiente">
+    Para grandes listas, use `limit=100` e navegue pelas páginas. Isso otimiza a performance e reduz o tempo de resposta.
+  </Accordion>
+
+  <Accordion title="Busca inteligente">
+    O parâmetro `search` busca em nome, e-mail e referralId simultaneamente. Use-o para encontrar afiliados rapidamente.
+  </Accordion>
+
+  <Accordion title="Filtre por status">
+    Use `status=active` para listar apenas afiliados que podem gerar conversões, ou `status=inactive` para revisar afiliados pausados.
+  </Accordion>
+
+  <Accordion title="Combine filtros">
+    Você pode combinar `status`, `search`, `page` e `limit` para buscas muito específicas.
+  </Accordion>
+
+  <Accordion title="Cache de resultados">
+    Se sua aplicação lista afiliados frequentemente, considere cachear os resultados por alguns minutos para reduzir chamadas à API.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Próximos Passos
+
+<CardGroup cols={2}>
+  <Card title="Consultar Afiliado" icon="user" href="/api-reference/affiliates/get-affiliate">
+    Veja detalhes de um afiliado específico
+  </Card>
+  
+  <Card title="Criar Afiliado" icon="plus" href="/api-reference/affiliates/create-affiliate">
+    Adicione um novo afiliado
+  </Card>
+  
+  <Card title="Atualizar Afiliado" icon="edit" href="/api-reference/affiliates/update-affiliate">
+    Edite informações de um afiliado
+  </Card>
+  
+  <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
+    Visualize no dashboard
+  </Card>
+</CardGroup>
+
