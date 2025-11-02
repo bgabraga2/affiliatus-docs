@@ -15,25 +15,27 @@ Uma campanha é como você organiza seu programa de afiliados. Nela, você defin
 
 <AccordionGroup>
   <Accordion icon="rocket" title="Criar campanha no onboarding">
-    Ao fazer login pela primeira vez, você será direcionado automaticamente para criar sua primeira campanha.
-    
-    **Configure os seguintes campos:**
-    
-    - **Nome da campanha**: Um nome simples para identificar (ex: "Programa de Indicação 2025")
-    - **Comissão**: Escolha entre percentual (ex: 10% de cada venda) ou valor fixo (ex: R$ 50 por venda)
-    - **Valor da comissão**: Quanto você vai pagar ao afiliado por cada venda
-    
-    <Tip>Comece com algo simples! Você pode ajustar as configurações depois.</Tip>
+    Ao fazer login pela primeira vez, você será direcionado automaticamente para
+    criar sua primeira campanha. **Configure os seguintes campos:** - **Nome da
+    campanha**: Um nome simples para identificar (ex: "Programa de Indicação
+    2025") - **Comissão**: Escolha entre percentual (ex: 10% de cada venda) ou
+    valor fixo (ex: R$ 50 por venda) - **Valor da comissão**: Quanto você vai
+    pagar ao afiliado por cada venda
+    <Tip>
+      Comece com algo simples! Você pode ajustar as configurações depois.
+    </Tip>
   </Accordion>
-  
+
   <Accordion icon="gear" title="Configurações opcionais">
-    Você também pode configurar (mas não é obrigatório agora):
-    
-    - **Duração do cookie**: Por quantos dias o código do afiliado fica válido (padrão: 30 dias)
-    - **Pagamento mínimo**: Valor mínimo para o afiliado sacar (padrão: R$ 50)
-    - **Modelo de atribuição**: Quem leva a comissão - o primeiro ou o último afiliado que indicou o cliente
-    
-    <Note>Não se preocupe com isso agora. As configurações padrão funcionam bem para começar!</Note>
+    Você também pode configurar (mas não é obrigatório agora): - **Duração do
+    cookie**: Por quantos dias o código do afiliado fica válido (padrão: 30
+    dias) - **Pagamento mínimo**: Valor mínimo para o afiliado sacar (padrão: R$
+    50) - **Modelo de atribuição**: Quem leva a comissão - o primeiro ou o
+    último afiliado que indicou o cliente
+    <Note>
+      Não se preocupe com isso agora. As configurações padrão funcionam bem para
+      começar!
+    </Note>
   </Accordion>
 </AccordionGroup>
 
@@ -45,42 +47,36 @@ Uma campanha é como você organiza seu programa de afiliados. Nela, você defin
 
 <AccordionGroup>
   <Accordion icon="shield-check" title="Adicionar domínio autorizado">
-    No menu lateral, vá em **"Configurações"** → **"Domínios"**.
-    
-    **Digite o domínio do seu site:**
-    
-    - Se seu site é `https://meusite.com.br`, adicione: `meusite.com.br`
-    - Para desenvolvimento local: `localhost` ou `localhost:3000`
-    - Para subdomínios: `app.meusite.com` ou `checkout.meusite.com`
-    
-    <Tip>Você pode adicionar vários domínios! Isso é útil se você tem site, blog e área de membros em domínios diferentes.</Tip>
+    No menu lateral, vá em **"Configurações"** → **"Domínios"**. **Digite o
+    domínio do seu site:** - Se seu site é `https://meusite.com.br`, adicione:
+    `meusite.com.br` - Para desenvolvimento local: `localhost` ou
+    `localhost:3000` - Para subdomínios: `app.meusite.com` ou
+    `checkout.meusite.com`
+    <Tip>
+      Você pode adicionar vários domínios! Isso é útil se você tem site, blog e
+      área de membros em domínios diferentes.
+    </Tip>
   </Accordion>
-  
+
   <Accordion icon="info-circle" title="Como funciona a segurança">
     Quando alguém acessa seu site com um link de afiliado, o sistema verifica:
-    
-    1. De qual domínio veio a solicitação
-    2. Se esse domínio está na sua lista de autorizados
-    3. Se estiver, o evento é registrado
-    4. Se não estiver, o evento é bloqueado
-    
-    **Isso protege você contra:**
-    - Pessoas criando conversões falsas
-    - Fraudes no sistema de afiliados
-    - Cliques e eventos vindos de lugares não autorizados
-    
-    <Warning>Sem adicionar seu domínio, NENHUM evento será registrado! É o primeiro passo obrigatório.</Warning>
+    1. De qual domínio veio a solicitação 2. Se esse domínio está na sua lista
+    de autorizados 3. Se estiver, o evento é registrado 4. Se não estiver, o
+    evento é bloqueado **Isso protege você contra:** - Pessoas criando
+    conversões falsas - Fraudes no sistema de afiliados - Cliques e eventos
+    vindos de lugares não autorizados
+    <Warning>
+      Sem adicionar seu domínio, NENHUM evento será registrado! É o primeiro
+      passo obrigatório.
+    </Warning>
   </Accordion>
-  
+
   <Accordion icon="check-circle" title="Exemplos de domínios válidos">
-    Você pode adicionar:
-    
-    - **Domínio principal**: `meusite.com`
-    - **Subdomínios**: `app.meusite.com`, `checkout.meusite.com`
-    - **Desenvolvimento local**: `localhost`, `localhost:3000`
-    - **Com porta específica**: `meusite.com:8080`
-    - **IP local**: `127.0.0.1`, `192.168.1.1:3000`
-    
+    Você pode adicionar: - **Domínio principal**: `meusite.com` -
+    **Subdomínios**: `app.meusite.com`, `checkout.meusite.com` -
+    **Desenvolvimento local**: `localhost`, `localhost:3000` - **Com porta
+    específica**: `meusite.com:8080` - **IP local**: `127.0.0.1`,
+    `192.168.1.1:3000`
     <Note>Não inclua `https://` ou `http://` - apenas o domínio puro!</Note>
   </Accordion>
 </AccordionGroup>
@@ -93,25 +89,25 @@ Agora sim! Com a segurança configurada, é hora de cadastrar as pessoas que vã
 
 <AccordionGroup>
   <Accordion icon="user-plus" title="Cadastrar um novo afiliado">
-    No menu lateral, vá em **"Afiliados"** e clique no botão **"Novo Afiliado"**.
-    
-    **Preencha as informações:**
-    
-    - **Nome**: Nome completo do afiliado
-    - **E-mail**: E-mail único para login do afiliado
-    - **Código de referência**: Um código único de 5 letras (ex: JOAO1, MARIA)
-    - **Senha**: Senha para o afiliado acessar o portal dele
-    - **Telefone**: Opcional
-    
-    <Tip>O código de referência é como o "apelido" do afiliado. Será usado nos links de indicação!</Tip>
+    No menu lateral, vá em **"Afiliados"** e clique no botão **"Novo
+    Afiliado"**. **Preencha as informações:** - **Nome**: Nome completo do
+    afiliado - **E-mail**: E-mail único para login do afiliado - **Código de
+    referência**: Um código único de 5 letras (ex: JOAO1, MARIA) - **Senha**:
+    Senha para o afiliado acessar o portal dele - **Telefone**: Opcional
+    <Tip>
+      O código de referência é como o "apelido" do afiliado. Será usado nos
+      links de indicação!
+    </Tip>
   </Accordion>
-  
+
   <Accordion icon="copy" title="Copiar código do afiliado">
-    Após cadastrar, você verá uma lista com todos os seus afiliados. 
-    
-    Clique no ícone de copiar ao lado do código de referência para compartilhar com o afiliado. Ele vai precisar disso!
-    
-    <Note>Cada afiliado tem um código único. É assim que você sabe quem trouxe cada cliente.</Note>
+    Após cadastrar, você verá uma lista com todos os seus afiliados. Clique no
+    ícone de copiar ao lado do código de referência para compartilhar com o
+    afiliado. Ele vai precisar disso!
+    <Note>
+      Cada afiliado tem um código único. É assim que você sabe quem trouxe cada
+      cliente.
+    </Note>
   </Accordion>
 </AccordionGroup>
 
@@ -122,7 +118,8 @@ Agora sim! Com a segurança configurada, é hora de cadastrar as pessoas que vã
 **Este passo é obrigatório para todas as integrações!** A SDK é responsável por rastrear cliques, salvar cookies com o código do afiliado e capturar page views. Mesmo que você use Stripe ou Woovi, precisa da SDK instalada.
 
 <Note>
-  **Importante:** A SDK faz o rastreamento básico (cliques e cookies). Stripe/Woovi/API REST só automatizam o envio de **conversões**.
+  **Importante:** A SDK faz o rastreamento básico (cliques e cookies).
+  Stripe/Woovi/API REST só automatizam o envio de **conversões**.
 </Note>
 
 <AccordionGroup>
@@ -178,38 +175,29 @@ Agora seus afiliados precisam saber como divulgar seu produto!
 
 <AccordionGroup>
   <Accordion icon="link" title="Gerar link de afiliado">
-    Você pode gerar links prontos no menu **"Gerador de Links"**.
-    
-    **Como funciona:**
-    1. Digite a URL da sua página (ex: sua página de vendas)
-    2. Selecione o afiliado
-    3. Clique em **"Gerar Link"**
-    4. Copie e envie para o afiliado
-    
-    O link vai ficar assim: `https://seusite.com/produto?ref=JOAO1`
+    Você pode gerar links prontos no menu **"Gerador de Links"**. **Como
+    funciona:** 1. Digite a URL da sua página (ex: sua página de vendas) 2.
+    Selecione o afiliado 3. Clique em **"Gerar Link"** 4. Copie e envie para o
+    afiliado O link vai ficar assim: `https://seusite.com/produto?ref=JOAO1`
   </Accordion>
-  
+
   <Accordion icon="share" title="Portal do afiliado">
-    Cada afiliado tem acesso a um portal próprio onde pode:
-    - Ver suas estatísticas de cliques e vendas
-    - Gerar seus próprios links
-    - Acompanhar comissões
-    
-    **Como o afiliado acessa:**
-    - URL: `https://app.affiliatus.io/affiliate-dashboard/SEU_ID_DA_CAMPANHA`
-    - Login: E-mail e senha que você cadastrou
-    
-    <Tip>Envie as credenciais de acesso por e-mail ou WhatsApp para cada afiliado!</Tip>
+    Cada afiliado tem acesso a um portal próprio onde pode: - Ver suas
+    estatísticas de cliques e vendas - Gerar seus próprios links - Acompanhar
+    comissões **Como o afiliado acessa:** - URL:
+    `https://app.affiliatus.io/affiliate-dashboard/SEU_ID_DA_CAMPANHA` - Login:
+    E-mail e senha que você cadastrou
+    <Tip>
+      Envie as credenciais de acesso por e-mail ou WhatsApp para cada afiliado!
+    </Tip>
   </Accordion>
-  
+
   <Accordion icon="lightbulb" title="Oriente seu afiliado">
-    Explique para ele de forma simples:
-    
-    > "Sempre que você compartilhar o link, adicione `?ref=SEUCÓDIGO` no final. Assim eu sei que a venda veio de você e você recebe a comissão!"
-    
-    Exemplo prático:
-    - Link normal: `https://seusite.com/produto`
-    - Link do afiliado: `https://seusite.com/produto?ref=JOAO1`
+    Explique para ele de forma simples: > "Sempre que você compartilhar o link,
+    adicione `?ref=SEUCÓDIGO` no final. Assim eu sei que a venda veio de você e
+    você recebe a comissão!" Exemplo prático: - Link normal:
+    `https://seusite.com/produto` - Link do afiliado:
+    `https://seusite.com/produto?ref=JOAO1`
   </Accordion>
 </AccordionGroup>
 
@@ -220,7 +208,9 @@ Agora seus afiliados precisam saber como divulgar seu produto!
 Agora você precisa escolher **como rastrear as vendas**. A SDK já está instalada (Passo 4) e rastreando cliques. Agora escolha como enviar as conversões:
 
 <Note>
-  **Lembre-se:** A SDK do Passo 4 é obrigatória para TODAS as opções abaixo. Ela gerencia cookies e page views. Aqui você está escolhendo apenas como enviar **conversões (vendas)**.
+  **Lembre-se:** A SDK do Passo 4 é obrigatória para TODAS as opções abaixo. Ela
+  gerencia cookies e page views. Aqui você está escolhendo apenas como enviar
+  **conversões (vendas)**.
 </Note>
 
 <AccordionGroup>
@@ -294,13 +284,14 @@ Agora você precisa escolher **como rastrear as vendas**. A SDK já está instal
 </AccordionGroup>
 
 <Warning>
-  **SDK é obrigatória:** Todas as opções acima precisam da SDK instalada (Passo 4). 
-  Ela gerencia cookies e page views. Você está escolhendo apenas como enviar as **conversões**.
+  **SDK é obrigatória:** Todas as opções acima precisam da SDK instalada (Passo
+  4). Ela gerencia cookies e page views. Você está escolhendo apenas como enviar
+  as **conversões**.
 </Warning>
 
 <Tip>
-  **Recomendação:** Comece com SDK JavaScript puro (opção 1) se estiver testando. 
-  Depois adicione Stripe/Woovi/API REST para automação.
+  **Recomendação:** Comece com SDK JavaScript puro (opção 1) se estiver
+  testando. Depois adicione Stripe/Woovi/API REST para automação.
 </Tip>
 
 ---
@@ -311,42 +302,37 @@ Após uma conversão ser registrada (manual ou automática), você precisa aprov
 
 <AccordionGroup>
   <Accordion icon="chart-line" title="Ver conversões no dashboard">
-    No **Dashboard** principal, você vê um resumo de tudo:
-    - Total de cliques
-    - Conversões pendentes de aprovação
-    - Comissões totais geradas
-    - Gráficos de performance
-    
-    <Tip>O dashboard é sua central de controle. Acesse diariamente para não perder nada!</Tip>
+    No **Dashboard** principal, você vê um resumo de tudo: - Total de cliques -
+    Conversões pendentes de aprovação - Comissões totais geradas - Gráficos de
+    performance
+    <Tip>
+      O dashboard é sua central de controle. Acesse diariamente para não perder
+      nada!
+    </Tip>
   </Accordion>
-  
+
   <Accordion icon="clipboard-check" title="Aprovar conversões">
-    Vá em **"Conversões"** no menu lateral.
-    
-    Você verá uma lista com todas as vendas. Cada conversão tem 4 status possíveis:
-    - **Pendente**: Aguardando sua aprovação
-    - **Aprovada**: Você validou, a comissão está liberada
-    - **Rejeitada**: Venda cancelada ou inválida
-    - **Paga**: Você já pagou essa comissão
-    
-    **Para aprovar:**
-    1. Revise a conversão (valor, afiliado, data)
-    2. Clique em "Aprovar" ou "Rejeitar"
-    3. A comissão entra no saldo do afiliado
-    
-    <Warning>Só aprove conversões de vendas confirmadas! Você pode rejeitar se houver cancelamento ou fraude.</Warning>
+    Vá em **"Conversões"** no menu lateral. Você verá uma lista com todas as
+    vendas. Cada conversão tem 4 status possíveis: - **Pendente**: Aguardando
+    sua aprovação - **Aprovada**: Você validou, a comissão está liberada -
+    **Rejeitada**: Venda cancelada ou inválida - **Paga**: Você já pagou essa
+    comissão **Para aprovar:** 1. Revise a conversão (valor, afiliado, data) 2.
+    Clique em "Aprovar" ou "Rejeitar" 3. A comissão entra no saldo do afiliado
+    <Warning>
+      Só aprove conversões de vendas confirmadas! Você pode rejeitar se houver
+      cancelamento ou fraude.
+    </Warning>
   </Accordion>
-  
+
   <Accordion icon="hand-holding-dollar" title="Registrar conversão manual">
     Se a venda não foi rastreada automaticamente, você pode criar manualmente:
-    
-    1. Vá em **"Conversões"** → **"Registrar Conversão"**
-    2. Selecione o afiliado responsável
-    3. Informe o valor da venda
-    4. O sistema calcula a comissão automaticamente
-    5. Clique em "Salvar"
-    
-    <Note>Isso é útil para vendas por telefone ou outros canais onde o link não foi usado.</Note>
+    1. Vá em **"Conversões"** → **"Registrar Conversão"** 2. Selecione o
+    afiliado responsável 3. Informe o valor da venda 4. O sistema calcula a
+    comissão automaticamente 5. Clique em "Salvar"
+    <Note>
+      Isso é útil para vendas por telefone ou outros canais onde o link não foi
+      usado.
+    </Note>
   </Accordion>
 </AccordionGroup>
 
@@ -358,40 +344,34 @@ Quando o afiliado atingir o saldo mínimo, você pode processar o pagamento.
 
 <AccordionGroup>
   <Accordion icon="wallet" title="Criar pagamento">
-    Vá em **"Pagamentos"** no menu lateral.
-    
-    Você verá:
-    - Afiliados com saldo disponível
-    - Valor a pagar para cada um
-    - Número de conversões incluídas
-    
-    **Para criar um pagamento:**
-    1. Clique em **"Novo Pagamento"**
-    2. Selecione o afiliado (só aparecem os elegíveis)
-    3. Escolha o método (PIX, Transferência, PayPal)
-    4. Adicione informações de pagamento (opcional)
-    5. Confirme
-    
-    <Tip>O sistema cria automaticamente o pagamento com todas as conversões aprovadas do afiliado!</Tip>
+    Vá em **"Pagamentos"** no menu lateral. Você verá: - Afiliados com saldo
+    disponível - Valor a pagar para cada um - Número de conversões incluídas
+    **Para criar um pagamento:** 1. Clique em **"Novo Pagamento"** 2. Selecione
+    o afiliado (só aparecem os elegíveis) 3. Escolha o método (PIX,
+    Transferência, PayPal) 4. Adicione informações de pagamento (opcional) 5.
+    Confirme
+    <Tip>
+      O sistema cria automaticamente o pagamento com todas as conversões
+      aprovadas do afiliado!
+    </Tip>
   </Accordion>
-  
+
   <Accordion icon="check-double" title="Marcar como pago">
-    Após criar o pagamento, ele fica com status **"Pendente"**.
-    
-    **Fluxo completo:**
-    1. **Pendente**: Pagamento criado, aguardando transferência
-    2. **Processando**: Você está fazendo a transferência
-    3. **Pago**: Transferência concluída
-    
-    Quando você realmente transferir o dinheiro, marque como **"Pago"** e adicione o ID da transação.
-    
-    <Note>As conversões incluídas no pagamento são automaticamente marcadas como "Pagas" e não entram em novos pagamentos.</Note>
+    Após criar o pagamento, ele fica com status **"Pendente"**. **Fluxo
+    completo:** 1. **Pendente**: Pagamento criado, aguardando transferência 2.
+    **Processando**: Você está fazendo a transferência 3. **Pago**:
+    Transferência concluída Quando você realmente transferir o dinheiro, marque
+    como **"Pago"** e adicione o ID da transação.
+    <Note>
+      As conversões incluídas no pagamento são automaticamente marcadas como
+      "Pagas" e não entram em novos pagamentos.
+    </Note>
   </Accordion>
-  
+
   <Accordion icon="circle-info" title="Saldo mínimo">
-    Por padrão, o afiliado precisa ter pelo menos **R$ 50** de comissões aprovadas para receber.
-    
-    Isso evita transferências muito pequenas e frequentes. Você pode alterar esse valor nas configurações da campanha.
+    Por padrão, o afiliado precisa ter pelo menos **R$ 50** de comissões
+    aprovadas para receber. Isso evita transferências muito pequenas e
+    frequentes. Você pode alterar esse valor nas configurações da campanha.
   </Accordion>
 </AccordionGroup>
 
@@ -404,19 +384,36 @@ Parabéns! Agora você tem um programa de afiliados funcionando.
 ### O que fazer agora?
 
 <CardGroup cols={2}>
-  <Card title="Analise performance" icon="chart-mixed" href="https://app.affiliatus.io">
-    Acesse o Analytics para ver gráficos detalhados de performance dos seus afiliados
+  <Card
+    title="Analise performance"
+    icon="chart-mixed"
+    href="https://app.affiliatus.io"
+  >
+    Acesse o Analytics para ver gráficos detalhados de performance dos seus
+    afiliados
   </Card>
-  
-  <Card title="Configure integrações" icon="plug" href="/integrations/introduction">
+
+  <Card
+    title="Configure integrações"
+    icon="plug"
+    href="/integrations/introduction"
+  >
     Conecte com Stripe, Woovi ou outros sistemas de pagamento
   </Card>
-  
-  <Card title="Personalize configurações" icon="sliders" href="https://app.affiliatus.io">
+
+  <Card
+    title="Personalize configurações"
+    icon="sliders"
+    href="https://app.affiliatus.io"
+  >
     Ajuste comissões, cookies, pagamento mínimo e outras regras
   </Card>
-  
-  <Card title="Convide mais afiliados" icon="users" href="https://app.affiliatus.io">
+
+  <Card
+    title="Convide mais afiliados"
+    icon="users"
+    href="https://app.affiliatus.io"
+  >
     Quanto mais afiliados ativos, mais vendas você vai gerar!
   </Card>
 </CardGroup>
@@ -427,24 +424,20 @@ Parabéns! Agora você tem um programa de afiliados funcionando.
 
 <AccordionGroup>
   <Accordion icon="trophy" title="Mantenha seus afiliados engajados">
-    - Responda rápido quando eles tiverem dúvidas
-    - Aprove conversões o mais rápido possível
-    - Pague em dia (isso faz toda diferença!)
-    - Compartilhe materiais de divulgação (imagens, textos, vídeos)
+    - Responda rápido quando eles tiverem dúvidas - Aprove conversões o mais
+    rápido possível - Pague em dia (isso faz toda diferença!) - Compartilhe
+    materiais de divulgação (imagens, textos, vídeos)
   </Accordion>
-  
+
   <Accordion icon="rocket" title="Monitore diariamente">
-    - Acesse o dashboard todo dia
-    - Aprove conversões pendentes
-    - Veja quais afiliados estão performando melhor
-    - Ajuste estratégias baseado nos dados
+    - Acesse o dashboard todo dia - Aprove conversões pendentes - Veja quais
+    afiliados estão performando melhor - Ajuste estratégias baseado nos dados
   </Accordion>
-  
+
   <Accordion icon="gift" title="Incentive seus top afiliados">
-    - Ofereça bônus para os que mais vendem
-    - Crie campanhas especiais com comissões maiores
-    - Reconheça publicamente os melhores resultados
-    - Facilite a vida deles com materiais prontos
+    - Ofereça bônus para os que mais vendem - Crie campanhas especiais com
+    comissões maiores - Reconheça publicamente os melhores resultados - Facilite
+    a vida deles com materiais prontos
   </Accordion>
 </AccordionGroup>
 
@@ -453,31 +446,38 @@ Parabéns! Agora você tem um programa de afiliados funcionando.
 ## ❓ Dúvidas frequentes
 
 <AccordionGroup>
-  <Accordion icon="question" title="E se a conversão não for rastreada automaticamente?">
-    Você pode criar conversões manualmente em **"Conversões" → "Registrar Conversão"**. 
-    
-    Isso é normal para vendas por telefone, WhatsApp ou outros canais offline.
+  <Accordion
+    icon="question"
+    title="E se a conversão não for rastreada automaticamente?"
+  >
+    Você pode criar conversões manualmente em **"Conversões" → "Registrar
+    Conversão"**. Isso é normal para vendas por telefone, WhatsApp ou outros
+    canais offline.
   </Accordion>
-  
+
   <Accordion icon="question" title="Posso ter mais de uma campanha?">
-    Sim! Você pode criar múltiplas campanhas para diferentes produtos, períodos promocionais ou estratégias.
-    
-    Cada campanha tem suas próprias regras e afiliados.
+    Sim! Você pode criar múltiplas campanhas para diferentes produtos, períodos
+    promocionais ou estratégias. Cada campanha tem suas próprias regras e
+    afiliados.
   </Accordion>
-  
-  <Accordion icon="question" title="Como sei se o código está instalado corretamente?">
-    Acesse seu site com `?ref=CÓDIGO` na URL e veja se aparece um evento em **"Eventos"** no dashboard.
-    
-    Se aparecer, está tudo certo!
+
+  <Accordion
+    icon="question"
+    title="Como sei se o código está instalado corretamente?"
+  >
+    Acesse seu site com `?ref=CÓDIGO` na URL e veja se aparece um evento em
+    **"Eventos"** no dashboard. Se aparecer, está tudo certo!
   </Accordion>
-  
+
   <Accordion icon="question" title="Posso mudar a comissão depois?">
-    Sim, mas as mudanças só afetam novas conversões. Conversões já criadas mantêm a comissão original.
+    Sim, mas as mudanças só afetam novas conversões. Conversões já criadas
+    mantêm a comissão original.
   </Accordion>
 </AccordionGroup>
 
 ---
 
 <Note>
-  **Precisa de ajuda?** Entre em contato pelo suporte ou consulte a [documentação completa](https://docs.affiliatus.io).
+  **Precisa de ajuda?** Entre em contato pelo suporte ou consulte a
+  [documentação completa](https://docs.affiliatus.io).
 </Note>

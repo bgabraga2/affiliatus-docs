@@ -8,11 +8,13 @@ description: "Automatize conversões via webhook do Stripe"
 A integração com Stripe cria conversões **automaticamente** quando um pagamento é aprovado no Stripe. Você não precisa chamar `trackConversion()` manualmente - tudo é feito via webhook.
 
 <Warning>
-  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar instalada no seu site! 
-  Ela é responsável por salvar o cookie com o código do afiliado. Esta integração Stripe é **complementar** à SDK.
+  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar
+  instalada no seu site! Ela é responsável por salvar o cookie com o código do
+  afiliado. Esta integração Stripe é **complementar** à SDK.
 </Warning>
 
 **Quando usar:**
+
 - Você usa Stripe para processar pagamentos
 - Quer automação total de conversões
 - Processa assinaturas recorrentes ou pagamentos únicos
@@ -40,8 +42,8 @@ graph LR
 6. **Conversão é criada automaticamente** ✨
 
 <Note>
-  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30 dias. 
-  Seu backend lê esse cookie e passa para o Stripe via metadata.
+  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30
+  dias. Seu backend lê esse cookie e passa para o Stripe via metadata.
 </Note>
 
 ---
@@ -56,6 +58,7 @@ graph LR
 4. Anote a **URL do Webhook** (você vai precisar)
 
 A URL será algo como:
+
 ```
 https://api.affiliatus.io/api/campaigns/{SEU_ID}/stripe/webhook
 ```
@@ -68,13 +71,17 @@ https://api.affiliatus.io/api/campaigns/{SEU_ID}/stripe/webhook
 2. Clique em **"Add endpoint"**
 3. Cole a URL do webhook copiada no passo anterior
 4. Em **"Events to send"**, selecione:
+
    - ✅ `checkout.session.completed`
    - ✅ `payment_intent.succeeded` (opcional, para redundância)
 
 5. Clique em **"Add endpoint"**
 6. Copie o **Signing Secret** (começa com `whsec_...`)
 
-<Warning>Guarde o Signing Secret em local seguro! Ele é necessário para validar os webhooks.</Warning>
+<Warning>
+  Guarde o Signing Secret em local seguro! Ele é necessário para validar os
+  webhooks.
+</Warning>
 
 ---
 
@@ -85,7 +92,10 @@ https://api.affiliatus.io/api/campaigns/{SEU_ID}/stripe/webhook
 3. Cole o **Signing Secret** no campo correspondente
 4. Clique em **"Salvar"**
 
-<Tip>O Signing Secret garante que apenas webhooks legítimos do Stripe sejam aceitos.</Tip>
+<Tip>
+  O Signing Secret garante que apenas webhooks legítimos do Stripe sejam
+  aceitos.
+</Tip>
 
 ---
 
@@ -99,25 +109,26 @@ Adicione o código do afiliado no `metadata` da sessão de checkout:
 
 ```javascript
 const session = await stripe.checkout.sessions.create({
-  payment_method_types: ['card'],
+  payment_method_types: ["card"],
   line_items: [
     {
-      price: 'price_1234567890',
+      price: "price_1234567890",
       quantity: 1,
     },
   ],
-  mode: 'subscription', // ou 'payment'
-  success_url: 'https://seusite.com/sucesso',
-  cancel_url: 'https://seusite.com/cancelado',
-  
+  mode: "subscription", // ou 'payment'
+  success_url: "https://seusite.com/sucesso",
+  cancel_url: "https://seusite.com/cancelado",
+
   metadata: {
-    affiliate_code: 'JOAO1'  // <- Código do afiliado
-  }
+    affiliate_code: "JOAO1", // <- Código do afiliado
+  },
 });
 ```
 
 <Note>
-  O código pode vir de um cookie, query string (?ref=JOAO1) ou campo no formulário.
+  O código pode vir de um cookie, query string (?ref=JOAO1) ou campo no
+  formulário.
 </Note>
 
 ---
@@ -128,20 +139,22 @@ Se o afiliado tem um cupom exclusivo no Stripe:
 
 ```javascript
 const session = await stripe.checkout.sessions.create({
-  payment_method_types: ['card'],
+  payment_method_types: ["card"],
   line_items: [
     {
-      price: 'price_1234567890',
+      price: "price_1234567890",
       quantity: 1,
     },
   ],
-  mode: 'subscription',
-  success_url: 'https://seusite.com/sucesso',
-  cancel_url: 'https://seusite.com/cancelado',
-  
-  discounts: [{
-    coupon: 'JOAO1'  // <- Código do cupom = código do afiliado
-  }]
+  mode: "subscription",
+  success_url: "https://seusite.com/sucesso",
+  cancel_url: "https://seusite.com/cancelado",
+
+  discounts: [
+    {
+      coupon: "JOAO1", // <- Código do cupom = código do afiliado
+    },
+  ],
 });
 ```
 
@@ -158,8 +171,8 @@ Neste caso, você precisa **mapear o cupom ao afiliado** no dashboard:
 
 ```typescript
 // pages/api/create-checkout-session.ts
-import Stripe from 'stripe';
-import { NextApiRequest, NextApiResponse } from 'next';
+import Stripe from "stripe";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -167,25 +180,25 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const { priceId, affiliateCode } = req.body;
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ["card"],
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
-      mode: 'subscription',
+      mode: "subscription",
       success_url: `${process.env.NEXT_PUBLIC_URL}/sucesso?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancelado`,
-      
+
       // Passar código do afiliado no metadata
       metadata: {
         affiliate_code: affiliateCode || null,
@@ -202,8 +215,8 @@ export default async function handler(
 **Componente React:**
 
 ```jsx
-import { loadStripe } from '@stripe/stripe-js';
-import { useState, useEffect } from 'react';
+import { loadStripe } from "@stripe/stripe-js";
+import { useState, useEffect } from "react";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
@@ -213,35 +226,31 @@ export default function CheckoutButton() {
   // Capturar código do afiliado do cookie ou URL
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('ref') || getCookie('aff_ref');
+    const code = urlParams.get("ref") || getCookie("aff_ref");
     setAffiliateCode(code);
   }, []);
 
   const handleCheckout = async () => {
-    const response = await fetch('/api/create-checkout-session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        priceId: 'price_1234567890',
+        priceId: "price_1234567890",
         affiliateCode: affiliateCode,
       }),
     });
 
     const { sessionId } = await response.json();
     const stripe = await stripePromise;
-    
+
     await stripe.redirectToCheckout({ sessionId });
   };
 
-  return (
-    <button onClick={handleCheckout}>
-      Assinar Agora
-    </button>
-  );
+  return <button onClick={handleCheckout}>Assinar Agora</button>;
 }
 
 function getCookie(name) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
   return match ? match[2] : null;
 }
 ```
@@ -251,21 +260,21 @@ function getCookie(name) {
 ### Node.js (Express)
 
 ```javascript
-const express = require('express');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const express = require("express");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
-app.post('/create-checkout-session', async (req, res) => {
+app.post("/create-checkout-session", async (req, res) => {
   const { priceId, affiliateCode } = req.body;
 
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
-      mode: 'subscription',
-      success_url: 'https://seusite.com/sucesso',
-      cancel_url: 'https://seusite.com/cancelado',
-      
+      mode: "subscription",
+      success_url: "https://seusite.com/sucesso",
+      cancel_url: "https://seusite.com/cancelado",
+
       metadata: {
         affiliate_code: affiliateCode || null,
       },
@@ -302,7 +311,7 @@ Route::post('/create-checkout-session', function (Request $request) {
         'mode' => 'subscription',
         'success_url' => url('/sucesso'),
         'cancel_url' => url('/cancelado'),
-        
+
         'metadata' => [
             'affiliate_code' => $affiliateCode,
         ],
@@ -327,7 +336,7 @@ stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
 def create_checkout_session(request):
     if request.method == 'POST':
         affiliate_code = request.COOKIES.get('aff_ref')
-        
+
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
@@ -337,12 +346,12 @@ def create_checkout_session(request):
             mode='subscription',
             success_url='https://seusite.com/sucesso',
             cancel_url='https://seusite.com/cancelado',
-            
+
             metadata={
                 'affiliate_code': affiliate_code,
             },
         )
-        
+
         return JsonResponse({'sessionId': session.id})
 ```
 
@@ -377,6 +386,7 @@ stripe trigger checkout.session.completed
 ### 3. Verifique os Logs
 
 No dashboard do Stripe:
+
 1. Vá em **"Developers"** → **"Webhooks"**
 2. Clique no seu webhook
 3. Veja a lista de eventos enviados
@@ -391,6 +401,7 @@ No dashboard do Stripe:
 **Causa:** Signing Secret incorreto ou integração não ativada.
 
 **Solução:**
+
 1. Verifique se a integração está ativa no dashboard
 2. Confirme que o Signing Secret está correto
 3. Tente reativar a integração
@@ -402,14 +413,17 @@ No dashboard do Stripe:
 **Possíveis causas:**
 
 1. **Metadata não enviado**
+
    - Verifique se `metadata.affiliate_code` está sendo passado
    - Confirme o valor no evento do Stripe
 
 2. **Código de afiliado inválido**
+
    - O código deve corresponder a um afiliado ativo
    - Verifique em "Afiliados" se o código existe
 
 3. **Webhook não configurado**
+
    - Confirme que o webhook está ativo no Stripe
    - Verifique se o evento `checkout.session.completed` está selecionado
 
@@ -424,6 +438,7 @@ No dashboard do Stripe:
 O valor é capturado diretamente do Stripe em centavos e convertido para reais.
 
 **Exemplo:**
+
 - Stripe: `amount_total: 9900` (centavos)
 - Conversão: `order_value: 99.00` (reais)
 
@@ -454,6 +469,7 @@ Se você usa cupons de desconto como identificadores de afiliados:
 4. Associe ao afiliado correspondente
 
 **Exemplo:**
+
 - Cupom: `DESCONTO10JOAO`
 - Afiliado: João Silva (código `JOAO1`)
 
@@ -481,19 +497,27 @@ Se você usa cupons de desconto como identificadores de afiliados:
 ## Próximos Passos
 
 <CardGroup cols={2}>
-  <Card title="Aprovar conversões" icon="check-circle" href="/quickstart#passo-7-aprove-conversoes-e-comissoes">
+  <Card
+    title="Aprovar conversões"
+    icon="check-circle"
+    href="/quickstart#passo-7-aprove-conversoes-e-comissoes"
+  >
     Aprenda a aprovar conversões automáticas
   </Card>
-  
+
   <Card title="Integração Woovi" icon="barcode" href="/integrations/woovi">
     Automatize conversões via PIX
   </Card>
-  
+
   <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
     Rastreamento manual via JavaScript
   </Card>
-  
-  <Card title="Dashboard" icon="chart-line" href="/quickstart#passo-7-aprove-conversoes-e-comissoes">
+
+  <Card
+    title="Dashboard"
+    icon="chart-line"
+    href="/quickstart#passo-7-aprove-conversoes-e-comissoes"
+  >
     Acompanhe métricas em tempo real
   </Card>
 </CardGroup>
@@ -504,23 +528,29 @@ Se você usa cupons de desconto como identificadores de afiliados:
 
 <AccordionGroup>
   <Accordion icon="question" title="Funciona com Stripe Connect?">
-    Não diretamente no momento. Use metadata no checkout da conta conectada e processe via API.
+    Não diretamente no momento. Use metadata no checkout da conta conectada e
+    processe via API.
   </Accordion>
-  
+
   <Accordion icon="question" title="Posso usar com assinaturas recorrentes?">
     Sim! Funciona tanto com `mode: 'subscription'` quanto `mode: 'payment'`.
   </Accordion>
-  
-  <Accordion icon="question" title="O que acontece se o pagamento for reembolsado?">
-    A conversão permanece no sistema. Você pode rejeitá-la manualmente se necessário.
+
+  <Accordion
+    icon="question"
+    title="O que acontece se o pagamento for reembolsado?"
+  >
+    A conversão permanece no sistema. Você pode rejeitá-la manualmente se
+    necessário.
   </Accordion>
-  
+
   <Accordion icon="question" title="Preciso da SDK JavaScript também?">
-    Sim! A SDK é obrigatória para salvar o código do afiliado no cookie. Sem ela, o webhook do Stripe não terá como saber qual afiliado trouxe a venda.
+    Sim! A SDK é obrigatória para salvar o código do afiliado no cookie. Sem
+    ela, o webhook do Stripe não terá como saber qual afiliado trouxe a venda.
   </Accordion>
 </AccordionGroup>
 
 <Note>
-  **Dúvidas?** Entre em contato pelo suporte ou consulte a [documentação do Stripe](https://stripe.com/docs/webhooks).
+  **Dúvidas?** Entre em contato pelo suporte ou consulte a [documentação do
+  Stripe](https://stripe.com/docs/webhooks).
 </Note>
-

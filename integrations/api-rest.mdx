@@ -8,11 +8,13 @@ description: "Envie conversões via API REST usando API keys"
 A integração via API REST permite que você envie conversões diretamente do seu backend usando API keys. Perfeito para integrações server-side com gateways não suportados.
 
 <Warning>
-  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar instalada no seu site! 
-  Ela é responsável por salvar o cookie com o código do afiliado. Esta integração API REST é **complementar** à SDK.
+  **Pré-requisito:** A [SDK JavaScript](/integrations/sdk-javascript) deve estar
+  instalada no seu site! Ela é responsável por salvar o cookie com o código do
+  afiliado. Esta integração API REST é **complementar** à SDK.
 </Warning>
 
 **Quando usar:**
+
 - Você processa conversões no backend
 - Usa gateway não suportado (Mercado Pago, PagSeguro, Asaas)
 - Quer integração server-to-server
@@ -40,8 +42,8 @@ graph LR
 6. API valida e cria a conversão ✨
 
 <Note>
-  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30 dias. 
-  Seu backend deve ler esse cookie antes de enviar a conversão via API.
+  **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30
+  dias. Seu backend deve ler esse cookie antes de enviar a conversão via API.
 </Note>
 
 ---
@@ -56,7 +58,8 @@ graph LR
 4. **Copie a chave imediatamente** - ela só será exibida uma vez!
 
 <Warning>
-  A API key é exibida apenas uma vez por segurança. Guarde em um local seguro (ex: variáveis de ambiente, gerenciador de secrets).
+  A API key é exibida apenas uma vez por segurança. Guarde em um local seguro
+  (ex: variáveis de ambiente, gerenciador de secrets).
 </Warning>
 
 ---
@@ -108,7 +111,7 @@ X-API-Key: your_api_key_here
       "affiliate_id": "CODIGO_DO_AFILIADO",
       "properties": {
         "order_id": "PEDIDO-12345",
-        "order_value": 99.90
+        "order_value": 99.9
       }
     }
   ]
@@ -152,35 +155,35 @@ X-API-Key: your_api_key_here
 
 ### Event Object
 
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|------|-------------|-----------|
-| `event_type` | String | ✅ Sim | Sempre `"conversion"` |
-| `campaign_id` | String | ✅ Sim | ID público da sua campanha |
-| `affiliate_id` | String | ✅ Sim | Código do afiliado (referralId) |
-| `properties` | Object | ✅ Sim | Dados da conversão |
-| `device_info` | Object | Recomendado | Informações do dispositivo |
+| Campo          | Tipo   | Obrigatório | Descrição                       |
+| -------------- | ------ | ----------- | ------------------------------- |
+| `event_type`   | String | ✅ Sim      | Sempre `"conversion"`           |
+| `campaign_id`  | String | ✅ Sim      | ID público da sua campanha      |
+| `affiliate_id` | String | ✅ Sim      | Código do afiliado (referralId) |
+| `properties`   | Object | ✅ Sim      | Dados da conversão              |
+| `device_info`  | Object | Recomendado | Informações do dispositivo      |
 
 ### Properties Object
 
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|------|-------------|-----------|
-| `order_id` | String | ✅ Sim | ID único do pedido |
-| `order_value` | Number | ✅ Sim | Valor da venda em reais |
-| `url` | String | Recomendado | URL da página de checkout |
-| `product` | String | Opcional | Nome do produto/plano |
-| `customer_email` | String | Opcional | E-mail do cliente |
-| `customer_name` | String | Opcional | Nome do cliente |
-| `timestamp` | String | Opcional | ISO 8601 timestamp |
+| Campo            | Tipo   | Obrigatório | Descrição                 |
+| ---------------- | ------ | ----------- | ------------------------- |
+| `order_id`       | String | ✅ Sim      | ID único do pedido        |
+| `order_value`    | Number | ✅ Sim      | Valor da venda em reais   |
+| `url`            | String | Recomendado | URL da página de checkout |
+| `product`        | String | Opcional    | Nome do produto/plano     |
+| `customer_email` | String | Opcional    | E-mail do cliente         |
+| `customer_name`  | String | Opcional    | Nome do cliente           |
+| `timestamp`      | String | Opcional    | ISO 8601 timestamp        |
 
 ### Device Info Object
 
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `user_agent` | String | User agent do navegador |
-| `ip` | String | IP do cliente |
-| `language` | String | Idioma do navegador |
-| `screen_width` | Number | Largura da tela |
-| `screen_height` | Number | Altura da tela |
+| Campo           | Tipo   | Descrição               |
+| --------------- | ------ | ----------------------- |
+| `user_agent`    | String | User agent do navegador |
+| `ip`            | String | IP do cliente           |
+| `language`      | String | Idioma do navegador     |
+| `screen_width`  | Number | Largura da tela         |
+| `screen_height` | Number | Altura da tela          |
 
 ---
 
@@ -190,26 +193,26 @@ X-API-Key: your_api_key_here
 
 ```javascript
 const AFFILIATUS_API_KEY = process.env.AFFILIATUS_API_KEY;
-const AFFILIATUS_API_URL = 'https://api.affiliatus.io/events/api';
+const AFFILIATUS_API_URL = "https://api.affiliatus.io/events/api";
 
 async function sendConversion(orderId, orderValue, affiliateCode) {
   try {
     const response = await fetch(AFFILIATUS_API_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': AFFILIATUS_API_KEY,
+        "Content-Type": "application/json",
+        "X-API-Key": AFFILIATUS_API_KEY,
       },
       body: JSON.stringify({
         events: [
           {
-            event_type: 'conversion',
-            campaign_id: 'abc-123-def',
+            event_type: "conversion",
+            campaign_id: "abc-123-def",
             affiliate_id: affiliateCode,
             properties: {
               order_id: orderId,
               order_value: orderValue,
-              url: 'https://seusite.com/checkout',
+              url: "https://seusite.com/checkout",
               timestamp: new Date().toISOString(),
             },
           },
@@ -222,16 +225,16 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
     }
 
     const data = await response.json();
-    console.log('Conversão enviada:', data);
+    console.log("Conversão enviada:", data);
     return data;
   } catch (error) {
-    console.error('Erro ao enviar conversão:', error);
+    console.error("Erro ao enviar conversão:", error);
     throw error;
   }
 }
 
 // Uso
-await sendConversion('ORDER-123', 99.90, 'JOAO1');
+await sendConversion("ORDER-123", 99.9, "JOAO1");
 ```
 
 ---
@@ -239,23 +242,23 @@ await sendConversion('ORDER-123', 99.90, 'JOAO1');
 ### Node.js (Axios)
 
 ```javascript
-const axios = require('axios');
+const axios = require("axios");
 
 const affiliatusClient = axios.create({
-  baseURL: 'https://api.affiliatus.io',
+  baseURL: "https://api.affiliatus.io",
   headers: {
-    'Content-Type': 'application/json',
-    'X-API-Key': process.env.AFFILIATUS_API_KEY,
+    "Content-Type": "application/json",
+    "X-API-Key": process.env.AFFILIATUS_API_KEY,
   },
 });
 
 async function sendConversion(orderId, orderValue, affiliateCode) {
   try {
-    const response = await affiliatusClient.post('/events/api', {
+    const response = await affiliatusClient.post("/events/api", {
       events: [
         {
-          event_type: 'conversion',
-          campaign_id: 'abc-123-def',
+          event_type: "conversion",
+          campaign_id: "abc-123-def",
           affiliate_id: affiliateCode,
           properties: {
             order_id: orderId,
@@ -266,10 +269,10 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
       ],
     });
 
-    console.log('Conversão enviada:', response.data);
+    console.log("Conversão enviada:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Erro:', error.response?.data || error.message);
+    console.error("Erro:", error.response?.data || error.message);
     throw error;
   }
 }
@@ -285,7 +288,7 @@ async function sendConversion(orderId, orderValue, affiliateCode) {
 function sendConversion($orderId, $orderValue, $affiliateCode) {
     $apiKey = getenv('AFFILIATUS_API_KEY');
     $apiUrl = 'https://api.affiliatus.io/events/api';
-    
+
     $payload = json_encode([
         'events' => [
             [
@@ -348,7 +351,7 @@ def send_conversion(order_id, order_value, affiliate_code):
         'Content-Type': 'application/json',
         'X-API-Key': AFFILIATUS_API_KEY,
     }
-    
+
     payload = {
         'events': [
             {
@@ -364,7 +367,7 @@ def send_conversion(order_id, order_value, affiliate_code):
             },
         ],
     }
-    
+
     try:
         response = requests.post(AFFILIATUS_API_URL, json=payload, headers=headers)
         response.raise_for_status()
@@ -392,7 +395,7 @@ AFFILIATUS_API_URL = 'https://api.affiliatus.io/events/api'
 
 def send_conversion(order_id, order_value, affiliate_code)
   uri = URI.parse(AFFILIATUS_API_URL)
-  
+
   payload = {
     events: [
       {
@@ -411,14 +414,14 @@ def send_conversion(order_id, order_value, affiliate_code)
 
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
-  
+
   request = Net::HTTP::Post.new(uri.path)
   request['Content-Type'] = 'application/json'
   request['X-API-Key'] = AFFILIATUS_API_KEY
   request.body = payload.to_json
-  
+
   response = http.request(request)
-  
+
   if response.code.to_i == 200
     puts "Conversão enviada: #{response.body}"
     JSON.parse(response.body)
@@ -468,7 +471,7 @@ type Payload struct {
 func sendConversion(orderID string, orderValue float64, affiliateCode string) error {
     apiKey := os.Getenv("AFFILIATUS_API_KEY")
     apiURL := "https://api.affiliatus.io/events/api"
-    
+
     payload := Payload{
         Events: []Event{
             {
@@ -484,31 +487,31 @@ func sendConversion(orderID string, orderValue float64, affiliateCode string) er
             },
         },
     }
-    
+
     jsonData, err := json.Marshal(payload)
     if err != nil {
         return fmt.Errorf("error marshaling JSON: %w", err)
     }
-    
+
     req, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonData))
     if err != nil {
         return fmt.Errorf("error creating request: %w", err)
     }
-    
+
     req.Header.Set("Content-Type", "application/json")
     req.Header.Set("X-API-Key", apiKey)
-    
+
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
         return fmt.Errorf("error sending request: %w", err)
     }
     defer resp.Body.Close()
-    
+
     if resp.StatusCode != 200 {
         return fmt.Errorf("HTTP error: %d", resp.StatusCode)
     }
-    
+
     fmt.Println("Conversão enviada com sucesso!")
     return nil
 }
@@ -620,7 +623,7 @@ async function sendConversionWithRetry(data, maxRetries = 3) {
     } catch (error) {
       if (error.response?.status === 429 && i < maxRetries - 1) {
         const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
       throw error;
@@ -709,15 +712,17 @@ Importe esta collection:
         "X-API-Key": "{{API_KEY}}"
       },
       "body": {
-        "events": [{
-          "event_type": "conversion",
-          "campaign_id": "{{CAMPAIGN_ID}}",
-          "affiliate_id": "{{AFFILIATE_CODE}}",
-          "properties": {
-            "order_id": "TEST-{{$timestamp}}",
-            "order_value": 99.90
+        "events": [
+          {
+            "event_type": "conversion",
+            "campaign_id": "{{CAMPAIGN_ID}}",
+            "affiliate_id": "{{AFFILIATE_CODE}}",
+            "properties": {
+              "order_id": "TEST-{{$timestamp}}",
+              "order_value": 99.9
+            }
           }
-        }]
+        ]
       }
     }
   ]
@@ -759,7 +764,7 @@ Se retornar `200 OK`, a chave está válida.
 Implemente timeout e retry:
 
 ```javascript
-const axios = require('axios');
+const axios = require("axios");
 
 const client = axios.create({
   timeout: 10000, // 10 segundos
@@ -771,15 +776,15 @@ const client = axios.create({
 
 ## Comparação: API REST vs SDK JavaScript
 
-| Característica | API REST | SDK JavaScript |
-|----------------|----------|----------------|
-| **Onde roda** | Backend/Server | Frontend/Browser |
-| **Requer código** | ✅ Sim | ✅ Sim |
-| **Autenticação** | API Key | Campaign ID |
-| **Segurança** | Alta (server-side) | Média (client-side) |
-| **Dependência** | Nenhuma | JavaScript habilitado |
-| **Rate limit** | 70/min por key | 70/min por IP |
-| **Ideal para** | Integrações backend | Sites tradicionais |
+| Característica    | API REST            | SDK JavaScript        |
+| ----------------- | ------------------- | --------------------- |
+| **Onde roda**     | Backend/Server      | Frontend/Browser      |
+| **Requer código** | ✅ Sim              | ✅ Sim                |
+| **Autenticação**  | API Key             | Campaign ID           |
+| **Segurança**     | Alta (server-side)  | Média (client-side)   |
+| **Dependência**   | Nenhuma             | JavaScript habilitado |
+| **Rate limit**    | 70/min por key      | 70/min por IP         |
+| **Ideal para**    | Integrações backend | Sites tradicionais    |
 
 ---
 
@@ -808,18 +813,26 @@ const client = axios.create({
 ## Próximos Passos
 
 <CardGroup cols={2}>
-  <Card title="API Reference" icon="book-open" href="/api-reference/events/send-events">
+  <Card
+    title="API Reference"
+    icon="book-open"
+    href="/api-reference/events/send-events"
+  >
     Documentação técnica completa da API
   </Card>
-  
-  <Card title="Aprovar conversões" icon="check-circle" href="/quickstart#passo-7-aprove-conversoes-e-comissoes">
+
+  <Card
+    title="Aprovar conversões"
+    icon="check-circle"
+    href="/quickstart#passo-7-aprove-conversoes-e-comissoes"
+  >
     Aprenda a aprovar conversões enviadas
   </Card>
-  
+
   <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
     Rastreamento frontend
   </Card>
-  
+
   <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
     Acesse o dashboard do Affiliatus
   </Card>
@@ -831,27 +844,32 @@ const client = axios.create({
 
 <AccordionGroup>
   <Accordion icon="question" title="Posso usar a API key no frontend?">
-    **Não!** A API key deve ser usada apenas no backend. No frontend, use o SDK JavaScript.
+    **Não!** A API key deve ser usada apenas no backend. No frontend, use o SDK
+    JavaScript.
   </Accordion>
-  
+
   <Accordion icon="question" title="Quantas API keys posso criar?">
-    Não há limite. Crie quantas precisar (ex: uma para produção, outra para staging).
+    Não há limite. Crie quantas precisar (ex: uma para produção, outra para
+    staging).
   </Accordion>
-  
+
   <Accordion icon="question" title="E se eu perder minha API key?">
     Não é possível recuperar. Você precisará revogar a antiga e criar uma nova.
   </Accordion>
-  
+
   <Accordion icon="question" title="A API key expira?">
     Não, ela permanece válida até ser revogada manualmente.
   </Accordion>
-  
-  <Accordion icon="question" title="Posso enviar outros tipos de evento além de conversão?">
+
+  <Accordion
+    icon="question"
+    title="Posso enviar outros tipos de evento além de conversão?"
+  >
     Sim! Você pode enviar `page_view` e `lead` também usando o mesmo formato.
   </Accordion>
 </AccordionGroup>
 
 <Note>
-  **Dúvidas?** Entre em contato pelo suporte ou consulte a [documentação da API](/api-reference/introduction).
+  **Dúvidas?** Entre em contato pelo suporte ou consulte a [documentação da
+  API](/api-reference/introduction).
 </Note>
-
