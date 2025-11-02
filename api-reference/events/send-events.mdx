@@ -1,0 +1,439 @@
+---
+title: 'Enviar Eventos'
+api: 'POST https://api.affiliatus.io/events/api'
+description: 'Envie conversões e outros eventos de rastreamento via API'
+---
+
+## Endpoint
+
+```
+POST https://api.affiliatus.io/events/api
+```
+
+Este endpoint permite enviar eventos de rastreamento (conversões, leads, page views) diretamente do seu backend.
+
+---
+
+## Autenticação
+
+<ParamField header="X-API-Key" type="string" required>
+  Sua API key obtida no dashboard em Configurações → API Keys
+</ParamField>
+
+---
+
+## Body Parameters
+
+<ParamField body="batch" type="boolean" default="false">
+  Indica se está enviando múltiplos eventos em lote
+</ParamField>
+
+<ParamField body="events" type="array" required>
+  Array de eventos a serem processados
+
+  <Expandable title="Event Object">
+    <ParamField body="event_type" type="string" required>
+      Tipo do evento. Valores possíveis:
+      - `conversion` - Venda realizada
+      - `lead` - Lead capturado
+      - `page_view` - Visualização de página
+    </ParamField>
+
+    <ParamField body="campaign_id" type="string" required>
+      ID público da campanha (ex: `abc-123-def`)
+    </ParamField>
+
+    <ParamField body="affiliate_id" type="string" required>
+      Código do afiliado (referralId, ex: `JOAO1`)
+    </ParamField>
+
+    <ParamField body="properties" type="object" required>
+      Propriedades específicas do evento
+
+      <Expandable title="Conversion Properties">
+        <ParamField body="order_id" type="string" required>
+          ID único do pedido
+        </ParamField>
+
+        <ParamField body="order_value" type="number" required>
+          Valor da venda em reais (ex: `99.90`)
+        </ParamField>
+
+        <ParamField body="url" type="string">
+          URL da página onde ocorreu a conversão
+        </ParamField>
+
+        <ParamField body="product" type="string">
+          Nome do produto ou plano vendido
+        </ParamField>
+
+        <ParamField body="customer_email" type="string">
+          E-mail do cliente
+        </ParamField>
+
+        <ParamField body="customer_name" type="string">
+          Nome do cliente
+        </ParamField>
+
+        <ParamField body="timestamp" type="string">
+          Timestamp ISO 8601 (ex: `2024-01-15T10:30:00Z`)
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField body="device_info" type="object">
+      Informações do dispositivo (opcional mas recomendado)
+
+      <Expandable title="Device Info Fields">
+        <ParamField body="user_agent" type="string">
+          User agent do navegador
+        </ParamField>
+
+        <ParamField body="ip" type="string">
+          Endereço IP do cliente
+        </ParamField>
+
+        <ParamField body="language" type="string">
+          Idioma do navegador (ex: `pt-BR`)
+        </ParamField>
+
+        <ParamField body="screen_width" type="number">
+          Largura da tela em pixels
+        </ParamField>
+
+        <ParamField body="screen_height" type="number">
+          Altura da tela em pixels
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+---
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indica se a operação foi bem-sucedida
+</ResponseField>
+
+---
+
+## Exemplos
+
+### Enviar uma Conversão
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.affiliatus.io/events/api \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "events": [{
+      "event_type": "conversion",
+      "campaign_id": "abc-123-def",
+      "affiliate_id": "JOAO1",
+      "properties": {
+        "order_id": "ORDER-12345",
+        "order_value": 99.90,
+        "product": "Plano Premium"
+      }
+    }]
+  }'
+```
+
+```javascript Node.js
+const response = await fetch('https://api.affiliatus.io/events/api', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Key': process.env.AFFILIATUS_API_KEY,
+  },
+  body: JSON.stringify({
+    events: [{
+      event_type: 'conversion',
+      campaign_id: 'abc-123-def',
+      affiliate_id: 'JOAO1',
+      properties: {
+        order_id: 'ORDER-12345',
+        order_value: 99.90,
+        product: 'Plano Premium'
+      }
+    }]
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.affiliatus.io/events/api',
+    headers={
+        'Content-Type': 'application/json',
+        'X-API-Key': 'sua_api_key_aqui',
+    },
+    json={
+        'events': [{
+            'event_type': 'conversion',
+            'campaign_id': 'abc-123-def',
+            'affiliate_id': 'JOAO1',
+            'properties': {
+                'order_id': 'ORDER-12345',
+                'order_value': 99.90,
+                'product': 'Plano Premium'
+            }
+        }]
+    }
+)
+
+print(response.json())
+```
+
+```php PHP
+<?php
+$ch = curl_init('https://api.affiliatus.io/events/api');
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'X-API-Key: sua_api_key_aqui'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'events' => [[
+        'event_type' => 'conversion',
+        'campaign_id' => 'abc-123-def',
+        'affiliate_id' => 'JOAO1',
+        'properties' => [
+            'order_id' => 'ORDER-12345',
+            'order_value' => 99.90,
+            'product' => 'Plano Premium'
+        ]
+    ]]
+]));
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+```
+
+</CodeGroup>
+
+### Resposta de Sucesso
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+### Enviar Múltiplas Conversões (Batch)
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.affiliatus.io/events/api \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "batch": true,
+    "events": [
+      {
+        "event_type": "conversion",
+        "campaign_id": "abc-123-def",
+        "affiliate_id": "JOAO1",
+        "properties": {
+          "order_id": "ORDER-001",
+          "order_value": 99.90
+        }
+      },
+      {
+        "event_type": "conversion",
+        "campaign_id": "abc-123-def",
+        "affiliate_id": "MARIA2",
+        "properties": {
+          "order_id": "ORDER-002",
+          "order_value": 149.90
+        }
+      }
+    ]
+  }'
+```
+
+```javascript Node.js
+const events = [
+  {
+    event_type: 'conversion',
+    campaign_id: 'abc-123-def',
+    affiliate_id: 'JOAO1',
+    properties: {
+      order_id: 'ORDER-001',
+      order_value: 99.90
+    }
+  },
+  {
+    event_type: 'conversion',
+    campaign_id: 'abc-123-def',
+    affiliate_id: 'MARIA2',
+    properties: {
+      order_id: 'ORDER-002',
+      order_value: 149.90
+    }
+  }
+];
+
+const response = await fetch('https://api.affiliatus.io/events/api', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Key': process.env.AFFILIATUS_API_KEY,
+  },
+  body: JSON.stringify({ batch: true, events })
+});
+```
+
+</CodeGroup>
+
+---
+
+## Erros
+
+### 401 - API Key Inválida
+
+```json
+{
+  "statusCode": 401,
+  "message": "API Key is required",
+  "error": "Unauthorized"
+}
+```
+
+**Solução:** Verifique se o header `X-API-Key` está sendo enviado.
+
+---
+
+### 400 - Dados Inválidos
+
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "order_value must be a positive number"
+  ],
+  "error": "Bad Request"
+}
+```
+
+**Solução:** Corrija os dados conforme a mensagem de erro.
+
+---
+
+### 403 - Limite Excedido
+
+```json
+{
+  "statusCode": 403,
+  "message": "Conversion limit exceeded: Monthly conversion limit reached for starter plan. Current: 500/500",
+  "error": "Forbidden"
+}
+```
+
+**Solução:** Faça upgrade do plano ou aguarde o próximo ciclo.
+
+---
+
+### 429 - Rate Limit
+
+```json
+{
+  "statusCode": 429,
+  "message": "ThrottlerException: Too Many Requests",
+  "error": "Too Many Requests"
+}
+```
+
+**Solução:** Aguarde 60 segundos ou implemente retry com backoff.
+
+---
+
+## Testando
+
+### Teste Rápido com cURL
+
+```bash
+curl -X POST https://api.affiliatus.io/events/api \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: SUA_API_KEY" \
+  -d '{
+    "events": [{
+      "event_type": "conversion",
+      "campaign_id": "SEU_CAMPAIGN_ID",
+      "affiliate_id": "TEST01",
+      "properties": {
+        "order_id": "TEST-'$(date +%s)'",
+        "order_value": 1.00
+      }
+    }]
+  }'
+```
+
+### Verificar no Dashboard
+
+Após enviar, verifique em **Conversões** no dashboard se a conversão apareceu com status **Pendente**.
+
+---
+
+## Boas Práticas
+
+<AccordionGroup>
+  <Accordion title="Use order_id único">
+    Sempre envie um `order_id` único para cada conversão. O sistema ignora conversões duplicadas com mesmo `order_id`.
+  </Accordion>
+
+  <Accordion title="Envie em lote quando possível">
+    Para melhor performance, envie múltiplas conversões em uma única requisição usando `batch: true`.
+  </Accordion>
+
+  <Accordion title="Implemente retry com backoff">
+    Caso receba erro 429 ou 500, implemente retry com exponential backoff (1s, 2s, 4s...).
+  </Accordion>
+
+  <Accordion title="Valide dados antes de enviar">
+    Verifique se `order_value` é positivo e se `affiliate_id` existe antes de enviar.
+  </Accordion>
+
+  <Accordion title="Logue erros para debug">
+    Mantenha logs de todas as requisições para facilitar troubleshooting.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Próximos Passos
+
+<CardGroup cols={2}>
+  <Card title="Guia Completo" icon="book" href="/integrations/api-rest">
+    Veja exemplos em mais linguagens
+  </Card>
+  
+  <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
+    Visualize suas conversões no dashboard
+  </Card>
+  
+  <Card title="Criar API Key" icon="key" href="https://app.affiliatus.io/dashboard/settings/api-keys">
+    Gere sua API key
+  </Card>
+  
+  <Card title="Aprovar Conversões" icon="check-circle" href="/quickstart#passo-7-aprove-conversoes-e-comissoes">
+    Aprenda a gerenciar conversões
+  </Card>
+</CardGroup>
+

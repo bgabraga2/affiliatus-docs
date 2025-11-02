@@ -1,217 +1,311 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
+    "title": "Affiliatus API",
+    "description": "API REST para integração com o sistema de afiliados Affiliatus.io",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Suporte Affiliatus",
+      "email": "suporte@affiliatus.io",
+      "url": "https://affiliatus.io"
     },
-    "version": "1.0.0"
+    "license": {
+      "name": "Proprietary"
+    }
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.affiliatus.io",
+      "description": "Servidor de Produção"
     }
   ],
   "security": [
     {
-      "bearerAuth": []
+      "ApiKeyAuth": []
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
+    "/events/api": {
+      "post": {
+        "summary": "Enviar Eventos",
+        "description": "Envia eventos de rastreamento (conversões, leads, page views) para o sistema",
+        "operationId": "sendEvents",
+        "tags": ["Eventos"],
+        "security": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "ApiKeyAuth": []
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventBatch"
+              },
+              "examples": {
+                "single_conversion": {
+                  "summary": "Conversão única",
+                  "value": {
+                    "events": [
+                      {
+                        "event_type": "conversion",
+                        "campaign_id": "abc-123-def",
+                        "affiliate_id": "JOAO1",
+                        "properties": {
+                          "order_id": "ORDER-12345",
+                          "order_value": 99.90,
+                          "product": "Plano Premium"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "batch_conversions": {
+                  "summary": "Múltiplas conversões",
+                  "value": {
+                    "batch": true,
+                    "events": [
+                      {
+                        "event_type": "conversion",
+                        "campaign_id": "abc-123-def",
+                        "affiliate_id": "JOAO1",
+                        "properties": {
+                          "order_id": "ORDER-001",
+                          "order_value": 99.90
+                        }
+                      },
+                      {
+                        "event_type": "conversion",
+                        "campaign_id": "abc-123-def",
+                        "affiliate_id": "MARIA2",
+                        "properties": {
+                          "order_id": "ORDER-002",
+                          "order_value": 149.90
+                        }
+                      }
+                    ]
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "Eventos processados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "API Key ausente ou inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "API Key revogada ou limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     }
   },
   "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "API key obtida em Configurações → API Keys no dashboard"
       }
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+    "schemas": {
+      "EventBatch": {
+        "type": "object",
+        "required": ["events"],
+        "properties": {
+          "batch": {
+            "type": "boolean",
+            "description": "Indica se está enviando múltiplos eventos em lote",
+            "default": false
+          },
+          "events": {
+            "type": "array",
+            "description": "Array de eventos a serem processados",
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "required": ["event_type", "campaign_id", "affiliate_id", "properties"],
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": ["conversion", "lead", "page_view"],
+            "description": "Tipo do evento"
+          },
+          "campaign_id": {
+            "type": "string",
+            "description": "ID público da campanha"
+          },
+          "affiliate_id": {
+            "type": "string",
+            "description": "Código de referência do afiliado"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/EventProperties"
+          },
+          "device_info": {
+            "$ref": "#/components/schemas/DeviceInfo"
+          }
+        }
+      },
+      "EventProperties": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "ID único do pedido (obrigatório para conversões)"
+          },
+          "order_value": {
+            "type": "number",
+            "format": "float",
+            "description": "Valor da venda em reais (obrigatório para conversões)",
+            "minimum": 0
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL da página onde ocorreu o evento"
+          },
+          "product": {
+            "type": "string",
+            "description": "Nome do produto ou plano vendido"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "description": "E-mail do cliente"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Nome do cliente"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp do evento em ISO 8601"
+          }
+        }
+      },
+      "DeviceInfo": {
+        "type": "object",
+        "description": "Informações do dispositivo do usuário",
+        "properties": {
+          "user_agent": {
+            "type": "string",
+            "description": "User agent do navegador"
+          },
+          "ip": {
+            "type": "string",
+            "description": "Endereço IP do cliente"
+          },
+          "language": {
+            "type": "string",
+            "description": "Idioma do navegador"
+          },
+          "screen_width": {
+            "type": "integer",
+            "description": "Largura da tela em pixels"
+          },
+          "screen_height": {
+            "type": "integer",
+            "description": "Altura da tela em pixels"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "example": "Validation error"
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Eventos",
+      "description": "Endpoints para envio e rastreamento de eventos"
+    }
+  ]
 }

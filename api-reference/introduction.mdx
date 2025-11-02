@@ -1,33 +1,270 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Documentação completa da API REST do Affiliatus.io'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Bem-vindo à API do Affiliatus
 
-## Welcome
+A API do Affiliatus permite que você integre seu sistema de afiliados diretamente com seu backend, possibilitando enviar conversões, gerenciar afiliados e acessar métricas programaticamente.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+---
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+## Base URL
 
-## Authentication
+```
+https://api.affiliatus.io
+```
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+**Ambiente de produção:**
+- Base URL: `https://api.affiliatus.io`
+- Versão: v1 (atual)
+
+---
+
+## Autenticação
+
+Todas as requisições à API requerem autenticação via **API Key**.
+
+### Como Obter sua API Key
+
+1. Acesse o [Dashboard do Affiliatus](https://app.affiliatus.io)
+2. Vá em **Configurações** → **API Keys**
+3. Clique em **"Nova API Key"**
+4. Copie a chave (será exibida apenas uma vez!)
+
+### Enviando a API Key
+
+Inclua sua API key no header `X-API-Key` de todas as requisições:
+
+```http
+X-API-Key: sua_api_key_aqui
+```
+
+<Warning>
+  **Segurança:** Nunca exponha sua API key no frontend ou em repositórios públicos. 
+  Use variáveis de ambiente ou gerenciadores de secrets.
+</Warning>
+
+---
+
+## Rate Limiting
+
+A API possui limites de requisições para garantir estabilidade:
+
+| Endpoint | Limite | Período |
+|----------|--------|---------|
+| `/events/api` | 70 requisições | por minuto |
+| Outros endpoints | 100 requisições | por minuto |
+
+**Headers de resposta:**
+
+```http
+X-RateLimit-Limit: 70
+X-RateLimit-Remaining: 65
+X-RateLimit-Reset: 1640000000
+```
+
+**Resposta quando limite excedido (429):**
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "statusCode": 429,
+  "message": "ThrottlerException: Too Many Requests",
+  "error": "Too Many Requests"
+}
 ```
+
+<Tip>
+  Implemente retry com exponential backoff para lidar com rate limits de forma elegante.
+</Tip>
+
+---
+
+## Formatos de Dados
+
+### Request
+
+- **Content-Type:** `application/json`
+- **Encoding:** UTF-8
+- **Date Format:** ISO 8601 (`2024-01-15T10:30:00Z`)
+
+### Response
+
+Todas as respostas são em formato JSON:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Optional success message"
+}
+```
+
+---
+
+## Códigos de Status HTTP
+
+| Código | Descrição | Uso |
+|--------|-----------|-----|
+| **200** | OK | Requisição bem-sucedida |
+| **201** | Created | Recurso criado com sucesso |
+| **400** | Bad Request | Dados inválidos ou faltando |
+| **401** | Unauthorized | API key inválida ou ausente |
+| **403** | Forbidden | API key revogada ou sem permissão |
+| **404** | Not Found | Recurso não encontrado |
+| **429** | Too Many Requests | Rate limit excedido |
+| **500** | Internal Server Error | Erro no servidor |
+
+---
+
+## Erros
+
+### Estrutura de Erro
+
+```json
+{
+  "statusCode": 400,
+  "message": "Validation error message",
+  "error": "Bad Request"
+}
+```
+
+### Erros Comuns
+
+#### 401 - API Key Inválida
+
+```json
+{
+  "statusCode": 401,
+  "message": "API Key is required",
+  "error": "Unauthorized"
+}
+```
+
+**Solução:** Verifique se o header `X-API-Key` está presente e correto.
+
+---
+
+#### 403 - API Key Revogada
+
+```json
+{
+  "statusCode": 403,
+  "message": "API Key is revoked or inactive",
+  "error": "Forbidden"
+}
+```
+
+**Solução:** Crie uma nova API key no dashboard.
+
+---
+
+#### 400 - Dados Inválidos
+
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "order_value must be a positive number",
+    "affiliate_id is required"
+  ],
+  "error": "Bad Request"
+}
+```
+
+**Solução:** Verifique se todos os campos obrigatórios estão presentes e válidos.
+
+---
+
+## Endpoints Disponíveis
+
+<Card title="Enviar Eventos" icon="paper-plane" href="/api-reference/events/send-events">
+  Envie conversões e outros eventos de rastreamento via POST
+</Card>
+
+---
+
+## Exemplo Rápido
+
+### Enviar uma Conversão
+
+```bash
+curl -X POST https://api.affiliatus.io/events/api \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sua_api_key_aqui" \
+  -d '{
+    "events": [{
+      "event_type": "conversion",
+      "campaign_id": "abc-123-def",
+      "affiliate_id": "JOAO1",
+      "properties": {
+        "order_id": "ORDER-12345",
+        "order_value": 99.90
+      }
+    }]
+  }'
+```
+
+**Resposta (200 OK):**
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## SDKs e Bibliotecas
+
+Atualmente, a API suporta requisições HTTP diretas em qualquer linguagem. Exemplos disponíveis:
+
+- Node.js (Fetch, Axios)
+- PHP (cURL)
+- Python (Requests)
+- Ruby (Net::HTTP)
+- Go (net/http)
+
+<Note>
+  Veja exemplos completos na [documentação de integração](/integrations/api-rest).
+</Note>
+
+---
+
+## Versionamento
+
+A API segue versionamento semântico. A versão atual é **v1**.
+
+**Breaking changes** serão comunicadas com antecedência e uma nova versão será disponibilizada.
+
+---
+
+## Suporte
+
+Precisa de ajuda?
+
+- 📧 Email: [suporte@affiliatus.io](mailto:suporte@affiliatus.io)
+- 📚 Guia de Integração: [/integrations/api-rest](/integrations/api-rest)
+- 🚀 Quickstart: [/quickstart](/quickstart)
+
+---
+
+## Próximos Passos
+
+<CardGroup cols={2}>
+  <Card title="Ver Endpoints" icon="list" href="/api-reference/events/send-events">
+    Explore todos os endpoints disponíveis
+  </Card>
+  
+  <Card title="Guia de Integração" icon="book" href="/integrations/api-rest">
+    Tutorial completo com exemplos de código
+  </Card>
+  
+  <Card title="Criar API Key" icon="key" href="https://app.affiliatus.io/dashboard/settings/api-keys">
+    Gere sua primeira API key no dashboard
+  </Card>
+  
+  <Card title="Testar API" icon="flask" href="/api-reference/events/send-events#testando">
+    Faça seu primeiro teste com cURL
+  </Card>
+</CardGroup>
