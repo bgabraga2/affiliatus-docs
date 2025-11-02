@@ -21,6 +21,12 @@
             ]
           },
           {
+            "group": "Eventos",
+            "pages": [
+              "guides/event-types"
+            ]
+          },
+          {
             "group": "Integrações",
             "pages": [
               "integrations/introduction",
