@@ -1,7 +1,7 @@
 ---
-title: 'Evento: Lead'
-description: 'Captura de leads e informações de contato'
-icon: 'user-plus'
+title: "Lead"
+description: "Captura de leads e informações de contato"
+icon: "user-plus"
 ---
 
 ## Descrição
@@ -21,23 +21,23 @@ O evento **`lead`** rastreia quando um visitante fornece informações de contat
   <Card title="Formulários" icon="file-pen">
     Quando o usuário preenche formulário de interesse
   </Card>
-  
+
   <Card title="Trial Gratuito" icon="flask">
     Ao cadastrar-se para trial gratuito
   </Card>
-  
+
   <Card title="Newsletter" icon="envelope">
     Ao assinar newsletter ou baixar material
   </Card>
-  
+
   <Card title="Carrinho" icon="cart-shopping">
     Ao adicionar produtos ao carrinho
   </Card>
-  
+
   <Card title="Checkout" icon="credit-card">
     Ao iniciar processo de checkout
   </Card>
-  
+
   <Card title="Demo" icon="presentation-screen">
     Ao solicitar demonstração ou contato
   </Card>
@@ -48,51 +48,36 @@ O evento **`lead`** rastreia quando um visitante fornece informações de contat
 ## Propriedades Suportadas
 
 <ParamField body="email" type="string">
-  E-mail do lead (recomendado para deduplicação)
-  
-  **Exemplo:** `"joao@email.com"`
+  E-mail do lead (recomendado para deduplicação) **Exemplo:** `"joao@email.com"`
 </ParamField>
 
 <ParamField body="name" type="string">
-  Nome completo do lead
-  
-  **Exemplo:** `"João Silva"`
+  Nome completo do lead **Exemplo:** `"João Silva"`
 </ParamField>
 
 <ParamField body="phone" type="string">
-  Telefone do lead
-  
-  **Exemplo:** `"(11) 99999-9999"`
+  Telefone do lead **Exemplo:** `"(11) 99999-9999"`
 </ParamField>
 
 <ParamField body="company" type="string">
-  Nome da empresa (B2B)
-  
-  **Exemplo:** `"Tech LTDA"`
+  Nome da empresa (B2B) **Exemplo:** `"Tech LTDA"`
 </ParamField>
 
 <ParamField body="lead_type" type="string">
-  Tipo ou categoria do lead
-  
-  **Exemplo:** `"trial_signup"`, `"newsletter"`, `"demo_request"`
+  Tipo ou categoria do lead **Exemplo:** `"trial_signup"`, `"newsletter"`,
+  `"demo_request"`
 </ParamField>
 
 <ParamField body="url" type="string">
-  URL onde o lead foi capturado
-  
-  **Exemplo:** `"https://seu-site.com/signup"`
+  URL onde o lead foi capturado **Exemplo:** `"https://seu-site.com/signup"`
 </ParamField>
 
 <ParamField body="source" type="string">
-  Origem ou canal do lead
-  
-  **Exemplo:** `"landing_page"`, `"popup"`, `"checkout"`
+  Origem ou canal do lead **Exemplo:** `"landing_page"`, `"popup"`, `"checkout"`
 </ParamField>
 
 <ParamField body="timestamp" type="string">
-  Data/hora ISO 8601 da captura
-  
-  **Exemplo:** `"2024-01-15T10:35:00Z"`
+  Data/hora ISO 8601 da captura **Exemplo:** `"2024-01-15T10:35:00Z"`
 </ParamField>
 
 ---
@@ -103,21 +88,21 @@ O evento **`lead`** rastreia quando um visitante fornece informações de contat
 
 ```javascript
 // Ao submeter formulário de cadastro
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  
+
   const formData = new FormData(e.target);
-  
+
   // Rastrear lead
   affiliatus.trackLead({
-    email: formData.get('email'),
-    name: formData.get('name'),
-    phone: formData.get('phone'),
-    lead_type: 'trial_signup',
-    source: 'hero_form',
-    url: window.location.href
+    email: formData.get("email"),
+    name: formData.get("name"),
+    phone: formData.get("phone"),
+    lead_type: "trial_signup",
+    source: "hero_form",
+    url: window.location.href,
   });
-  
+
   // Continuar com o submit
   await submitForm(formData);
 });
@@ -130,26 +115,26 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
 async function startTrial(userData) {
   try {
     // Criar conta no backend
-    const response = await fetch('/api/users/trial', {
-      method: 'POST',
-      body: JSON.stringify(userData)
+    const response = await fetch("/api/users/trial", {
+      method: "POST",
+      body: JSON.stringify(userData),
     });
-    
+
     const user = await response.json();
-    
+
     // Rastrear lead
     affiliatus.trackLead({
       email: user.email,
       name: user.name,
       company: user.company,
-      lead_type: 'trial_started',
-      url: window.location.href
+      lead_type: "trial_started",
+      url: window.location.href,
     });
-    
+
     // Redirecionar para o app
-    window.location.href = '/app/onboarding';
+    window.location.href = "/app/onboarding";
   } catch (error) {
-    console.error('Erro ao criar trial:', error);
+    console.error("Erro ao criar trial:", error);
   }
 }
 ```
@@ -158,19 +143,19 @@ async function startTrial(userData) {
 
 ```javascript
 // Captura de email para newsletter
-document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+document.getElementById("newsletter-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  
+
   const email = e.target.email.value;
-  
+
   affiliatus.trackLead({
     email: email,
-    lead_type: 'newsletter_signup',
-    source: 'footer_form'
+    lead_type: "newsletter_signup",
+    source: "footer_form",
   });
-  
+
   // Mostrar mensagem de sucesso
-  showSuccessMessage('Obrigado por se inscrever!');
+  showSuccessMessage("Obrigado por se inscrever!");
 });
 ```
 
@@ -181,17 +166,17 @@ document.getElementById('newsletter-form').addEventListener('submit', (e) => {
 function addToCart(product) {
   // Adicionar ao carrinho
   cart.add(product);
-  
+
   // Rastrear como lead (intenção de compra)
   affiliatus.trackLead({
-    lead_type: 'add_to_cart',
-    source: 'product_page',
+    lead_type: "add_to_cart",
+    source: "product_page",
     product_id: product.id,
     product_name: product.name,
     product_price: product.price,
-    url: window.location.href
+    url: window.location.href,
   });
-  
+
   showCartNotification();
 }
 ```
@@ -200,42 +185,44 @@ function addToCart(product) {
 
 ```javascript
 // Processar webhook de plataforma de email
-app.post('/webhook/newsletter', async (req, res) => {
+app.post("/webhook/newsletter", async (req, res) => {
   const { email, name, source } = req.body;
-  
+
   // Buscar affiliate_id da sessão ou cookie
   const affiliateId = await getAffiliateFromEmail(email);
   const sessionId = await getSessionFromEmail(email);
-  
+
   if (affiliateId) {
-    await fetch('https://api.affiliatus.io/events/api', {
-      method: 'POST',
+    await fetch("https://api.affiliatus.io/events/api", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': process.env.AFFILIATUS_API_KEY,
+        "Content-Type": "application/json",
+        "X-API-Key": process.env.AFFILIATUS_API_KEY,
       },
       body: JSON.stringify({
-        events: [{
-          event_type: 'lead',
-          campaign_id: process.env.CAMPAIGN_ID,
-          affiliate_id: affiliateId,
-          session_id: sessionId,
-          properties: {
-            email,
-            name,
-            lead_type: 'newsletter_signup',
-            source: source || 'website',
-            timestamp: new Date().toISOString()
+        events: [
+          {
+            event_type: "lead",
+            campaign_id: process.env.CAMPAIGN_ID,
+            affiliate_id: affiliateId,
+            session_id: sessionId,
+            properties: {
+              email,
+              name,
+              lead_type: "newsletter_signup",
+              source: source || "website",
+              timestamp: new Date().toISOString(),
+            },
+            device_info: {
+              user_agent: req.headers["user-agent"],
+              ip: req.ip,
+            },
           },
-          device_info: {
-            user_agent: req.headers['user-agent'],
-            ip: req.ip
-          }
-        }]
-      })
+        ],
+      }),
     });
   }
-  
+
   res.json({ success: true });
 });
 ```
@@ -249,7 +236,7 @@ import os
 
 def track_lead_capture(lead_data):
     """Rastrear lead capturado no CRM"""
-    
+
     payload = {
         'events': [{
             'event_type': 'lead',
@@ -271,7 +258,7 @@ def track_lead_capture(lead_data):
             }
         }]
     }
-    
+
     response = requests.post(
         'https://api.affiliatus.io/events/api',
         headers={
@@ -280,7 +267,7 @@ def track_lead_capture(lead_data):
         },
         json=payload
     )
-    
+
     return response.json()
 
 # Exemplo de uso
@@ -308,11 +295,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $phone = $_POST['phone'];
     $message = $_POST['message'];
-    
+
     // Buscar affiliate_id do cookie
     $affiliateId = $_COOKIE['affiliate_id'] ?? null;
     $sessionId = $_COOKIE['session_id'] ?? null;
-    
+
     if ($affiliateId) {
         // Rastrear lead no Affiliatus
         $data = [
@@ -336,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             ]]
         ];
-        
+
         $ch = curl_init('https://api.affiliatus.io/events/api');
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
@@ -347,10 +334,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         curl_exec($ch);
         curl_close($ch);
     }
-    
+
     // Processar mensagem normalmente
     sendEmailToSales($email, $name, $message);
-    
+
     echo json_encode(['success' => true]);
 }
 ?>
@@ -366,23 +353,23 @@ O evento Lead gera as seguintes métricas no dashboard:
   <Card title="Total de Leads" icon="users">
     Número total de leads capturados por afiliado
   </Card>
-  
+
   <Card title="Taxa de Conversão" icon="arrow-trend-up">
     Page Views → Leads (%)
   </Card>
-  
+
   <Card title="Qualidade do Tráfego" icon="star">
     Percentual de visitas que viram leads
   </Card>
-  
+
   <Card title="Leads por Tipo" icon="layer-group">
     Distribuição por lead_type
   </Card>
-  
+
   <Card title="Custo por Lead" icon="dollar-sign">
     Comissões dividido por leads
   </Card>
-  
+
   <Card title="Lead → Sale Rate" icon="funnel">
     Taxa de conversão de lead para venda
   </Card>
@@ -396,34 +383,29 @@ Use esses valores em `lead_type` para categorizar seus leads:
 
 <AccordionGroup>
   <Accordion title="Trial e Demos" icon="flask">
-    - `trial_signup` - Cadastro em trial gratuito
-    - `trial_started` - Trial ativado
-    - `demo_request` - Solicitação de demonstração
-    - `demo_scheduled` - Demo agendada
+    - `trial_signup` - Cadastro em trial gratuito - `trial_started` - Trial
+    ativado - `demo_request` - Solicitação de demonstração - `demo_scheduled` -
+    Demo agendada
   </Accordion>
-  
+
   <Accordion title="Formulários" icon="file-pen">
-    - `contact_form` - Formulário de contato
-    - `quote_request` - Solicitação de orçamento
-    - `consultation_request` - Pedido de consultoria
+    - `contact_form` - Formulário de contato - `quote_request` - Solicitação de
+    orçamento - `consultation_request` - Pedido de consultoria
   </Accordion>
-  
+
   <Accordion title="Marketing" icon="megaphone">
-    - `newsletter_signup` - Inscrição na newsletter
-    - `ebook_download` - Download de material
-    - `webinar_registration` - Registro em webinar
+    - `newsletter_signup` - Inscrição na newsletter - `ebook_download` -
+    Download de material - `webinar_registration` - Registro em webinar
   </Accordion>
-  
+
   <Accordion title="E-commerce" icon="cart-shopping">
-    - `add_to_cart` - Adicionou ao carrinho
-    - `checkout_started` - Iniciou checkout
-    - `wishlist_add` - Adicionou à lista de desejos
+    - `add_to_cart` - Adicionou ao carrinho - `checkout_started` - Iniciou
+    checkout - `wishlist_add` - Adicionou à lista de desejos
   </Accordion>
-  
+
   <Accordion title="Engajamento" icon="heart">
-    - `pricing_viewed` - Visualizou pricing
-    - `feature_explored` - Explorou features
-    - `video_watched` - Assistiu vídeo completo
+    - `pricing_viewed` - Visualizou pricing - `feature_explored` - Explorou
+    features - `video_watched` - Assistiu vídeo completo
   </Accordion>
 </AccordionGroup>
 
@@ -538,14 +520,16 @@ Se o mesmo usuário está gerando múltiplos leads:
 // Use uma flag para evitar duplicatas
 let leadTracked = false;
 
-document.getElementById('form').addEventListener('submit', (e) => {
+document.getElementById("form").addEventListener("submit", (e) => {
   e.preventDefault();
-  
+
   if (!leadTracked) {
-    affiliatus.trackLead({ /* ... */ });
+    affiliatus.trackLead({
+      /* ... */
+    });
     leadTracked = true;
   }
-  
+
   submitForm();
 });
 ```
@@ -556,8 +540,10 @@ Ou use localStorage:
 const leadKey = `lead_tracked_${formData.email}`;
 
 if (!localStorage.getItem(leadKey)) {
-  affiliatus.trackLead({ /* ... */ });
-  localStorage.setItem(leadKey, 'true');
+  affiliatus.trackLead({
+    /* ... */
+  });
+  localStorage.setItem(leadKey, "true");
 }
 ```
 
@@ -566,20 +552,23 @@ if (!localStorage.getItem(leadKey)) {
 ## Próximos Passos
 
 <CardGroup cols={2}>
-  <Card title="Evento Conversion" icon="shopping-cart" href="/guides/event-conversion">
+  <Card
+    title="Evento Conversion"
+    icon="shopping-cart"
+    href="/guides/event-conversion"
+  >
     Aprenda sobre o último passo do funil
   </Card>
-  
+
   <Card title="Evento Page View" icon="eye" href="/guides/event-page-view">
     Voltar para Page View
   </Card>
-  
+
   <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
     Guia completo do SDK JavaScript
   </Card>
-  
+
   <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
     Visualize leads em tempo real
   </Card>
 </CardGroup>
-

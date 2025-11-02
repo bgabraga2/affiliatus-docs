@@ -1,7 +1,7 @@
 ---
-title: 'Evento: Page View'
-description: 'Rastreamento de visitas e visualizações de página'
-icon: 'eye'
+title: "Page View"
+description: "Rastreamento de visitas e visualizações de página"
+icon: "eye"
 ---
 
 ## Descrição
@@ -21,15 +21,15 @@ O evento **`page_view`** rastreia quando um visitante acessa uma página atravé
   <Card title="Automaticamente" icon="robot">
     Ao carregar o SDK JavaScript com `autoPageView: true` (padrão)
   </Card>
-  
+
   <Card title="Manualmente" icon="hand-pointer">
     Em navegações SPA (React, Vue, Angular)
   </Card>
-  
+
   <Card title="Landing Pages" icon="browser">
     Para rastrear visualizações de páginas específicas
   </Card>
-  
+
   <Card title="Engajamento" icon="chart-line">
     Ao medir interações em páginas de produto/serviço
   </Card>
@@ -40,33 +40,26 @@ O evento **`page_view`** rastreia quando um visitante acessa uma página atravé
 ## Propriedades Suportadas
 
 <ParamField body="url" type="string" required>
-  URL completa da página visitada
-  
-  **Exemplo:** `https://seu-site.com/produto`
+  URL completa da página visitada **Exemplo:** `https://seu-site.com/produto`
 </ParamField>
 
 <ParamField body="title" type="string">
-  Título da página (`document.title`)
-  
-  **Exemplo:** `"Produto Premium - Sua Empresa"`
+  Título da página (`document.title`) **Exemplo:** `"Produto Premium - Sua
+  Empresa"`
 </ParamField>
 
 <ParamField body="referrer" type="string">
-  URL de origem do visitante (`document.referrer`)
-  
-  **Exemplo:** `"https://google.com"`
+  URL de origem do visitante (`document.referrer`) **Exemplo:**
+  `"https://google.com"`
 </ParamField>
 
 <ParamField body="timestamp" type="string">
-  Data/hora ISO 8601 da visualização
-  
-  **Exemplo:** `"2024-01-15T10:30:00Z"`
+  Data/hora ISO 8601 da visualização **Exemplo:** `"2024-01-15T10:30:00Z"`
 </ParamField>
 
 <ParamField body="page" type="string">
-  Identificador customizado da página
-  
-  **Exemplo:** `"home"`, `"pricing"`, `"checkout"`
+  Identificador customizado da página **Exemplo:** `"home"`, `"pricing"`,
+  `"checkout"`
 </ParamField>
 
 ---
@@ -77,22 +70,22 @@ O evento **`page_view`** rastreia quando um visitante acessa uma página atravé
 
 ```javascript
 // Page view enviado automaticamente ao carregar
-const affiliatus = new Affiliatus('seu-campaign-id');
+const affiliatus = new Affiliatus("seu-campaign-id");
 // Pronto! Não precisa fazer mais nada.
 ```
 
 ### SDK JavaScript - Rastreamento Manual
 
 ```javascript
-const affiliatus = new Affiliatus('seu-campaign-id', {
-  autoPageView: false // Desabilitar automático
+const affiliatus = new Affiliatus("seu-campaign-id", {
+  autoPageView: false, // Desabilitar automático
 });
 
 // Rastrear manualmente
 affiliatus.trackPageView({
-  page: 'pricing',
+  page: "pricing",
   url: window.location.href,
-  title: document.title
+  title: document.title,
 });
 ```
 
@@ -101,28 +94,28 @@ affiliatus.trackPageView({
 <CodeGroup>
 
 ```javascript React Router
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const location = useLocation();
-  
+
   useEffect(() => {
     // Rastrear mudança de rota
     affiliatus.trackPageView({
       page: location.pathname,
       url: window.location.href,
-      title: document.title
+      title: document.title,
     });
   }, [location]);
-  
+
   return <Router>{/* ... */}</Router>;
 }
 ```
 
 ```javascript Vue Router
 // router/index.js
-import { createRouter } from 'vue-router';
+import { createRouter } from "vue-router";
 
 const router = createRouter({
   // ...
@@ -132,7 +125,7 @@ router.afterEach((to, from) => {
   affiliatus.trackPageView({
     page: to.name,
     url: window.location.href,
-    title: document.title
+    title: document.title,
   });
 });
 
@@ -140,21 +133,21 @@ export default router;
 ```
 
 ```javascript Next.js App Router
-'use client';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+"use client";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export function AffiliateTracker() {
   const pathname = usePathname();
-  
+
   useEffect(() => {
     affiliatus.trackPageView({
       page: pathname,
       url: window.location.href,
-      title: document.title
+      title: document.title,
     });
   }, [pathname]);
-  
+
   return null;
 }
 ```
@@ -165,39 +158,41 @@ export function AffiliateTracker() {
 
 ```javascript Node.js
 // Rastreamento server-side
-app.get('/produto/:id', async (req, res) => {
+app.get("/produto/:id", async (req, res) => {
   const affiliateId = req.cookies.affiliate_id;
   const sessionId = req.cookies.session_id;
-  
+
   if (affiliateId) {
-    await fetch('https://api.affiliatus.io/events/api', {
-      method: 'POST',
+    await fetch("https://api.affiliatus.io/events/api", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': process.env.AFFILIATUS_API_KEY,
+        "Content-Type": "application/json",
+        "X-API-Key": process.env.AFFILIATUS_API_KEY,
       },
       body: JSON.stringify({
-        events: [{
-          event_type: 'page_view',
-          campaign_id: process.env.CAMPAIGN_ID,
-          affiliate_id: affiliateId,
-          session_id: sessionId,
-          properties: {
-            url: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-            title: 'Página do Produto',
-            page: 'product-details'
+        events: [
+          {
+            event_type: "page_view",
+            campaign_id: process.env.CAMPAIGN_ID,
+            affiliate_id: affiliateId,
+            session_id: sessionId,
+            properties: {
+              url: `${req.protocol}://${req.get("host")}${req.originalUrl}`,
+              title: "Página do Produto",
+              page: "product-details",
+            },
+            device_info: {
+              user_agent: req.headers["user-agent"],
+              language: req.headers["accept-language"],
+              ip: req.ip,
+            },
           },
-          device_info: {
-            user_agent: req.headers['user-agent'],
-            language: req.headers['accept-language'],
-            ip: req.ip
-          }
-        }]
-      })
+        ],
+      }),
     });
   }
-  
-  res.render('produto', { id: req.params.id });
+
+  res.render("produto", { id: req.params.id });
 });
 ```
 
@@ -258,23 +253,23 @@ O evento Page View gera as seguintes métricas no dashboard:
   <Card title="Total de Visitas" icon="eye">
     Número total de page views por afiliado
   </Card>
-  
+
   <Card title="Taxa de Rejeição" icon="chart-line">
     Percentual de visitas sem lead/conversão
   </Card>
-  
+
   <Card title="Páginas Mais Visitadas" icon="ranking-star">
     Quais páginas geram mais tráfego
   </Card>
-  
+
   <Card title="Origem do Tráfego" icon="arrow-right-to-bracket">
     De onde vêm os visitantes (via referrer)
   </Card>
-  
+
   <Card title="Engajamento" icon="clock">
     Tempo entre visitas e conversões
   </Card>
-  
+
   <Card title="Taxa de Conversão" icon="percentage">
     Page Views → Leads → Conversions
   </Card>
@@ -378,13 +373,15 @@ Se você está vendo page views duplicados, provavelmente está usando SPA sem d
 
 ```javascript
 // ✅ SOLUÇÃO
-const affiliatus = new Affiliatus('campaign-id', {
-  autoPageView: false // Desabilitar automático
+const affiliatus = new Affiliatus("campaign-id", {
+  autoPageView: false, // Desabilitar automático
 });
 
 // Rastrear manualmente nas mudanças de rota
 router.afterEach(() => {
-  affiliatus.trackPageView({ /* ... */ });
+  affiliatus.trackPageView({
+    /* ... */
+  });
 });
 ```
 
@@ -396,17 +393,20 @@ router.afterEach(() => {
   <Card title="Evento Lead" icon="user-plus" href="/guides/event-lead">
     Aprenda sobre o próximo passo do funil
   </Card>
-  
+
   <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
     Guia completo do SDK JavaScript
   </Card>
-  
-  <Card title="Enviar Eventos" icon="paper-plane" href="/api-reference/events/send-events">
+
+  <Card
+    title="Enviar Eventos"
+    icon="paper-plane"
+    href="/api-reference/events/send-events"
+  >
     Documentação da API REST
   </Card>
-  
+
   <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
     Visualize page views em tempo real
   </Card>
 </CardGroup>
-
