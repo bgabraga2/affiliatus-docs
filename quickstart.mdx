@@ -1,80 +1,464 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: "Guia Rápido"
+description: "Comece seu programa de afiliados em minutos"
 ---
 
-## Get started in three steps
+## Configure seu programa de afiliados em 8 passos
 
-Get your documentation site running locally and make your first customization.
+Este guia vai te ajudar a configurar tudo do zero, desde a criação da sua primeira campanha até receber os primeiros resultados dos seus afiliados.
 
-### Step 1: Set up your local environment
+---
+
+## Passo 1: Crie sua primeira campanha
+
+Uma campanha é como você organiza seu programa de afiliados. Nela, você define quanto vai pagar de comissão e as regras do jogo.
 
 <AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+  <Accordion icon="rocket" title="Criar campanha no onboarding">
+    Ao fazer login pela primeira vez, você será direcionado automaticamente para criar sua primeira campanha.
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
+    **Configure os seguintes campos:**
+    
+    - **Nome da campanha**: Um nome simples para identificar (ex: "Programa de Indicação 2025")
+    - **Comissão**: Escolha entre percentual (ex: 10% de cada venda) ou valor fixo (ex: R$ 50 por venda)
+    - **Valor da comissão**: Quanto você vai pagar ao afiliado por cada venda
+    
+    <Tip>Comece com algo simples! Você pode ajustar as configurações depois.</Tip>
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+  
+  <Accordion icon="gear" title="Configurações opcionais">
+    Você também pode configurar (mas não é obrigatório agora):
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
+    - **Duração do cookie**: Por quantos dias o código do afiliado fica válido (padrão: 30 dias)
+    - **Pagamento mínimo**: Valor mínimo para o afiliado sacar (padrão: R$ 50)
+    - **Modelo de atribuição**: Quem leva a comissão - o primeiro ou o último afiliado que indicou o cliente
+    
+    <Note>Não se preocupe com isso agora. As configurações padrão funcionam bem para começar!</Note>
   </Accordion>
 </AccordionGroup>
 
-### Step 2: Deploy your changes
+---
+
+## Passo 2: Adicione seu domínio à lista de autorizados
+
+**Por que isso é importante?** Esta é uma camada de segurança que impede que pessoas mal-intencionadas enviem eventos falsos para sua campanha. Apenas os domínios que você autorizar poderão enviar conversões.
 
 <AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Accordion icon="shield-check" title="Adicionar domínio autorizado">
+    No menu lateral, vá em **"Configurações"** → **"Domínios"**.
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
+    **Digite o domínio do seu site:**
+    
+    - Se seu site é `https://meusite.com.br`, adicione: `meusite.com.br`
+    - Para desenvolvimento local: `localhost` ou `localhost:3000`
+    - Para subdomínios: `app.meusite.com` ou `checkout.meusite.com`
+    
+    <Tip>Você pode adicionar vários domínios! Isso é útil se você tem site, blog e área de membros em domínios diferentes.</Tip>
+  </Accordion>
+  
+  <Accordion icon="info-circle" title="Como funciona a segurança">
+    Quando alguém acessa seu site com um link de afiliado, o sistema verifica:
+    
+    1. De qual domínio veio a solicitação
+    2. Se esse domínio está na sua lista de autorizados
+    3. Se estiver, o evento é registrado
+    4. Se não estiver, o evento é bloqueado
+    
+    **Isso protege você contra:**
+    - Pessoas criando conversões falsas
+    - Fraudes no sistema de afiliados
+    - Cliques e eventos vindos de lugares não autorizados
+    
+    <Warning>Sem adicionar seu domínio, NENHUM evento será registrado! É o primeiro passo obrigatório.</Warning>
+  </Accordion>
+  
+  <Accordion icon="check-circle" title="Exemplos de domínios válidos">
+    Você pode adicionar:
+    
+    - **Domínio principal**: `meusite.com`
+    - **Subdomínios**: `app.meusite.com`, `checkout.meusite.com`
+    - **Desenvolvimento local**: `localhost`, `localhost:3000`
+    - **Com porta específica**: `meusite.com:8080`
+    - **IP local**: `127.0.0.1`, `192.168.1.1:3000`
+    
+    <Note>Não inclua `https://` ou `http://` - apenas o domínio puro!</Note>
   </Accordion>
 </AccordionGroup>
 
-### Step 3: Go live
+---
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+## Passo 3: Adicione afiliados à sua campanha
 
-## Next steps
+Agora sim! Com a segurança configurada, é hora de cadastrar as pessoas que vão divulgar seu produto.
 
-Now that you have your docs running, explore these key features:
+<AccordionGroup>
+  <Accordion icon="user-plus" title="Cadastrar um novo afiliado">
+    No menu lateral, vá em **"Afiliados"** e clique no botão **"Novo Afiliado"**.
+    
+    **Preencha as informações:**
+    
+    - **Nome**: Nome completo do afiliado
+    - **E-mail**: E-mail único para login do afiliado
+    - **Código de referência**: Um código único de 5 letras (ex: JOAO1, MARIA)
+    - **Senha**: Senha para o afiliado acessar o portal dele
+    - **Telefone**: Opcional
+    
+    <Tip>O código de referência é como o "apelido" do afiliado. Será usado nos links de indicação!</Tip>
+  </Accordion>
+  
+  <Accordion icon="copy" title="Copiar código do afiliado">
+    Após cadastrar, você verá uma lista com todos os seus afiliados. 
+    
+    Clique no ícone de copiar ao lado do código de referência para compartilhar com o afiliado. Ele vai precisar disso!
+    
+    <Note>Cada afiliado tem um código único. É assim que você sabe quem trouxe cada cliente.</Note>
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Passo 4: Instale o código no seu site
+
+Esta é a parte técnica, mas vamos simplificar ao máximo! É como instalar o Google Analytics no seu site.
+
+<AccordionGroup>
+  <Accordion icon="code" title="Copie o código de instalação">
+    No menu lateral, vá em **"Como integrar"** e você verá um código pronto para copiar.
+    
+    Parece com isso:
+    
+    ```html
+    <script src="https://cdn.affiliatus.io/latest/affiliatus.min.js"></script>
+    
+    <script>
+        var tracker = window.affiliatus.init('SEU_ID_DA_CAMPANHA', {
+            autoPageView: true,
+            attributionModel: 'last_click',
+            cookieDuration: 30
+        });
+    </script>
+    ```
+    
+    <Tip>Seu ID da campanha já vem preenchido automaticamente no código!</Tip>
+  </Accordion>
+  
+  <Accordion icon="brackets-curly" title="Cole no seu site">
+    **Onde colocar?** Dentro da tag `<head>` do seu site, antes de fechar `</head>`.
+    
+    **É exatamente como:**
+    - Instalar Google Analytics
+    - Instalar Pixel do Facebook
+    - Instalar Hotjar ou outros scripts
+    
+    **Se você usa WordPress, Webflow ou outra plataforma:**
+    - Procure por "Custom Code", "Head Scripts" ou "HTML Customizado"
+    - Cole o código lá
+    
+    <Warning>Se você não tem acesso ao código do site, peça ajuda ao seu desenvolvedor. É super rápido!</Warning>
+  </Accordion>
+  
+  <Accordion icon="check-circle" title="Teste se está funcionando">
+    Depois de instalar, acesse seu site com o código de um afiliado na URL:
+    
+    `https://seusite.com?ref=JOAO1`
+    
+    No menu **"Eventos"** do dashboard, você deve ver uma visualização de página registrada. Se aparecer, tudo certo! 🎉
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Passo 5: Compartilhe o link com seus afiliados
+
+Agora seus afiliados precisam saber como divulgar seu produto!
+
+<AccordionGroup>
+  <Accordion icon="link" title="Gerar link de afiliado">
+    Você pode gerar links prontos no menu **"Gerador de Links"**.
+    
+    **Como funciona:**
+    1. Digite a URL da sua página (ex: sua página de vendas)
+    2. Selecione o afiliado
+    3. Clique em **"Gerar Link"**
+    4. Copie e envie para o afiliado
+    
+    O link vai ficar assim: `https://seusite.com/produto?ref=JOAO1`
+  </Accordion>
+  
+  <Accordion icon="share" title="Portal do afiliado">
+    Cada afiliado tem acesso a um portal próprio onde pode:
+    - Ver suas estatísticas de cliques e vendas
+    - Gerar seus próprios links
+    - Acompanhar comissões
+    
+    **Como o afiliado acessa:**
+    - URL: `https://app.affly.io/affiliate-dashboard/SEU_ID_DA_CAMPANHA`
+    - Login: E-mail e senha que você cadastrou
+    
+    <Tip>Envie as credenciais de acesso por e-mail ou WhatsApp para cada afiliado!</Tip>
+  </Accordion>
+  
+  <Accordion icon="lightbulb" title="Oriente seu afiliado">
+    Explique para ele de forma simples:
+    
+    > "Sempre que você compartilhar o link, adicione `?ref=SEUCÓDIGO` no final. Assim eu sei que a venda veio de você e você recebe a comissão!"
+    
+    Exemplo prático:
+    - Link normal: `https://seusite.com/produto`
+    - Link do afiliado: `https://seusite.com/produto?ref=JOAO1`
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Passo 6: Rastreie conversões (vendas)
+
+Existem 4 formas de rastrear quando alguém compra através do link de um afiliado:
+
+<AccordionGroup>
+  <Accordion icon="code" title="1. Via SDK JavaScript (Manual)">
+    Adicione um código JavaScript na sua página de confirmação de compra:
+    
+    ```javascript
+    tracker.trackConversion({
+      order_id: 'PEDIDO-123',
+      order_value: 99.90
+    });
+    ```
+    
+    **Quando usar:** Se você tem controle total do seu site e checkout.
+    
+    <Card title="Ver guia completo" icon="book" href="/integrations/sdk-javascript">
+      Aprenda a implementar conversões via SDK JavaScript
+    </Card>
+  </Accordion>
+  
+  <Accordion icon="credit-card" title="2. Via Stripe (Automático)">
+    Conecte seu Stripe e as conversões são criadas automaticamente quando um pagamento é aprovado.
+    
+    **Como funciona:**
+    - Configure o webhook do Stripe
+    - Quando alguém compra, o Stripe envia os dados
+    - A conversão é criada automaticamente
+    
+    **Quando usar:** Se você usa Stripe para processar pagamentos.
+    
+    <Card title="Ver guia completo" icon="stripe" href="/integrations/stripe">
+      Aprenda a configurar a integração com Stripe
+    </Card>
+  </Accordion>
+  
+  <Accordion icon="brazilian-real-sign" title="3. Via Woovi/OpenPix (Automático)">
+    Conecte sua conta Woovi (OpenPix) e as conversões via PIX são criadas automaticamente.
+    
+    **Como funciona:**
+    - Configure o webhook da Woovi
+    - Quando um PIX é confirmado, a Woovi envia os dados
+    - A conversão é criada automaticamente
+    
+    **Quando usar:** Se você usa Woovi/OpenPix para receber pagamentos via PIX.
+    
+    <Card title="Ver guia completo" icon="barcode" href="/integrations/woovi">
+      Aprenda a configurar a integração com Woovi
+    </Card>
+  </Accordion>
+  
+  <Accordion icon="server" title="4. Via API REST (Backend)">
+    Envie conversões diretamente do seu backend usando API keys.
+    
+    **Como funciona:**
+    - Crie uma API key no dashboard
+    - Após processar o pagamento no backend
+    - Envie um POST para a API com a conversão
+    
+    **Quando usar:** Integrações server-side ou gateways não suportados.
+    
+    <Card title="Ver guia completo" icon="code" href="/integrations/api-rest">
+      Aprenda a usar a API REST para conversões
+    </Card>
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  **Recomendação:** Use integrações automáticas (Stripe ou Woovi) sempre que possível. 
+  Para outros gateways, use API REST (backend) ou SDK JavaScript (frontend).
+</Tip>
+
+---
+
+## Passo 7: Aprove conversões e comissões
+
+Após uma conversão ser registrada (manual ou automática), você precisa aprovar para liberar a comissão.
+
+<AccordionGroup>
+  <Accordion icon="chart-line" title="Ver conversões no dashboard">
+    No **Dashboard** principal, você vê um resumo de tudo:
+    - Total de cliques
+    - Conversões pendentes de aprovação
+    - Comissões totais geradas
+    - Gráficos de performance
+    
+    <Tip>O dashboard é sua central de controle. Acesse diariamente para não perder nada!</Tip>
+  </Accordion>
+  
+  <Accordion icon="clipboard-check" title="Aprovar conversões">
+    Vá em **"Conversões"** no menu lateral.
+    
+    Você verá uma lista com todas as vendas. Cada conversão tem 4 status possíveis:
+    - **Pendente**: Aguardando sua aprovação
+    - **Aprovada**: Você validou, a comissão está liberada
+    - **Rejeitada**: Venda cancelada ou inválida
+    - **Paga**: Você já pagou essa comissão
+    
+    **Para aprovar:**
+    1. Revise a conversão (valor, afiliado, data)
+    2. Clique em "Aprovar" ou "Rejeitar"
+    3. A comissão entra no saldo do afiliado
+    
+    <Warning>Só aprove conversões de vendas confirmadas! Você pode rejeitar se houver cancelamento ou fraude.</Warning>
+  </Accordion>
+  
+  <Accordion icon="hand-holding-dollar" title="Registrar conversão manual">
+    Se a venda não foi rastreada automaticamente, você pode criar manualmente:
+    
+    1. Vá em **"Conversões"** → **"Registrar Conversão"**
+    2. Selecione o afiliado responsável
+    3. Informe o valor da venda
+    4. O sistema calcula a comissão automaticamente
+    5. Clique em "Salvar"
+    
+    <Note>Isso é útil para vendas por telefone ou outros canais onde o link não foi usado.</Note>
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Passo 8: Processe os pagamentos
+
+Quando o afiliado atingir o saldo mínimo, você pode processar o pagamento.
+
+<AccordionGroup>
+  <Accordion icon="wallet" title="Criar pagamento">
+    Vá em **"Pagamentos"** no menu lateral.
+    
+    Você verá:
+    - Afiliados com saldo disponível
+    - Valor a pagar para cada um
+    - Número de conversões incluídas
+    
+    **Para criar um pagamento:**
+    1. Clique em **"Novo Pagamento"**
+    2. Selecione o afiliado (só aparecem os elegíveis)
+    3. Escolha o método (PIX, Transferência, PayPal)
+    4. Adicione informações de pagamento (opcional)
+    5. Confirme
+    
+    <Tip>O sistema cria automaticamente o pagamento com todas as conversões aprovadas do afiliado!</Tip>
+  </Accordion>
+  
+  <Accordion icon="check-double" title="Marcar como pago">
+    Após criar o pagamento, ele fica com status **"Pendente"**.
+    
+    **Fluxo completo:**
+    1. **Pendente**: Pagamento criado, aguardando transferência
+    2. **Processando**: Você está fazendo a transferência
+    3. **Pago**: Transferência concluída
+    
+    Quando você realmente transferir o dinheiro, marque como **"Pago"** e adicione o ID da transação.
+    
+    <Note>As conversões incluídas no pagamento são automaticamente marcadas como "Pagas" e não entram em novos pagamentos.</Note>
+  </Accordion>
+  
+  <Accordion icon="circle-info" title="Saldo mínimo">
+    Por padrão, o afiliado precisa ter pelo menos **R$ 50** de comissões aprovadas para receber.
+    
+    Isso evita transferências muito pequenas e frequentes. Você pode alterar esse valor nas configurações da campanha.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## 🎉 Pronto! Seu programa está no ar
+
+Parabéns! Agora você tem um programa de afiliados funcionando.
+
+### O que fazer agora?
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Analise performance" icon="chart-mixed" href="/dashboard/analytics">
+    Acesse o Analytics para ver gráficos detalhados de performance dos seus afiliados
+  </Card>
+  
+  <Card title="Configure integrações" icon="plug" href="/dashboard/integrations">
+    Conecte com Stripe, Mercado Pago ou outros sistemas de pagamento
+  </Card>
+  
+  <Card title="Personalize configurações" icon="sliders" href="/dashboard/settings">
+    Ajuste comissões, cookies, pagamento mínimo e outras regras
+  </Card>
+  
+  <Card title="Convide mais afiliados" icon="users" href="/dashboard/affiliates">
+    Quanto mais afiliados ativos, mais vendas você vai gerar!
+  </Card>
 </CardGroup>
 
+---
+
+## 💡 Dicas para o sucesso do seu programa
+
+<AccordionGroup>
+  <Accordion icon="trophy" title="Mantenha seus afiliados engajados">
+    - Responda rápido quando eles tiverem dúvidas
+    - Aprove conversões o mais rápido possível
+    - Pague em dia (isso faz toda diferença!)
+    - Compartilhe materiais de divulgação (imagens, textos, vídeos)
+  </Accordion>
+  
+  <Accordion icon="rocket" title="Monitore diariamente">
+    - Acesse o dashboard todo dia
+    - Aprove conversões pendentes
+    - Veja quais afiliados estão performando melhor
+    - Ajuste estratégias baseado nos dados
+  </Accordion>
+  
+  <Accordion icon="gift" title="Incentive seus top afiliados">
+    - Ofereça bônus para os que mais vendem
+    - Crie campanhas especiais com comissões maiores
+    - Reconheça publicamente os melhores resultados
+    - Facilite a vida deles com materiais prontos
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## ❓ Dúvidas frequentes
+
+<AccordionGroup>
+  <Accordion icon="question" title="E se a conversão não for rastreada automaticamente?">
+    Você pode criar conversões manualmente em **"Conversões" → "Registrar Conversão"**. 
+    
+    Isso é normal para vendas por telefone, WhatsApp ou outros canais offline.
+  </Accordion>
+  
+  <Accordion icon="question" title="Posso ter mais de uma campanha?">
+    Sim! Você pode criar múltiplas campanhas para diferentes produtos, períodos promocionais ou estratégias.
+    
+    Cada campanha tem suas próprias regras e afiliados.
+  </Accordion>
+  
+  <Accordion icon="question" title="Como sei se o código está instalado corretamente?">
+    Acesse seu site com `?ref=CÓDIGO` na URL e veja se aparece um evento em **"Eventos"** no dashboard.
+    
+    Se aparecer, está tudo certo!
+  </Accordion>
+  
+  <Accordion icon="question" title="Posso mudar a comissão depois?">
+    Sim, mas as mudanças só afetam novas conversões. Conversões já criadas mantêm a comissão original.
+  </Accordion>
+</AccordionGroup>
+
+---
+
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  **Precisa de ajuda?** Entre em contato pelo suporte ou consulte a [documentação completa](https://docs.affiliatus.io).
 </Note>
