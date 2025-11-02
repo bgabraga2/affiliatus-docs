@@ -39,7 +39,7 @@ graph LR
 3. Cliente escaneia QR Code e paga o PIX
 4. Woovi confirma o pagamento
 5. **Woovi envia webhook** com o código do afiliado
-6. **Conversão é criada automaticamente** ✨
+6. **Conversão é criada automaticamente** <Icon icon="sparkles" />
 
 <Note>
   **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30
@@ -72,8 +72,8 @@ https://api.affiliatus.io/api/campaigns/{SEU_ID}/woovi/webhook
 3. Cole a URL do webhook copiada no passo anterior
 4. Selecione os eventos:
 
-   - ✅ `OPENPIX:CHARGE_COMPLETED`
-   - ✅ `OPENPIX:CHARGE_EXPIRED` (opcional)
+   - <Icon icon="check" color="#db2777" /> `OPENPIX:CHARGE_COMPLETED`
+   - <Icon icon="check" color="#db2777" /> `OPENPIX:CHARGE_EXPIRED` (opcional)
 
 5. Clique em **"Criar"**
 
@@ -470,13 +470,13 @@ Se o valor estiver incorreto, verifique o `value` enviado na criação da cobran
 
 ## Campos Suportados no additionalInfo
 
-| Campo            | Obrigatório | Descrição                       |
-| ---------------- | ----------- | ------------------------------- |
-| `affiliate_code` | ✅ Sim      | Código único do afiliado        |
-| `order_id`       | Recomendado | ID do pedido (evita duplicação) |
-| `product`        | Opcional    | Nome do produto vendido         |
-| `customer_email` | Opcional    | E-mail do cliente               |
-| `customer_name`  | Opcional    | Nome do cliente                 |
+| Campo            | Obrigatório                               | Descrição                       |
+| ---------------- | ----------------------------------------- | ------------------------------- |
+| `affiliate_code` | <Icon icon="check" color="#db2777" /> Sim | Código único do afiliado        |
+| `order_id`       | Recomendado                               | ID do pedido (evita duplicação) |
+| `product`        | Opcional                                  | Nome do produto vendido         |
+| `customer_email` | Opcional                                  | E-mail do cliente               |
+| `customer_name`  | Opcional                                  | Nome do cliente                 |
 
 **Exemplo completo:**
 
@@ -506,20 +506,20 @@ additionalInfo: [
 
 ## Boas Práticas
 
-### ✅ Faça
+### <Icon icon="check" color="#db2777" /> Faça
 
-- ✅ Sempre teste no ambiente de sandbox primeiro
-- ✅ Inclua `affiliate_code` no `additionalInfo`
-- ✅ Use `correlationID` único para cada cobrança
-- ✅ Monitore os logs de webhook na Woovi
-- ✅ Armazene o `chargeId` para referência
+- <Icon icon="check" color="#db2777" /> Sempre teste no ambiente de sandbox primeiro
+- <Icon icon="check" color="#db2777" /> Inclua `affiliate_code` no `additionalInfo`
+- <Icon icon="check" color="#db2777" /> Use `correlationID` único para cada cobrança
+- <Icon icon="check" color="#db2777" /> Monitore os logs de webhook na Woovi
+- <Icon icon="check" color="#db2777" /> Armazene o `chargeId` para referência
 
-### ❌ Não Faça
+### <Icon icon="x" /> Não Faça
 
-- ❌ Não exponha seu App ID no frontend
-- ❌ Não crie cobranças duplicadas com mesmo `correlationID`
-- ❌ Não esqueça de converter valores para centavos
-- ❌ Não desative o webhook sem avisar os afiliados
+- <Icon icon="x" /> Não exponha seu App ID no frontend
+- <Icon icon="x" /> Não crie cobranças duplicadas com mesmo `correlationID`
+- <Icon icon="x" /> Não esqueça de converter valores para centavos
+- <Icon icon="x" /> Não desative o webhook sem avisar os afiliados
 
 ---
 
@@ -550,11 +550,13 @@ additionalInfo: [
   </Card>
 
 {" "}
+
 <Card title="Integração Stripe" icon="credit-card" href="/integrations/stripe">
   Automatize conversões via cartão
 </Card>
 
 {" "}
+
 <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
   Rastreamento manual via JavaScript
 </Card>
@@ -579,17 +581,20 @@ additionalInfo: [
   </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="O PIX pode expirar antes do pagamento?">
   Sim. Configure o tempo de expiração na criação da cobrança. O padrão é 24
   horas.
 </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="O que acontece se o PIX for estornado?">
   A conversão permanece. Você pode rejeitá-la manualmente se necessário.
 </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="Preciso da SDK JavaScript também?">
   Sim! A SDK é obrigatória para salvar o código do afiliado no cookie. Sem ela,
   você não terá como passar o código do afiliado para a Woovi.

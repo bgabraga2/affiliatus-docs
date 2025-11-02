@@ -39,7 +39,7 @@ graph LR
 3. Seu backend processa o pagamento
 4. **Backend lê o código do afiliado** (do cookie ou session)
 5. **Backend envia conversão via API REST**
-6. API valida e cria a conversão ✨
+6. API valida e cria a conversão <Icon icon="sparkles" />
 
 <Note>
   **Papel da SDK:** Ela salva o código do afiliado em um cookie que dura 30
@@ -155,25 +155,25 @@ X-API-Key: your_api_key_here
 
 ### Event Object
 
-| Campo          | Tipo   | Obrigatório | Descrição                       |
-| -------------- | ------ | ----------- | ------------------------------- |
-| `event_type`   | String | ✅ Sim      | Sempre `"conversion"`           |
-| `campaign_id`  | String | ✅ Sim      | ID público da sua campanha      |
-| `affiliate_id` | String | ✅ Sim      | Código do afiliado (referralId) |
-| `properties`   | Object | ✅ Sim      | Dados da conversão              |
-| `device_info`  | Object | Recomendado | Informações do dispositivo      |
+| Campo          | Tipo   | Obrigatório                               | Descrição                       |
+| -------------- | ------ | ----------------------------------------- | ------------------------------- |
+| `event_type`   | String | <Icon icon="check" color="#db2777" /> Sim | Sempre `"conversion"`           |
+| `campaign_id`  | String | <Icon icon="check" color="#db2777" /> Sim | ID público da sua campanha      |
+| `affiliate_id` | String | <Icon icon="check" color="#db2777" /> Sim | Código do afiliado (referralId) |
+| `properties`   | Object | <Icon icon="check" color="#db2777" /> Sim | Dados da conversão              |
+| `device_info`  | Object | Recomendado                               | Informações do dispositivo      |
 
 ### Properties Object
 
-| Campo            | Tipo   | Obrigatório | Descrição                 |
-| ---------------- | ------ | ----------- | ------------------------- |
-| `order_id`       | String | ✅ Sim      | ID único do pedido        |
-| `order_value`    | Number | ✅ Sim      | Valor da venda em reais   |
-| `url`            | String | Recomendado | URL da página de checkout |
-| `product`        | String | Opcional    | Nome do produto/plano     |
-| `customer_email` | String | Opcional    | E-mail do cliente         |
-| `customer_name`  | String | Opcional    | Nome do cliente           |
-| `timestamp`      | String | Opcional    | ISO 8601 timestamp        |
+| Campo            | Tipo   | Obrigatório                               | Descrição                 |
+| ---------------- | ------ | ----------------------------------------- | ------------------------- |
+| `order_id`       | String | <Icon icon="check" color="#db2777" /> Sim | ID único do pedido        |
+| `order_value`    | Number | <Icon icon="check" color="#db2777" /> Sim | Valor da venda em reais   |
+| `url`            | String | Recomendado                               | URL da página de checkout |
+| `product`        | String | Opcional                                  | Nome do produto/plano     |
+| `customer_email` | String | Opcional                                  | E-mail do cliente         |
+| `customer_name`  | String | Opcional                                  | Nome do cliente           |
+| `timestamp`      | String | Opcional                                  | ISO 8601 timestamp        |
 
 ### Device Info Object
 
@@ -737,11 +737,12 @@ Importe esta collection:
 
 **Verifique:**
 
-1. ✅ API key está ativa (não revogada)
-2. ✅ `campaign_id` está correto
-3. ✅ `affiliate_id` corresponde a um afiliado ativo
-4. ✅ Header `X-API-Key` está sendo enviado
-5. ✅ Response da API retornou `200 OK`
+1. <Icon icon="check" color="#db2777" /> API key está ativa (não revogada)
+2. <Icon icon="check" color="#db2777" /> `campaign_id` está correto
+3. <Icon icon="check" color="#db2777" /> `affiliate_id` corresponde a um afiliado
+   ativo
+4. <Icon icon="check" color="#db2777" /> Header `X-API-Key` está sendo enviado
+5. <Icon icon="check" color="#db2777" /> Response da API retornou `200 OK`
 
 ---
 
@@ -776,37 +777,37 @@ const client = axios.create({
 
 ## Comparação: API REST vs SDK JavaScript
 
-| Característica    | API REST            | SDK JavaScript        |
-| ----------------- | ------------------- | --------------------- |
-| **Onde roda**     | Backend/Server      | Frontend/Browser      |
-| **Requer código** | ✅ Sim              | ✅ Sim                |
-| **Autenticação**  | API Key             | Campaign ID           |
-| **Segurança**     | Alta (server-side)  | Média (client-side)   |
-| **Dependência**   | Nenhuma             | JavaScript habilitado |
-| **Rate limit**    | 70/min por key      | 70/min por IP         |
-| **Ideal para**    | Integrações backend | Sites tradicionais    |
+| Característica    | API REST                                  | SDK JavaScript                            |
+| ----------------- | ----------------------------------------- | ----------------------------------------- |
+| **Onde roda**     | Backend/Server                            | Frontend/Browser                          |
+| **Requer código** | <Icon icon="check" color="#db2777" /> Sim | <Icon icon="check" color="#db2777" /> Sim |
+| **Autenticação**  | API Key                                   | Campaign ID                               |
+| **Segurança**     | Alta (server-side)                        | Média (client-side)                       |
+| **Dependência**   | Nenhuma                                   | JavaScript habilitado                     |
+| **Rate limit**    | 70/min por key                            | 70/min por IP                             |
+| **Ideal para**    | Integrações backend                       | Sites tradicionais                        |
 
 ---
 
 ## Boas Práticas
 
-### ✅ Faça
+### <Icon icon="check" color="#db2777" /> Faça
 
-- ✅ Armazene API key em variáveis de ambiente
-- ✅ Use HTTPS sempre
-- ✅ Implemente retry com backoff exponencial
-- ✅ Valide dados antes de enviar
-- ✅ Logue erros para debugging
-- ✅ Use `order_id` único para evitar duplicação
-- ✅ Envie eventos em lote quando possível
+- <Icon icon="check" color="#db2777" /> Armazene API key em variáveis de ambiente
+- <Icon icon="check" color="#db2777" /> Use HTTPS sempre
+- <Icon icon="check" color="#db2777" /> Implemente retry com backoff exponencial
+- <Icon icon="check" color="#db2777" /> Valide dados antes de enviar
+- <Icon icon="check" color="#db2777" /> Logue erros para debugging
+- <Icon icon="check" color="#db2777" /> Use `order_id` único para evitar duplicação
+- <Icon icon="check" color="#db2777" /> Envie eventos em lote quando possível
 
-### ❌ Não Faça
+### <Icon icon="x" /> Não Faça
 
-- ❌ Nunca exponha a API key no frontend
-- ❌ Não commite API keys no Git
-- ❌ Não ignore erros da API
-- ❌ Não envie conversões duplicadas com mesmo `order_id`
-- ❌ Não ultrapasse o rate limit (70/min)
+- <Icon icon="x" /> Nunca exponha a API key no frontend
+- <Icon icon="x" /> Não commite API keys no Git
+- <Icon icon="x" /> Não ignore erros da API
+- <Icon icon="x" /> Não envie conversões duplicadas com mesmo `order_id`
+- <Icon icon="x" /> Não ultrapasse o rate limit (70/min)
 
 ---
 
@@ -822,6 +823,7 @@ const client = axios.create({
   </Card>
 
 {" "}
+
 <Card
   title="Aprovar conversões"
   icon="check-circle"
@@ -831,6 +833,7 @@ const client = axios.create({
 </Card>
 
 {" "}
+
 <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
   Rastreamento frontend
 </Card>
@@ -851,17 +854,20 @@ const client = axios.create({
   </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="Quantas API keys posso criar?">
   Não há limite. Crie quantas precisar (ex: uma para produção, outra para
   staging).
 </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="E se eu perder minha API key?">
   Não é possível recuperar. Você precisará revogar a antiga e criar uma nova.
 </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="A API key expira?">
   Não, ela permanece válida até ser revogada manualmente.
 </Accordion>

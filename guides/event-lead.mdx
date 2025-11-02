@@ -22,21 +22,29 @@ O evento **`lead`** rastreia quando um visitante fornece informações de contat
     Quando o usuário preenche formulário de interesse
   </Card>
 
-  <Card title="Trial Gratuito" icon="flask">
-    Ao cadastrar-se para trial gratuito
-  </Card>
+{" "}
 
-  <Card title="Newsletter" icon="envelope">
-    Ao assinar newsletter ou baixar material
-  </Card>
+<Card title="Trial Gratuito" icon="flask">
+  Ao cadastrar-se para trial gratuito
+</Card>
 
-  <Card title="Carrinho" icon="cart-shopping">
-    Ao adicionar produtos ao carrinho
-  </Card>
+{" "}
 
-  <Card title="Checkout" icon="credit-card">
-    Ao iniciar processo de checkout
-  </Card>
+<Card title="Newsletter" icon="envelope">
+  Ao assinar newsletter ou baixar material
+</Card>
+
+{" "}
+
+<Card title="Carrinho" icon="cart-shopping">
+  Ao adicionar produtos ao carrinho
+</Card>
+
+{" "}
+
+<Card title="Checkout" icon="credit-card">
+  Ao iniciar processo de checkout
+</Card>
 
   <Card title="Demo" icon="presentation-screen">
     Ao solicitar demonstração ou contato
@@ -354,21 +362,29 @@ O evento Lead gera as seguintes métricas no dashboard:
     Número total de leads capturados por afiliado
   </Card>
 
-  <Card title="Taxa de Conversão" icon="arrow-trend-up">
-    Page Views → Leads (%)
-  </Card>
+{" "}
 
-  <Card title="Qualidade do Tráfego" icon="star">
-    Percentual de visitas que viram leads
-  </Card>
+<Card title="Taxa de Conversão" icon="arrow-trend-up">
+  Page Views → Leads (%)
+</Card>
 
-  <Card title="Leads por Tipo" icon="layer-group">
-    Distribuição por lead_type
-  </Card>
+{" "}
 
-  <Card title="Custo por Lead" icon="dollar-sign">
-    Comissões dividido por leads
-  </Card>
+<Card title="Qualidade do Tráfego" icon="star">
+  Percentual de visitas que viram leads
+</Card>
+
+{" "}
+
+<Card title="Leads por Tipo" icon="layer-group">
+  Distribuição por lead_type
+</Card>
+
+{" "}
+
+<Card title="Custo por Lead" icon="dollar-sign">
+  Comissões dividido por leads
+</Card>
 
   <Card title="Lead → Sale Rate" icon="funnel">
     Taxa de conversão de lead para venda
@@ -388,20 +404,26 @@ Use esses valores em `lead_type` para categorizar seus leads:
     Demo agendada
   </Accordion>
 
-  <Accordion title="Formulários" icon="file-pen">
-    - `contact_form` - Formulário de contato - `quote_request` - Solicitação de
-    orçamento - `consultation_request` - Pedido de consultoria
-  </Accordion>
+{" "}
 
-  <Accordion title="Marketing" icon="megaphone">
-    - `newsletter_signup` - Inscrição na newsletter - `ebook_download` -
-    Download de material - `webinar_registration` - Registro em webinar
-  </Accordion>
+<Accordion title="Formulários" icon="file-pen">
+  - `contact_form` - Formulário de contato - `quote_request` - Solicitação de
+  orçamento - `consultation_request` - Pedido de consultoria
+</Accordion>
 
-  <Accordion title="E-commerce" icon="cart-shopping">
-    - `add_to_cart` - Adicionou ao carrinho - `checkout_started` - Iniciou
-    checkout - `wishlist_add` - Adicionou à lista de desejos
-  </Accordion>
+{" "}
+
+<Accordion title="Marketing" icon="megaphone">
+  - `newsletter_signup` - Inscrição na newsletter - `ebook_download` - Download
+  de material - `webinar_registration` - Registro em webinar
+</Accordion>
+
+{" "}
+
+<Accordion title="E-commerce" icon="cart-shopping">
+  - `add_to_cart` - Adicionou ao carrinho - `checkout_started` - Iniciou
+  checkout - `wishlist_add` - Adicionou à lista de desejos
+</Accordion>
 
   <Accordion title="Engajamento" icon="heart">
     - `pricing_viewed` - Visualizou pricing - `feature_explored` - Explorou
@@ -417,13 +439,13 @@ Use esses valores em `lead_type` para categorizar seus leads:
   <Accordion title="Rastreie apenas leads qualificados" icon="filter">
     Não rastreie todos os formulários. Foque em ações que indicam **real interesse**.
     
-    **✅ Rastrear:**
+    **<Icon icon="check" color="#db2777" /> Rastrear:**
     - Trial gratuito
     - Demo/consultoria
     - Contato comercial
     - Checkout iniciado
     
-    **❌ Evitar rastrear:**
+    **<Icon icon="x" /> Evitar rastrear:**
     - Busca no site
     - Visualização de qualquer página
     - Scroll ou hover
@@ -434,14 +456,14 @@ Use esses valores em `lead_type` para categorizar seus leads:
     Diferencie tipos de leads para análises mais precisas.
     
     ```javascript
-    // ✅ BOM - categorizado
+    // <Icon icon="check" color="#db2777" /> BOM - categorizado
     affiliatus.trackLead({
       email: 'user@email.com',
       lead_type: 'trial_signup',
       source: 'pricing_page'
     });
     
-    // ❌ RUIM - genérico
+    // <Icon icon="x" /> RUIM - genérico
     affiliatus.trackLead({
       email: 'user@email.com'
     });
@@ -452,7 +474,7 @@ Use esses valores em `lead_type` para categorizar seus leads:
     Envie email, nome, telefone quando disponível. Ajuda na análise e deduplicação futura.
     
     ```javascript
-    // ✅ COMPLETO
+    // <Icon icon="check" color="#db2777" /> COMPLETO
     affiliatus.trackLead({
       email: 'joao@empresa.com',
       name: 'João Silva',
@@ -560,13 +582,17 @@ if (!localStorage.getItem(leadKey)) {
     Aprenda sobre o último passo do funil
   </Card>
 
-  <Card title="Evento Page View" icon="eye" href="/guides/event-page-view">
-    Voltar para Page View
-  </Card>
+{" "}
 
-  <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
-    Guia completo do SDK JavaScript
-  </Card>
+<Card title="Evento Page View" icon="eye" href="/guides/event-page-view">
+  Voltar para Page View
+</Card>
+
+{" "}
+
+<Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
+  Guia completo do SDK JavaScript
+</Card>
 
   <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
     Visualize leads em tempo real

@@ -28,10 +28,10 @@ Primeiro, instale a SDK JavaScript no seu site. Ela é a base de tudo:
 
 **O que a SDK faz:**
 
-- ✅ Captura o código do afiliado da URL (`?ref=CODIGO`)
-- ✅ Salva em um cookie que dura 30 dias
-- ✅ Rastreia visualizações de página (page views)
-- ✅ Pode enviar conversões (se usar método JavaScript)
+- <Icon icon="check" color="#db2777" /> Captura o código do afiliado da URL (`?ref=CODIGO`)
+- <Icon icon="check" color="#db2777" /> Salva em um cookie que dura 30 dias
+- <Icon icon="check" color="#db2777" /> Rastreia visualizações de página (page views)
+- <Icon icon="check" color="#db2777" /> Pode enviar conversões (se usar método JavaScript)
 
 ---
 
@@ -51,6 +51,7 @@ Depois da SDK instalada, escolha **como enviar as conversões (vendas)**:
   </Card>
 
 {" "}
+
 <Card title="B. Via Stripe" icon="credit-card" href="/integrations/stripe">
   **Automático - Webhook** Conversões criadas automaticamente quando pagamento é
   aprovado. **Ideal para:** - Usa Stripe - Assinaturas recorrentes - Zero
@@ -58,6 +59,7 @@ Depois da SDK instalada, escolha **como enviar as conversões (vendas)**:
 </Card>
 
 {" "}
+
 <Card title="C. Via Woovi" icon="barcode" href="/integrations/woovi">
   **Automático - Webhook** Conversões criadas automaticamente quando PIX é
   confirmado. **Ideal para:** - Usa Woovi/OpenPix - Pagamentos via PIX - Mercado
@@ -80,15 +82,15 @@ Depois da SDK instalada, escolha **como enviar as conversões (vendas)**:
   apenas os **métodos de envio de conversões**.
 </Note>
 
-| Característica       | A. SDK trackConversion() | B. Stripe Webhook | C. Woovi Webhook  | D. API REST |
-| -------------------- | ------------------------ | ----------------- | ----------------- | ----------- |
-| **SDK obrigatória?** | ✅ Sim                   | ✅ Sim            | ✅ Sim            | ✅ Sim      |
-| **Automação**        | Manual                   | Automático        | Automático        | Manual      |
-| **Complexidade**     | Baixa                    | Média             | Média             | Média       |
-| **Gateway**          | Qualquer                 | Stripe            | Woovi             | Qualquer    |
-| **Onde chama**       | Página sucesso           | Webhook           | Webhook           | Backend     |
-| **Código extra**     | ✅ 3 linhas JS           | ✅ Config webhook | ✅ Config webhook | ✅ Backend  |
-| **Manutenção**       | Baixa                    | Baixa             | Baixa             | Média       |
+| Característica       | A. SDK trackConversion()                          | B. Stripe Webhook                                    | C. Woovi Webhook                                     | D. API REST                                   |
+| -------------------- | ------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------- |
+| **SDK obrigatória?** | <Icon icon="check" color="#db2777" /> Sim         | <Icon icon="check" color="#db2777" /> Sim            | <Icon icon="check" color="#db2777" /> Sim            | <Icon icon="check" color="#db2777" /> Sim     |
+| **Automação**        | Manual                                            | Automático                                           | Automático                                           | Manual                                        |
+| **Complexidade**     | Baixa                                             | Média                                                | Média                                                | Média                                         |
+| **Gateway**          | Qualquer                                          | Stripe                                               | Woovi                                                | Qualquer                                      |
+| **Onde chama**       | Página sucesso                                    | Webhook                                              | Webhook                                              | Backend                                       |
+| **Código extra**     | <Icon icon="check" color="#db2777" /> 3 linhas JS | <Icon icon="check" color="#db2777" /> Config webhook | <Icon icon="check" color="#db2777" /> Config webhook | <Icon icon="check" color="#db2777" /> Backend |
+| **Manutenção**       | Baixa                                             | Baixa                                                | Baixa                                                | Média                                         |
 
 ---
 
@@ -119,14 +121,14 @@ graph LR
 
 **Prós:**
 
-- ✅ Mais simples para começar
-- ✅ Funciona com qualquer gateway
-- ✅ Apenas 3 linhas de código
+- <Icon icon="check" color="#db2777" /> Mais simples para começar
+- <Icon icon="check" color="#db2777" /> Funciona com qualquer gateway
+- <Icon icon="check" color="#db2777" /> Apenas 3 linhas de código
 
 **Contras:**
 
-- ❌ Precisa chamar manualmente na página de sucesso
-- ❌ Pode falhar se JavaScript estiver desabilitado
+- <Icon icon="x" /> Precisa chamar manualmente na página de sucesso
+- <Icon icon="x" /> Pode falhar se JavaScript estiver desabilitado
 
 ---
 
@@ -143,15 +145,15 @@ graph LR
 
 **Prós:**
 
-- ✅ Totalmente automático
-- ✅ Zero trabalho manual na conversão
-- ✅ Confiável e testado
-- ✅ Suporta assinaturas
+- <Icon icon="check" color="#db2777" /> Totalmente automático
+- <Icon icon="check" color="#db2777" /> Zero trabalho manual na conversão
+- <Icon icon="check" color="#db2777" /> Confiável e testado
+- <Icon icon="check" color="#db2777" /> Suporta assinaturas
 
 **Contras:**
 
-- ❌ Apenas para quem usa Stripe
-- ❌ Requer configuração de webhook
+- <Icon icon="x" /> Apenas para quem usa Stripe
+- <Icon icon="x" /> Requer configuração de webhook
 
 ---
 
@@ -168,15 +170,15 @@ graph LR
 
 **Prós:**
 
-- ✅ Totalmente automático
-- ✅ PIX instantâneo
-- ✅ Taxas baixas (~1%)
-- ✅ Perfeito para Brasil
+- <Icon icon="check" color="#db2777" /> Totalmente automático
+- <Icon icon="check" color="#db2777" /> PIX instantâneo
+- <Icon icon="check" color="#db2777" /> Taxas baixas (~1%)
+- <Icon icon="check" color="#db2777" /> Perfeito para Brasil
 
 **Contras:**
 
-- ❌ Apenas para quem usa Woovi
-- ❌ Requer configuração de webhook
+- <Icon icon="x" /> Apenas para quem usa Woovi
+- <Icon icon="x" /> Requer configuração de webhook
 
 ---
 
@@ -193,16 +195,17 @@ graph LR
 
 **Prós:**
 
-- ✅ Funciona com qualquer gateway (Mercado Pago, PagSeguro, etc)
-- ✅ Server-side (mais seguro)
-- ✅ Controle total do fluxo
-- ✅ Não depende de JavaScript para conversão
+- <Icon icon="check" color="#db2777" /> Funciona com qualquer gateway (Mercado Pago,
+  PagSeguro, etc)
+- <Icon icon="check" color="#db2777" /> Server-side (mais seguro)
+- <Icon icon="check" color="#db2777" /> Controle total do fluxo
+- <Icon icon="check" color="#db2777" /> Não depende de JavaScript para conversão
 
 **Contras:**
 
-- ❌ Requer implementação no backend
-- ❌ Precisa gerenciar API keys
-- ❌ Rate limit (70 req/min)
+- <Icon icon="x" /> Requer implementação no backend
+- <Icon icon="x" /> Precisa gerenciar API keys
+- <Icon icon="x" /> Rate limit (70 req/min)
 
 ---
 
@@ -291,11 +294,13 @@ graph LR
   </Card>
 
 {" "}
+
 <Card title="B. Stripe" icon="credit-card" href="/integrations/stripe">
   Se usa Stripe (automático)
 </Card>
 
 {" "}
+
 <Card title="C. Woovi" icon="barcode" href="/integrations/woovi">
   Se usa Woovi/PIX (automático)
 </Card>
@@ -340,12 +345,14 @@ Para outros gateways, você pode:
   </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="Quanto tempo leva para implementar?">
   - SDK JavaScript: 30min - 2h - Stripe: 15-30min - Woovi: 15-30min - API REST:
   1-3h
 </Accordion>
 
 {" "}
+
 <Accordion icon="question" title="Qual é o mais confiável?">
   Todos são confiáveis. Webhooks (Stripe/Woovi) têm menos margem para erro por
   serem automáticos.
@@ -373,6 +380,7 @@ Após configurar sua integração:
   </Card>
 
 {" "}
+
 <Card
   title="Testar integração"
   icon="flask"
@@ -382,6 +390,7 @@ Após configurar sua integração:
 </Card>
 
 {" "}
+
 <Card
   title="Aprovar conversões"
   icon="check-circle"

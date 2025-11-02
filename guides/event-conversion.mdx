@@ -29,13 +29,17 @@ O evento **`conversion`** rastreia quando uma venda é concretizada através de 
     Quando um pagamento é confirmado pelo gateway
   </Card>
 
-  <Card title="Webhook Recebido" icon="webhook">
-    Ao receber webhook de Stripe, Mercado Pago, etc
-  </Card>
+{" "}
 
-  <Card title="Assinatura Ativada" icon="repeat">
-    Quando uma assinatura é criada/ativada
-  </Card>
+<Card title="Webhook Recebido" icon="webhook">
+  Ao receber webhook de Stripe, Mercado Pago, etc
+</Card>
+
+{" "}
+
+<Card title="Assinatura Ativada" icon="repeat">
+  Quando uma assinatura é criada/ativada
+</Card>
 
   <Card title="Pagamento Recebido" icon="money-bill">
     Ao confirmar recebimento do pagamento
@@ -123,7 +127,7 @@ O evento **`conversion`** rastreia quando uma venda é concretizada através de 
     <script src="https://cdn.affiliatus.io/latest/affiliatus.min.js"></script>
   </head>
   <body>
-    <h1>🎉 Obrigado pela sua compra!</h1>
+    <h1><Icon icon="party-horn" /> Obrigado pela sua compra!</h1>
     <p>Seu pedido foi confirmado com sucesso.</p>
 
     <script>
@@ -429,19 +433,27 @@ Quando uma conversão é recebida, o sistema executa os seguintes passos:
     Verifica se `campaign`, `affiliate` e `domain` são válidos e ativos
   </Step>
 
-  <Step title="2. Idempotência">
-    Checa se `order_id` já existe no banco de dados (evita duplicatas)
-  </Step>
+{" "}
 
-  <Step title="3. Limites do Plano">
-    Verifica se o plano do usuário suporta mais conversões no mês
-  </Step>
+<Step title="2. Idempotência">
+  Checa se `order_id` já existe no banco de dados (evita duplicatas)
+</Step>
 
-  <Step title="4. Salvar Evento">Registra o evento na tabela `events`</Step>
+{" "}
 
-  <Step title="5. Criar Conversão">
-    Cria registro na tabela `conversions` com status `pending`
-  </Step>
+<Step title="3. Limites do Plano">
+  Verifica se o plano do usuário suporta mais conversões no mês
+</Step>
+
+{" "}
+
+<Step title="4. Salvar Evento">Registra o evento na tabela `events`</Step>
+
+{" "}
+
+<Step title="5. Criar Conversão">
+  Cria registro na tabela `conversions` com status `pending`
+</Step>
 
   <Step title="6. Calcular Comissão">
     Calcula comissão baseado em `commission_type` e `commission_value`
@@ -489,13 +501,17 @@ Após criação, a conversão passa pelos seguintes status:
     **Pendente** - Aguardando aprovação manual do merchant
   </Step>
 
-  <Step title="approved" icon="circle-check">
-    **Aprovada** - Conversão aprovada, comissão confirmada
-  </Step>
+{" "}
 
-  <Step title="rejected" icon="circle-xmark">
-    **Recusada** - Conversão recusada (chargeback, fraude, cancelamento)
-  </Step>
+<Step title="approved" icon="circle-check">
+  **Aprovada** - Conversão aprovada, comissão confirmada
+</Step>
+
+{" "}
+
+<Step title="rejected" icon="circle-xmark">
+  **Recusada** - Conversão recusada (chargeback, fraude, cancelamento)
+</Step>
 
   <Step title="paid" icon="money-bill">
     **Paga** - Comissão foi paga ao afiliado
@@ -511,21 +527,29 @@ Após criação, a conversão passa pelos seguintes status:
     Número de vendas por afiliado
   </Card>
 
-  <Card title="Receita Gerada" icon="dollar-sign">
-    Soma de order_value por afiliado
-  </Card>
+{" "}
 
-  <Card title="Comissões a Pagar" icon="money-bill">
-    Total de comissões calculadas
-  </Card>
+<Card title="Receita Gerada" icon="dollar-sign">
+  Soma de order_value por afiliado
+</Card>
 
-  <Card title="Taxa de Conversão" icon="percentage">
-    Conversões / Visitas (%)
-  </Card>
+{" "}
 
-  <Card title="Ticket Médio" icon="calculator">
-    Receita total / Número de conversões
-  </Card>
+<Card title="Comissões a Pagar" icon="money-bill">
+  Total de comissões calculadas
+</Card>
+
+{" "}
+
+<Card title="Taxa de Conversão" icon="percentage">
+  Conversões / Visitas (%)
+</Card>
+
+{" "}
+
+<Card title="Ticket Médio" icon="calculator">
+  Receita total / Número de conversões
+</Card>
 
   <Card title="ROI do Programa" icon="chart-pie">
     Receita gerada vs Comissões pagas
@@ -541,16 +565,16 @@ Após criação, a conversão passa pelos seguintes status:
     Use o ID da transação do seu sistema ou gateway. **Nunca** gere IDs aleatórios ou reutilize.
     
     ```javascript
-    // ✅ BOM - ID do Stripe
+    // <Icon icon="check" color="#db2777" /> BOM - ID do Stripe
     order_id: session.id // "cs_1234abcd"
     
-    // ✅ BOM - ID do seu banco de dados
+    // <Icon icon="check" color="#db2777" /> BOM - ID do seu banco de dados
     order_id: `ORDER-${order.id}` // "ORDER-12345"
     
-    // ❌ RUIM - Aleatório
+    // <Icon icon="x" /> RUIM - Aleatório
     order_id: Math.random().toString()
     
-    // ❌ RUIM - Timestamp
+    // <Icon icon="x" /> RUIM - Timestamp
     order_id: Date.now().toString()
     ```
   </Accordion>
@@ -559,13 +583,13 @@ Após criação, a conversão passa pelos seguintes status:
     **Aguarde** webhook ou confirmação do gateway. **Nunca** envie no clique do botão de compra.
     
     ```javascript
-    // ❌ ERRADO - No clique do botão
+    // <Icon icon="x" /> ERRADO - No clique do botão
     button.addEventListener('click', () => {
       affiliatus.trackConversion({ /* ... */ });
       checkout();
     });
     
-    // ✅ CORRETO - No webhook após pagamento confirmado
+    // <Icon icon="check" color="#db2777" /> CORRETO - No webhook após pagamento confirmado
     app.post('/webhook/payment', (req, res) => {
       if (req.body.status === 'paid') {
         trackConversion({ /* ... */ });
@@ -578,13 +602,13 @@ Após criação, a conversão passa pelos seguintes status:
     Envie o valor que o cliente **realmente pagou** (após descontos, mas antes de taxas).
     
     ```javascript
-    // ✅ CORRETO - Valor que o cliente pagou
+    // <Icon icon="check" color="#db2777" /> CORRETO - Valor que o cliente pagou
     order_value: 99.90 // Após desconto de R$ 10
     
-    // ❌ ERRADO - Valor antes do desconto
+    // <Icon icon="x" /> ERRADO - Valor antes do desconto
     order_value: 109.90
     
-    // ❌ ERRADO - Valor após taxas do gateway
+    // <Icon icon="x" /> ERRADO - Valor após taxas do gateway
     order_value: 94.90
     ```
   </Accordion>
@@ -629,10 +653,10 @@ Após criação, a conversão passa pelos seguintes status:
     O valor deve ser maior que zero
     
     ```javascript
-    // ✅ Válido
+    // <Icon icon="check" color="#db2777" /> Válido
     order_value: 99.90
     
-    // ❌ Inválido
+    // <Icon icon="x" /> Inválido
     order_value: 0
     order_value: -50
     ```
@@ -671,9 +695,11 @@ Após criação, a conversão passa pelos seguintes status:
     Status deve ser `active`, não `inactive`
   </Step>
 
-  <Step title="Confirme configuração da campanha">
-    `commission_type` e `commission_value` devem estar configurados
-  </Step>
+{" "}
+
+<Step title="Confirme configuração da campanha">
+  `commission_type` e `commission_value` devem estar configurados
+</Step>
 
   <Step title="Aprove manualmente no dashboard">
     Conversões ficam `pending` até aprovação manual Dashboard → Conversões →
@@ -699,17 +725,21 @@ Isso significa que você está tentando enviar uma conversão com `order_id` que
     Guia completo de integração com Stripe
   </Card>
 
-  <Card title="Integração Woovi" icon="pix" href="/integrations/woovi">
-    Guia completo de integração com Woovi (Pix)
-  </Card>
+{" "}
 
-  <Card
-    title="Aprovar Conversões"
-    icon="circle-check"
-    href="https://app.affiliatus.io/dashboard/conversions"
-  >
-    Gerenciar conversões no dashboard
-  </Card>
+<Card title="Integração Woovi" icon="pix" href="/integrations/woovi">
+  Guia completo de integração com Woovi (Pix)
+</Card>
+
+{" "}
+
+<Card
+  title="Aprovar Conversões"
+  icon="circle-check"
+  href="https://app.affiliatus.io/dashboard/conversions"
+>
+  Gerenciar conversões no dashboard
+</Card>
 
   <Card
     title="Criar Payouts"

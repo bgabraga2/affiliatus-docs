@@ -18,8 +18,8 @@ A SDK JavaScript é a **base de todas as integrações** do Affiliatus. Ela é r
 </Warning>
 
 **Esta página ensina:**
-- ✅ Como instalar a SDK (obrigatório para todos)
-- ✅ Como usar `trackConversion()` para enviar vendas (opcional se usar Stripe/Woovi/API REST)
+- <Icon icon="check" color="#db2777" /> Como instalar a SDK (obrigatório para todos)
+- <Icon icon="check" color="#db2777" /> Como usar `trackConversion()` para enviar vendas (opcional se usar Stripe/Woovi/API REST)
 
 ---
 
@@ -355,20 +355,20 @@ Se o cookie some após o cliente navegar:
 
 ## Boas Práticas
 
-### ✅ Faça
+### <Icon icon="check" color="#db2777" /> Faça
 
-- ✅ Use `order_id` único para cada venda
-- ✅ Teste em ambiente de staging primeiro
-- ✅ Adicione o código na página de sucesso/confirmação
-- ✅ Valide se o tracker está carregado antes de chamar
-- ✅ Use valores decimais para `order_value` (ex: `99.90`)
+- <Icon icon="check" color="#db2777" /> Use `order_id` único para cada venda
+- <Icon icon="check" color="#db2777" /> Teste em ambiente de staging primeiro
+- <Icon icon="check" color="#db2777" /> Adicione o código na página de sucesso/confirmação
+- <Icon icon="check" color="#db2777" /> Valide se o tracker está carregado antes de chamar
+- <Icon icon="check" color="#db2777" /> Use valores decimais para `order_value` (ex: `99.90`)
 
-### ❌ Não Faça
+### <Icon icon="x" /> Não Faça
 
-- ❌ Não coloque o código na página de checkout (antes da compra)
-- ❌ Não chame `trackConversion()` múltiplas vezes para o mesmo pedido
-- ❌ Não use valores inteiros truncados (ex: use `99.90` em vez de `99`)
-- ❌ Não esqueça de adicionar o domínio nos autorizados
+- <Icon icon="x" /> Não coloque o código na página de checkout (antes da compra)
+- <Icon icon="x" /> Não chame `trackConversion()` múltiplas vezes para o mesmo pedido
+- <Icon icon="x" /> Não use valores inteiros truncados (ex: use `99.90` em vez de `99`)
+- <Icon icon="x" /> Não esqueça de adicionar o domínio nos autorizados
 
 ---
 

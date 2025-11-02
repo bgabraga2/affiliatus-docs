@@ -22,13 +22,17 @@ O evento **`page_view`** rastreia quando um visitante acessa uma página atravé
     Ao carregar o SDK JavaScript com `autoPageView: true` (padrão)
   </Card>
 
-  <Card title="Manualmente" icon="hand-pointer">
-    Em navegações SPA (React, Vue, Angular)
-  </Card>
+{" "}
 
-  <Card title="Landing Pages" icon="browser">
-    Para rastrear visualizações de páginas específicas
-  </Card>
+<Card title="Manualmente" icon="hand-pointer">
+  Em navegações SPA (React, Vue, Angular)
+</Card>
+
+{" "}
+
+<Card title="Landing Pages" icon="browser">
+  Para rastrear visualizações de páginas específicas
+</Card>
 
   <Card title="Engajamento" icon="chart-line">
     Ao medir interações em páginas de produto/serviço
@@ -254,21 +258,29 @@ O evento Page View gera as seguintes métricas no dashboard:
     Número total de page views por afiliado
   </Card>
 
-  <Card title="Taxa de Rejeição" icon="chart-line">
-    Percentual de visitas sem lead/conversão
-  </Card>
+{" "}
 
-  <Card title="Páginas Mais Visitadas" icon="ranking-star">
-    Quais páginas geram mais tráfego
-  </Card>
+<Card title="Taxa de Rejeição" icon="chart-line">
+  Percentual de visitas sem lead/conversão
+</Card>
 
-  <Card title="Origem do Tráfego" icon="arrow-right-to-bracket">
-    De onde vêm os visitantes (via referrer)
-  </Card>
+{" "}
 
-  <Card title="Engajamento" icon="clock">
-    Tempo entre visitas e conversões
-  </Card>
+<Card title="Páginas Mais Visitadas" icon="ranking-star">
+  Quais páginas geram mais tráfego
+</Card>
+
+{" "}
+
+<Card title="Origem do Tráfego" icon="arrow-right-to-bracket">
+  De onde vêm os visitantes (via referrer)
+</Card>
+
+{" "}
+
+<Card title="Engajamento" icon="clock">
+  Tempo entre visitas e conversões
+</Card>
 
   <Card title="Taxa de Conversão" icon="percentage">
     Page Views → Leads → Conversions
@@ -323,12 +335,12 @@ O evento Page View gera as seguintes métricas no dashboard:
     Use sempre o mesmo formato para a propriedade `page` para facilitar análises.
     
     ```javascript
-    // ✅ BOM - consistente
+    // <Icon icon="check" color="#db2777" /> BOM - consistente
     page: 'home'
     page: 'pricing'
     page: 'product-details'
     
-    // ❌ RUIM - inconsistente
+    // <Icon icon="x" /> RUIM - inconsistente
     page: 'Home Page'
     page: '/pricing/'
     page: 'ProductDetails'
@@ -372,7 +384,7 @@ O evento Page View gera as seguintes métricas no dashboard:
 Se você está vendo page views duplicados, provavelmente está usando SPA sem desabilitar o modo automático:
 
 ```javascript
-// ✅ SOLUÇÃO
+// <Icon icon="check" color="#db2777" /> SOLUÇÃO
 const affiliatus = new Affiliatus("campaign-id", {
   autoPageView: false, // Desabilitar automático
 });
@@ -394,17 +406,21 @@ router.afterEach(() => {
     Aprenda sobre o próximo passo do funil
   </Card>
 
-  <Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
-    Guia completo do SDK JavaScript
-  </Card>
+{" "}
 
-  <Card
-    title="Enviar Eventos"
-    icon="paper-plane"
-    href="/api-reference/events/send-events"
-  >
-    Documentação da API REST
-  </Card>
+<Card title="SDK JavaScript" icon="code" href="/integrations/sdk-javascript">
+  Guia completo do SDK JavaScript
+</Card>
+
+{" "}
+
+<Card
+  title="Enviar Eventos"
+  icon="paper-plane"
+  href="/api-reference/events/send-events"
+>
+  Documentação da API REST
+</Card>
 
   <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
     Visualize page views em tempo real
