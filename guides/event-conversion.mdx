@@ -28,19 +28,12 @@ O evento **`conversion`** rastreia quando uma venda é concretizada através de 
   <Card title="Pagamento Confirmado" icon="circle-check">
     Quando um pagamento é confirmado pelo gateway
   </Card>
-
-{" "}
-
-<Card title="Webhook Recebido" icon="webhook">
-  Ao receber webhook de Stripe, Mercado Pago, etc
-</Card>
-
-{" "}
-
-<Card title="Assinatura Ativada" icon="repeat">
-  Quando uma assinatura é criada/ativada
-</Card>
-
+  <Card title="Webhook Recebido" icon="webhook">
+    Ao receber webhook de Stripe, Mercado Pago, etc
+  </Card>
+  <Card title="Assinatura Ativada" icon="repeat">
+    Quando uma assinatura é criada/ativada
+  </Card>
   <Card title="Pagamento Recebido" icon="money-bill">
     Ao confirmar recebimento do pagamento
   </Card>
@@ -432,29 +425,18 @@ Quando uma conversão é recebida, o sistema executa os seguintes passos:
   <Step title="1. Validação">
     Verifica se `campaign`, `affiliate` e `domain` são válidos e ativos
   </Step>
-
-{" "}
-
-<Step title="2. Idempotência">
-  Checa se `order_id` já existe no banco de dados (evita duplicatas)
-</Step>
-
-{" "}
-
-<Step title="3. Limites do Plano">
-  Verifica se o plano do usuário suporta mais conversões no mês
-</Step>
-
-{" "}
-
-<Step title="4. Salvar Evento">Registra o evento na tabela `events`</Step>
-
-{" "}
-
-<Step title="5. Criar Conversão">
-  Cria registro na tabela `conversions` com status `pending`
-</Step>
-
+  <Step title="2. Idempotência">
+    Checa se `order_id` já existe no banco de dados (evita duplicatas)
+  </Step>
+  <Step title="3. Limites do Plano">
+    Verifica se o plano do usuário suporta mais conversões no mês
+  </Step>
+  <Step title="4. Salvar Evento">
+    Registra o evento na tabela `events`
+  </Step>
+  <Step title="5. Criar Conversão">
+    Cria registro na tabela `conversions` com status `pending`
+  </Step>
   <Step title="6. Calcular Comissão">
     Calcula comissão baseado em `commission_type` e `commission_value`
   </Step>
@@ -500,19 +482,12 @@ Após criação, a conversão passa pelos seguintes status:
   <Step title="pending" icon="clock">
     **Pendente** - Aguardando aprovação manual do merchant
   </Step>
-
-{" "}
-
-<Step title="approved" icon="circle-check">
-  **Aprovada** - Conversão aprovada, comissão confirmada
-</Step>
-
-{" "}
-
-<Step title="rejected" icon="circle-xmark">
-  **Recusada** - Conversão recusada (chargeback, fraude, cancelamento)
-</Step>
-
+  <Step title="approved" icon="circle-check">
+    **Aprovada** - Conversão aprovada, comissão confirmada
+  </Step>
+  <Step title="rejected" icon="circle-xmark">
+    **Recusada** - Conversão recusada (chargeback, fraude, cancelamento)
+  </Step>
   <Step title="paid" icon="money-bill">
     **Paga** - Comissão foi paga ao afiliado
   </Step>
@@ -526,31 +501,18 @@ Após criação, a conversão passa pelos seguintes status:
   <Card title="Total de Conversões" icon="chart-line">
     Número de vendas por afiliado
   </Card>
-
-{" "}
-
-<Card title="Receita Gerada" icon="dollar-sign">
-  Soma de order_value por afiliado
-</Card>
-
-{" "}
-
-<Card title="Comissões a Pagar" icon="money-bill">
-  Total de comissões calculadas
-</Card>
-
-{" "}
-
-<Card title="Taxa de Conversão" icon="percentage">
-  Conversões / Visitas (%)
-</Card>
-
-{" "}
-
-<Card title="Ticket Médio" icon="calculator">
-  Receita total / Número de conversões
-</Card>
-
+  <Card title="Receita Gerada" icon="dollar-sign">
+    Soma de order_value por afiliado
+  </Card>
+  <Card title="Comissões a Pagar" icon="money-bill">
+    Total de comissões calculadas
+  </Card>
+  <Card title="Taxa de Conversão" icon="percentage">
+    Conversões / Visitas (%)
+  </Card>
+  <Card title="Ticket Médio" icon="calculator">
+    Receita total / Número de conversões
+  </Card>
   <Card title="ROI do Programa" icon="chart-pie">
     Receita gerada vs Comissões pagas
   </Card>
@@ -694,13 +656,9 @@ Após criação, a conversão passa pelos seguintes status:
   <Step title="Verifique se affiliate está ativo">
     Status deve ser `active`, não `inactive`
   </Step>
-
-{" "}
-
-<Step title="Confirme configuração da campanha">
-  `commission_type` e `commission_value` devem estar configurados
-</Step>
-
+  <Step title="Confirme configuração da campanha">
+    `commission_type` e `commission_value` devem estar configurados
+  </Step>
   <Step title="Aprove manualmente no dashboard">
     Conversões ficam `pending` até aprovação manual Dashboard → Conversões →
     Ações → Aprovar
@@ -724,23 +682,16 @@ Isso significa que você está tentando enviar uma conversão com `order_id` que
   <Card title="Integração Stripe" icon="stripe" href="/integrations/stripe">
     Guia completo de integração com Stripe
   </Card>
-
-{" "}
-
-<Card title="Integração Woovi" icon="pix" href="/integrations/woovi">
-  Guia completo de integração com Woovi (Pix)
-</Card>
-
-{" "}
-
-<Card
-  title="Aprovar Conversões"
-  icon="circle-check"
-  href="https://app.affiliatus.io/dashboard/conversions"
->
-  Gerenciar conversões no dashboard
-</Card>
-
+  <Card title="Integração Woovi" icon="pix" href="/integrations/woovi">
+    Guia completo de integração com Woovi (Pix)
+  </Card>
+  <Card
+    title="Aprovar Conversões"
+    icon="circle-check"
+    href="https://app.affiliatus.io/dashboard/conversions"
+  >
+    Gerenciar conversões no dashboard
+  </Card>
   <Card
     title="Criar Payouts"
     icon="money-bill"
