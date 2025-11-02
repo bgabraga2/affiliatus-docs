@@ -21,9 +21,12 @@
             ]
           },
           {
-            "group": "Eventos",
+            "group": "Tipos de Eventos",
             "pages": [
-              "guides/event-types"
+              "guides/event-types",
+              "guides/event-page-view",
+              "guides/event-lead",
+              "guides/event-conversion"
             ]
           },
           {

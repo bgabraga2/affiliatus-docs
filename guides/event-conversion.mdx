@@ -1,0 +1,715 @@
+---
+title: 'Evento: Conversion'
+description: 'Vendas e conversões monetizadas que geram comissões'
+icon: 'shopping-cart'
+---
+
+## Descrição
+
+O evento **`conversion`** rastreia quando uma venda é concretizada através de um afiliado. Este é o evento **mais importante** do sistema pois:
+
+- **Gera comissões** para os afiliados
+- **Calcula o ROI** do programa de afiliados
+- **Determina os pagamentos** (payouts)
+- **Mede o sucesso** real dos afiliados
+- **Vincula receita** à origem do tráfego
+
+<Warning>
+  Conversões devem ter `order_id` **único** e `order_value` **obrigatório**. O sistema automaticamente calcula a comissão baseado nas configurações da campanha.
+</Warning>
+
+---
+
+## Quando Usar
+
+<CardGroup cols={2}>
+  <Card title="Pagamento Confirmado" icon="circle-check">
+    Quando um pagamento é confirmado pelo gateway
+  </Card>
+  
+  <Card title="Webhook Recebido" icon="webhook">
+    Ao receber webhook de Stripe, Mercado Pago, etc
+  </Card>
+  
+  <Card title="Assinatura Ativada" icon="repeat">
+    Quando uma assinatura é criada/ativada
+  </Card>
+  
+  <Card title="Pagamento Recebido" icon="money-bill">
+    Ao confirmar recebimento do pagamento
+  </Card>
+</CardGroup>
+
+<Warning>
+  **NUNCA** envie conversões antes da confirmação do pagamento. Aguarde sempre o webhook ou confirmação do gateway.
+</Warning>
+
+---
+
+## Propriedades Obrigatórias
+
+<ParamField body="order_id" type="string" required>
+  ID único do pedido/transação (usado para **idempotência**)
+  
+  **Exemplo:** `"ORDER-12345"`, `"ch_1234abcd"`, `"TXN-2024-001"`
+  
+  <Warning>Conversões com mesmo `order_id` serão **ignoradas** (deduplicação automática)</Warning>
+</ParamField>
+
+<ParamField body="order_value" type="number" required>
+  Valor total da venda em reais (deve ser **positivo**)
+  
+  **Exemplo:** `99.90`, `299.00`, `1499.99`
+  
+  <Info>
+    A comissão será calculada automaticamente: Percentage → `(order_value * commission_value / 100)` | Fixed → `commission_value` fixo
+  </Info>
+</ParamField>
+
+---
+
+## Propriedades Opcionais
+
+<ParamField body="product" type="string">
+  Nome do produto ou plano vendido
+  
+  **Exemplo:** `"Plano Premium Anual"`, `"Produto X"`
+</ParamField>
+
+<ParamField body="customer_email" type="string">
+  E-mail do cliente que comprou
+  
+  **Exemplo:** `"cliente@email.com"`
+</ParamField>
+
+<ParamField body="customer_name" type="string">
+  Nome do cliente que comprou
+  
+  **Exemplo:** `"Maria Santos"`
+</ParamField>
+
+<ParamField body="customer_id" type="string">
+  ID do cliente no seu sistema
+  
+  **Exemplo:** `"user_abc123"`, `"cus_1234abcd"`
+</ParamField>
+
+<ParamField body="payment_method" type="string">
+  Método de pagamento usado
+  
+  **Exemplo:** `"credit_card"`, `"boleto"`, `"pix"`, `"stripe"`
+</ParamField>
+
+<ParamField body="subscription_id" type="string">
+  ID da assinatura (para modelos recorrentes)
+  
+  **Exemplo:** `"sub_abc123"`, `"subscription_456"`
+</ParamField>
+
+<ParamField body="url" type="string">
+  URL da página de checkout/confirmação
+  
+  **Exemplo:** `"https://seu-site.com/checkout/success"`
+</ParamField>
+
+<ParamField body="timestamp" type="string">
+  Data/hora ISO 8601 da conversão
+  
+  **Exemplo:** `"2024-01-15T10:45:00Z"`
+</ParamField>
+
+---
+
+## Exemplos de Implementação
+
+### SDK JavaScript - Página de Sucesso
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Compra Confirmada!</title>
+  <script src="https://cdn.affiliatus.io/latest/affiliatus.min.js"></script>
+</head>
+<body>
+  <h1>🎉 Obrigado pela sua compra!</h1>
+  <p>Seu pedido foi confirmado com sucesso.</p>
+  
+  <script>
+    const affiliatus = new Affiliatus('seu-campaign-id');
+    
+    // Dados do pedido (vindos do backend via template)
+    const orderData = {
+      order_id: '<?= $order->id ?>',
+      order_value: <?= $order->total ?>,
+      product: '<?= $order->product_name ?>',
+      customer_email: '<?= $customer->email ?>',
+      customer_name: '<?= $customer->name ?>',
+      payment_method: '<?= $order->payment_method ?>'
+    };
+    
+    // Rastrear conversão
+    affiliatus.trackConversion(orderData);
+    
+    console.log('Conversão rastreada:', orderData);
+  </script>
+</body>
+</html>
+```
+
+### Webhook Stripe
+
+```javascript
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const express = require('express');
+
+const app = express();
+
+// Endpoint para webhook do Stripe
+app.post('/webhook/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    // Verificar assinatura do webhook
+    event = stripe.webhooks.constructEvent(
+      req.body, 
+      sig, 
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error('Erro ao verificar webhook:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Processar evento de checkout completo
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    
+    // Buscar affiliate_id e session_id dos metadata
+    const affiliateId = session.metadata.affiliate_id;
+    const affiliateSessionId = session.metadata.session_id;
+    
+    if (affiliateId) {
+      console.log('Rastreando conversão para afiliado:', affiliateId);
+      
+      try {
+        await fetch('https://api.affiliatus.io/events/api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': process.env.AFFILIATUS_API_KEY,
+          },
+          body: JSON.stringify({
+            events: [{
+              event_type: 'conversion',
+              campaign_id: process.env.CAMPAIGN_ID,
+              affiliate_id: affiliateId,
+              session_id: affiliateSessionId,
+              properties: {
+                order_id: session.id,
+                order_value: session.amount_total / 100, // Stripe usa centavos
+                product: session.metadata.product_name || 'Produto',
+                customer_email: session.customer_email,
+                customer_id: session.customer,
+                payment_method: 'stripe',
+                subscription_id: session.subscription,
+                url: session.success_url,
+                timestamp: new Date().toISOString()
+              },
+              device_info: {
+                ip: req.ip,
+                user_agent: req.headers['user-agent']
+              }
+            }]
+          })
+        });
+        
+        console.log('Conversão rastreada com sucesso');
+      } catch (error) {
+        console.error('Erro ao rastrear conversão:', error);
+      }
+    }
+  }
+  
+  res.json({ received: true });
+});
+
+app.listen(3000, () => console.log('Webhook server running on port 3000'));
+```
+
+### Como Adicionar Metadata no Stripe
+
+```javascript
+// No checkout, adicione affiliate_id aos metadata
+const session = await stripe.checkout.sessions.create({
+  payment_method_types: ['card'],
+  line_items: [{
+    price: 'price_abc123',
+    quantity: 1,
+  }],
+  mode: 'subscription',
+  success_url: 'https://seu-site.com/success',
+  cancel_url: 'https://seu-site.com/cancel',
+  metadata: {
+    affiliate_id: affiliateId,      // ← Importante!
+    session_id: sessionId,          // ← Importante!
+    product_name: 'Plano Premium'
+  }
+});
+```
+
+### Webhook Mercado Pago
+
+```python
+from flask import Flask, request, jsonify
+import requests
+import os
+
+app = Flask(__name__)
+
+@app.route('/webhook/mercadopago', methods=['POST'])
+def mercadopago_webhook():
+    """Processar notificação de pagamento aprovado do Mercado Pago"""
+    
+    data = request.json
+    
+    # Verificar se é notificação de pagamento aprovado
+    if data.get('type') == 'payment' and data.get('action') == 'payment.approved':
+        payment_id = data['data']['id']
+        
+        # Buscar detalhes do pagamento na API do Mercado Pago
+        payment = get_mercadopago_payment(payment_id)
+        
+        # Buscar affiliate_id armazenado nos metadata
+        affiliate_id = payment.get('metadata', {}).get('affiliate_id')
+        session_id = payment.get('metadata', {}).get('session_id')
+        
+        if affiliate_id:
+            # Enviar conversão para Affiliatus
+            payload = {
+                'events': [{
+                    'event_type': 'conversion',
+                    'campaign_id': os.getenv('CAMPAIGN_ID'),
+                    'affiliate_id': affiliate_id,
+                    'session_id': session_id,
+                    'properties': {
+                        'order_id': payment['external_reference'] or str(payment_id),
+                        'order_value': float(payment['transaction_amount']),
+                        'product': payment['description'],
+                        'customer_email': payment['payer']['email'],
+                        'customer_name': payment['payer']['name'],
+                        'customer_id': str(payment['payer']['id']),
+                        'payment_method': 'mercadopago',
+                        'timestamp': payment['date_approved']
+                    },
+                    'device_info': {
+                        'ip': request.remote_addr
+                    }
+                }]
+            }
+            
+            response = requests.post(
+                'https://api.affiliatus.io/events/api',
+                headers={
+                    'Content-Type': 'application/json',
+                    'X-API-Key': os.getenv('AFFILIATUS_API_KEY')
+                },
+                json=payload
+            )
+            
+            print(f"Conversão rastreada: {response.json()}")
+    
+    return jsonify({'status': 'ok'})
+
+def get_mercadopago_payment(payment_id):
+    """Buscar detalhes do pagamento no Mercado Pago"""
+    access_token = os.getenv('MERCADOPAGO_ACCESS_TOKEN')
+    
+    response = requests.get(
+        f'https://api.mercadopago.com/v1/payments/{payment_id}',
+        headers={'Authorization': f'Bearer {access_token}'}
+    )
+    
+    return response.json()
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+### Webhook PagSeguro
+
+```php
+<?php
+// Webhook PagSeguro
+if ($_POST['notificationCode']) {
+    $notificationCode = $_POST['notificationCode'];
+    
+    // Consultar transação no PagSeguro
+    $transaction = consultarTransacaoPagSeguro($notificationCode);
+    
+    // Verificar se pagamento foi aprovado (status 3 = Paga)
+    if ($transaction['status'] == 3) {
+        
+        // Buscar affiliate_id armazenado na referência
+        // Você deve ter salvo isso ao criar o pagamento
+        $reference = $transaction['reference'];
+        list($orderId, $affiliateId, $sessionId) = explode('_', $reference);
+        
+        if ($affiliateId) {
+            // Preparar dados para Affiliatus
+            $data = [
+                'events' => [[
+                    'event_type' => 'conversion',
+                    'campaign_id' => $_ENV['CAMPAIGN_ID'],
+                    'affiliate_id' => $affiliateId,
+                    'session_id' => $sessionId,
+                    'properties' => [
+                        'order_id' => $orderId,
+                        'order_value' => floatval($transaction['grossAmount']),
+                        'product' => $transaction['items'][0]['description'],
+                        'customer_email' => $transaction['sender']['email'],
+                        'customer_name' => $transaction['sender']['name'],
+                        'payment_method' => 'pagseguro',
+                        'timestamp' => date('c')
+                    ],
+                    'device_info' => [
+                        'ip' => $_SERVER['REMOTE_ADDR']
+                    ]
+                ]]
+            ];
+            
+            // Enviar para Affiliatus
+            $ch = curl_init('https://api.affiliatus.io/events/api');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'X-API-Key: ' . $_ENV['AFFILIATUS_API_KEY']
+            ]);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($httpCode == 200) {
+                error_log("Conversão rastreada com sucesso: $orderId");
+            } else {
+                error_log("Erro ao rastrear conversão: $response");
+            }
+        }
+    }
+}
+
+function consultarTransacaoPagSeguro($notificationCode) {
+    $email = $_ENV['PAGSEGURO_EMAIL'];
+    $token = $_ENV['PAGSEGURO_TOKEN'];
+    
+    $url = "https://ws.pagseguro.uol.com.br/v3/transactions/notifications/$notificationCode?email=$email&token=$token";
+    
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $xml = curl_exec($ch);
+    curl_close($ch);
+    
+    // Converter XML para array
+    $transaction = simplexml_load_string($xml);
+    return json_decode(json_encode($transaction), true);
+}
+?>
+```
+
+---
+
+## Fluxo de Processamento
+
+Quando uma conversão é recebida, o sistema executa os seguintes passos:
+
+<Steps>
+  <Step title="1. Validação">
+    Verifica se `campaign`, `affiliate` e `domain` são válidos e ativos
+  </Step>
+  
+  <Step title="2. Idempotência">
+    Checa se `order_id` já existe no banco de dados (evita duplicatas)
+  </Step>
+  
+  <Step title="3. Limites do Plano">
+    Verifica se o plano do usuário suporta mais conversões no mês
+  </Step>
+  
+  <Step title="4. Salvar Evento">
+    Registra o evento na tabela `events`
+  </Step>
+  
+  <Step title="5. Criar Conversão">
+    Cria registro na tabela `conversions` com status `pending`
+  </Step>
+  
+  <Step title="6. Calcular Comissão">
+    Calcula comissão baseado em `commission_type` e `commission_value`
+  </Step>
+</Steps>
+
+---
+
+## Cálculo de Comissão
+
+O sistema calcula automaticamente a comissão baseado no tipo configurado na campanha:
+
+### Comissão Percentual (`percentage`)
+
+```
+commission_value = (order_value * campaign.commission_value) / 100
+```
+
+**Exemplo:**
+- `order_value`: R$ 100,00
+- `commission_value`: 10%
+- **Comissão calculada:** R$ 10,00
+
+### Comissão Fixa (`fixed`)
+
+```
+commission_value = campaign.commission_value
+```
+
+**Exemplo:**
+- `order_value`: R$ 100,00
+- `commission_value`: R$ 15,00
+- **Comissão calculada:** R$ 15,00 (independente do valor)
+
+---
+
+## Status da Conversão
+
+Após criação, a conversão passa pelos seguintes status:
+
+<Steps>
+  <Step title="pending" icon="clock">
+    **Pendente** - Aguardando aprovação manual do merchant
+  </Step>
+  
+  <Step title="approved" icon="circle-check">
+    **Aprovada** - Conversão aprovada, comissão confirmada
+  </Step>
+  
+  <Step title="rejected" icon="circle-xmark">
+    **Recusada** - Conversão recusada (chargeback, fraude, cancelamento)
+  </Step>
+  
+  <Step title="paid" icon="money-bill">
+    **Paga** - Comissão foi paga ao afiliado
+  </Step>
+</Steps>
+
+---
+
+## Métricas Geradas
+
+<CardGroup cols={2}>
+  <Card title="Total de Conversões" icon="chart-line">
+    Número de vendas por afiliado
+  </Card>
+  
+  <Card title="Receita Gerada" icon="dollar-sign">
+    Soma de order_value por afiliado
+  </Card>
+  
+  <Card title="Comissões a Pagar" icon="money-bill">
+    Total de comissões calculadas
+  </Card>
+  
+  <Card title="Taxa de Conversão" icon="percentage">
+    Conversões / Visitas (%)
+  </Card>
+  
+  <Card title="Ticket Médio" icon="calculator">
+    Receita total / Número de conversões
+  </Card>
+  
+  <Card title="ROI do Programa" icon="chart-pie">
+    Receita gerada vs Comissões pagas
+  </Card>
+</CardGroup>
+
+---
+
+## Boas Práticas
+
+<AccordionGroup>
+  <Accordion title="SEMPRE use order_id único" icon="fingerprint">
+    Use o ID da transação do seu sistema ou gateway. **Nunca** gere IDs aleatórios ou reutilize.
+    
+    ```javascript
+    // ✅ BOM - ID do Stripe
+    order_id: session.id // "cs_1234abcd"
+    
+    // ✅ BOM - ID do seu banco de dados
+    order_id: `ORDER-${order.id}` // "ORDER-12345"
+    
+    // ❌ RUIM - Aleatório
+    order_id: Math.random().toString()
+    
+    // ❌ RUIM - Timestamp
+    order_id: Date.now().toString()
+    ```
+  </Accordion>
+  
+  <Accordion title="Envie APENAS após confirmação" icon="circle-check">
+    **Aguarde** webhook ou confirmação do gateway. **Nunca** envie no clique do botão de compra.
+    
+    ```javascript
+    // ❌ ERRADO - No clique do botão
+    button.addEventListener('click', () => {
+      affiliatus.trackConversion({ /* ... */ });
+      checkout();
+    });
+    
+    // ✅ CORRETO - No webhook após pagamento confirmado
+    app.post('/webhook/payment', (req, res) => {
+      if (req.body.status === 'paid') {
+        trackConversion({ /* ... */ });
+      }
+    });
+    ```
+  </Accordion>
+  
+  <Accordion title="Use order_value correto" icon="dollar-sign">
+    Envie o valor que o cliente **realmente pagou** (após descontos, mas antes de taxas).
+    
+    ```javascript
+    // ✅ CORRETO - Valor que o cliente pagou
+    order_value: 99.90 // Após desconto de R$ 10
+    
+    // ❌ ERRADO - Valor antes do desconto
+    order_value: 109.90
+    
+    // ❌ ERRADO - Valor após taxas do gateway
+    order_value: 94.90
+    ```
+  </Accordion>
+  
+  <Accordion title="Teste em ambiente sandbox" icon="flask">
+    Use webhooks de teste dos gateways e uma campanha de testes **antes** de produção.
+    
+    **Stripe:** Use test keys e `stripe trigger` CLI
+    
+    **Mercado Pago:** Use ambiente de testes
+    
+    **PagSeguro:** Use sandbox
+  </Accordion>
+  
+  <Accordion title="Implemente retry com idempotência" icon="rotate">
+    Se falhar, pode tentar novamente. O sistema **ignora duplicatas** pelo `order_id`.
+    
+    ```javascript
+    async function trackConversion(data, retries = 3) {
+      for (let i = 0; i < retries; i++) {
+        try {
+          await sendToAffiliatus(data);
+          return; // Sucesso
+        } catch (error) {
+          if (i === retries - 1) throw error;
+          await sleep(1000 * Math.pow(2, i)); // Backoff exponencial
+        }
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Troubleshooting
+
+### Conversões não aparecem no dashboard
+
+<Steps>
+  <Step title="Verifique se order_value é positivo">
+    O valor deve ser maior que zero
+    
+    ```javascript
+    // ✅ Válido
+    order_value: 99.90
+    
+    // ❌ Inválido
+    order_value: 0
+    order_value: -50
+    ```
+  </Step>
+  
+  <Step title="Confirme se não é duplicata">
+    Cheque se o `order_id` já foi usado anteriormente
+    
+    Query no dashboard ou logs do sistema
+  </Step>
+  
+  <Step title="Valide limites do plano">
+    Veja se não atingiu o limite mensal de conversões
+    
+    Dashboard → Configurações → Plano
+  </Step>
+  
+  <Step title="Verifique logs de erro">
+    Cheque resposta da API para mensagens de erro
+    
+    ```javascript
+    const response = await fetch(/* ... */);
+    const data = await response.json();
+    
+    if (!response.ok) {
+      console.error('Erro:', data);
+    }
+    ```
+  </Step>
+</Steps>
+
+### Conversões não geram comissão
+
+<Steps>
+  <Step title="Verifique se affiliate está ativo">
+    Status deve ser `active`, não `inactive`
+  </Step>
+  
+  <Step title="Confirme configuração da campanha">
+    `commission_type` e `commission_value` devem estar configurados
+  </Step>
+  
+  <Step title="Aprove manualmente no dashboard">
+    Conversões ficam `pending` até aprovação manual
+    
+    Dashboard → Conversões → Ações → Aprovar
+  </Step>
+</Steps>
+
+### Erro "order_id already exists"
+
+Isso significa que você está tentando enviar uma conversão com `order_id` que já existe.
+
+**Soluções:**
+1. Se é uma tentativa de reenvio → Está tudo bem, o sistema já registrou
+2. Se é uma nova venda → Use um `order_id` diferente e único
+
+---
+
+## Próximos Passos
+
+<CardGroup cols={2}>
+  <Card title="Integração Stripe" icon="stripe" href="/integrations/stripe">
+    Guia completo de integração com Stripe
+  </Card>
+  
+  <Card title="Integração Woovi" icon="pix" href="/integrations/woovi">
+    Guia completo de integração com Woovi (Pix)
+  </Card>
+  
+  <Card title="Aprovar Conversões" icon="circle-check" href="https://app.affiliatus.io/dashboard/conversions">
+    Gerenciar conversões no dashboard
+  </Card>
+  
+  <Card title="Criar Payouts" icon="money-bill" href="https://app.affiliatus.io/dashboard/payouts">
+    Processar pagamentos para afiliados
+  </Card>
+</CardGroup>
+
