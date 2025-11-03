@@ -187,7 +187,7 @@ echo "Comissões: R$ " . number_format($affiliate['totalCommissions'], 2, ',', '
 ```json
 {
   "statusCode": 404,
-  "message": "Affiliate not found or does not belong to this campaign",
+  "message": "Affiliate not found",
   "error": "Not Found"
 }
 ```
@@ -198,6 +198,10 @@ echo "Comissões: R$ " . number_format($affiliate['totalCommissions'], 2, ',', '
 - O afiliado foi deletado
 
 **Solução:** Verifique se o ID está correto e se o afiliado pertence à sua campanha.
+
+<Note>
+  **Segurança:** Por motivos de segurança, a API não revela se um afiliado existe em outra campanha. Sempre retorna a mesma mensagem de erro.
+</Note>
 
 ---
 

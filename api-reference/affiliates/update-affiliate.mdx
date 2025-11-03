@@ -378,21 +378,25 @@ const response = await fetch(
 ```json
 {
   "statusCode": 404,
-  "message": "Affiliate not found or does not belong to this campaign",
+  "message": "Affiliate not found",
   "error": "Not Found"
 }
 ```
 
 **Solução:** Verifique se o ID está correto e se o afiliado pertence à sua campanha.
 
+<Note>
+  **Segurança:** A API não revela se um afiliado existe em outra campanha por motivos de segurança.
+</Note>
+
 ---
 
-### 409 - E-mail ou Referral ID Duplicado
+### 409 - E-mail ou Referral ID Não Disponível
 
 ```json
 {
   "statusCode": 409,
-  "message": "Email already exists for this campaign",
+  "message": "Email is not available",
   "error": "Conflict"
 }
 ```
@@ -402,12 +406,16 @@ ou
 ```json
 {
   "statusCode": 409,
-  "message": "Referral ID already exists",
+  "message": "Referral ID is not available",
   "error": "Conflict"
 }
 ```
 
 **Solução:** Use um e-mail ou referralId diferente.
+
+<Note>
+  **Segurança:** As mensagens não revelam se o conflito é dentro da sua campanha ou em outra.
+</Note>
 
 ---
 

@@ -303,12 +303,12 @@ console.log('Referral ID gerado:', affiliate.referralId);
 
 ---
 
-### 409 - E-mail ou Referral ID Duplicado
+### 409 - E-mail ou Referral ID Não Disponível
 
 ```json
 {
   "statusCode": 409,
-  "message": "Email already exists for this campaign",
+  "message": "Email is not available",
   "error": "Conflict"
 }
 ```
@@ -318,12 +318,16 @@ ou
 ```json
 {
   "statusCode": 409,
-  "message": "Referral ID already exists",
+  "message": "Referral ID is not available",
   "error": "Conflict"
 }
 ```
 
 **Solução:** Use um e-mail ou referralId diferente.
+
+<Note>
+  **Segurança:** As mensagens não revelam se o conflito é dentro da sua campanha ou em outra campanha.
+</Note>
 
 ---
 

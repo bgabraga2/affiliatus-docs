@@ -185,7 +185,7 @@ Quando você deleta um afiliado, os seguintes dados são **permanentemente remov
 ```json
 {
   "statusCode": 404,
-  "message": "Affiliate not found or does not belong to this campaign",
+  "message": "Affiliate not found",
   "error": "Not Found"
 }
 ```
@@ -196,6 +196,10 @@ Quando você deleta um afiliado, os seguintes dados são **permanentemente remov
 - O afiliado já foi deletado
 
 **Solução:** Verifique se o ID está correto e se o afiliado pertence à sua campanha.
+
+<Note>
+  **Segurança:** A API não revela se um afiliado existe em outra campanha.
+</Note>
 
 ---
 
