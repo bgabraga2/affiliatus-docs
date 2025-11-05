@@ -1,6 +1,6 @@
 ---
-title: 'Gerenciamento de Afiliados'
-description: 'API completa para gerenciar afiliados em suas campanhas'
+title: "Gerenciamento de Afiliados"
+description: "API completa para gerenciar afiliados em suas campanhas"
 ---
 
 ## Visão Geral
@@ -22,21 +22,24 @@ X-API-Key: sua_api_key_aqui
 ```
 
 <Warning>
-  **Escopo da API Key:** As operações de afiliados são limitadas aos afiliados associados à **campanha da API Key**. Você só pode acessar e gerenciar afiliados da campanha vinculada à sua API Key.
+  **Escopo da API Key:** As operações de afiliados são limitadas aos afiliados
+  associados à **campanha da API Key**. Você só pode acessar e gerenciar
+  afiliados da campanha vinculada à sua API Key.
 </Warning>
 
 ## Limites do Plano
 
 O número de afiliados que você pode criar é limitado pelo seu plano:
 
-| Plano | Limite de Afiliados por Campanha |
-|-------|----------------------------------|
-| **Starter** | 50 afiliados |
-| **Pro** | 500 afiliados |
-| **Premium** | Ilimitado |
+| Plano       | Limite de Afiliados por Campanha |
+| ----------- | -------------------------------- |
+| **Starter** | 50 afiliados                     |
+| **Pro**     | 500 afiliados                    |
+| **Premium** | Ilimitado                        |
 
 <Info>
-  Se você tentar criar um afiliado e já atingiu o limite do seu plano, receberá um erro `403 Forbidden`.
+  Se você tentar criar um afiliado e já atingiu o limite do seu plano, receberá
+  um erro `403 Forbidden`.
 </Info>
 
 ## Rate Limiting
@@ -59,8 +62,8 @@ Um objeto afiliado contém as seguintes informações:
   "status": "active",
   "createdAt": "2024-01-15T10:30:00.000Z",
   "totalConversions": 45,
-  "totalCommissions": 2500.00,
-  "totalPaid": 1200.00
+  "totalCommissions": 2500.0,
+  "totalPaid": 1200.0
 }
 ```
 
@@ -71,36 +74,57 @@ Um objeto afiliado contém as seguintes informações:
 - **email**: E-mail do afiliado (único por campanha)
 - **phone**: Telefone do afiliado (opcional)
 - **referralId**: Código de referência único (usado para rastreamento)
-- **status**: Status do afiliado (`active` ou `inactive`)
+- **status**: Status do afiliado (`pending`, `active` ou `inactive`)
 - **createdAt**: Data de criação do afiliado
 - **totalConversions**: Número total de conversões geradas
 - **totalCommissions**: Valor total de comissões (aprovadas + pagas)
 - **totalPaid**: Valor total já pago ao afiliado
 
 <Note>
-  O campo **password** nunca é retornado nas respostas da API por motivos de segurança.
+  O campo **password** nunca é retornado nas respostas da API por motivos de
+  segurança.
 </Note>
 
 ## Endpoints Disponíveis
 
 <CardGroup cols={2}>
-  <Card title="Criar Afiliado" icon="plus" href="/api-reference/affiliates/create-affiliate">
+  <Card
+    title="Criar Afiliado"
+    icon="plus"
+    href="/api-reference/affiliates/create-affiliate"
+  >
     Adicione um novo afiliado à sua campanha
   </Card>
-  
-  <Card title="Listar Afiliados" icon="list" href="/api-reference/affiliates/list-affiliates">
+
+  <Card
+    title="Listar Afiliados"
+    icon="list"
+    href="/api-reference/affiliates/list-affiliates"
+  >
     Liste todos os afiliados com filtros e paginação
   </Card>
-  
-  <Card title="Consultar Afiliado" icon="user" href="/api-reference/affiliates/get-affiliate">
+
+  <Card
+    title="Consultar Afiliado"
+    icon="user"
+    href="/api-reference/affiliates/get-affiliate"
+  >
     Obtenha detalhes de um afiliado específico
   </Card>
-  
-  <Card title="Atualizar Afiliado" icon="edit" href="/api-reference/affiliates/update-affiliate">
+
+  <Card
+    title="Atualizar Afiliado"
+    icon="edit"
+    href="/api-reference/affiliates/update-affiliate"
+  >
     Atualize informações de um afiliado
   </Card>
-  
-  <Card title="Deletar Afiliado" icon="trash" href="/api-reference/affiliates/delete-affiliate">
+
+  <Card
+    title="Deletar Afiliado"
+    icon="trash"
+    href="/api-reference/affiliates/delete-affiliate"
+  >
     Remova um afiliado da campanha
   </Card>
 </CardGroup>
@@ -112,21 +136,31 @@ Um objeto afiliado contém as seguintes informações:
     Se não fornecer um `referralId` na criação, o sistema gera um automaticamente. Porém, é recomendado usar códigos personalizados que sejam fáceis de identificar (ex: `JOAO123`, `MARIA_INFLUENCER`).
   </Accordion>
 
-  <Accordion title="Valide e-mails antes de criar">
-    O e-mail deve ser único por campanha. Valide antes de enviar para evitar erros de conflito.
-  </Accordion>
+{" "}
+<Accordion title="Valide e-mails antes de criar">
+  O e-mail deve ser único por campanha. Valide antes de enviar para evitar erros
+  de conflito.
+</Accordion>
 
-  <Accordion title="Use senhas fortes">
-    A senha deve ter no mínimo 6 caracteres. Recomendamos senhas com 8+ caracteres incluindo letras, números e símbolos.
-  </Accordion>
+{" "}
+<Accordion title="Use senhas fortes">
+  A senha deve ter no mínimo 6 caracteres. Recomendamos senhas com 8+ caracteres
+  incluindo letras, números e símbolos.
+</Accordion>
 
-  <Accordion title="Gerencie status adequadamente">
-    Use o status `inactive` para desativar temporariamente um afiliado sem deletá-lo. Isso preserva o histórico de conversões.
-  </Accordion>
+{" "}
+<Accordion title="Gerencie status adequadamente">
+  - Use `pending` para afiliados aguardando aprovação (auto-cadastro) - Use
+  `active` para afiliados aprovados que podem gerar conversões - Use `inactive`
+  para desativar temporariamente um afiliado sem deletá-lo, preservando o
+  histórico
+</Accordion>
 
-  <Accordion title="Utilize paginação ao listar">
-    Para grandes listas de afiliados, use os parâmetros `page` e `limit` para otimizar a performance.
-  </Accordion>
+{" "}
+<Accordion title="Utilize paginação ao listar">
+  Para grandes listas de afiliados, use os parâmetros `page` e `limit` para
+  otimizar a performance.
+</Accordion>
 
   <Accordion title="Filtre por status e busca">
     Use os filtros `status` e `search` para encontrar afiliados específicos rapidamente.
@@ -136,20 +170,27 @@ Um objeto afiliado contém as seguintes informações:
 ## Próximos Passos
 
 <CardGroup cols={2}>
-  <Card title="Criar API Key" icon="key" href="https://app.affiliatus.io/dashboard/settings/api-keys">
+  <Card
+    title="Criar API Key"
+    icon="key"
+    href="https://app.affiliatus.io/dashboard/settings/api-keys"
+  >
     Gere sua API key no dashboard
   </Card>
-  
-  <Card title="Enviar Eventos" icon="bolt" href="/api-reference/events/send-events">
+
+  <Card
+    title="Enviar Eventos"
+    icon="bolt"
+    href="/api-reference/events/send-events"
+  >
     Rastreie conversões dos seus afiliados
   </Card>
-  
+
   <Card title="Dashboard" icon="chart-line" href="https://app.affiliatus.io">
     Visualize estatísticas no dashboard
   </Card>
-  
+
   <Card title="Suporte" icon="life-ring" href="mailto:suporte@affiliatus.io">
     Entre em contato conosco
   </Card>
 </CardGroup>
-

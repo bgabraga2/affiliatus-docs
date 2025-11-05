@@ -32,6 +32,7 @@ Este endpoint retorna uma lista paginada de todos os afiliados associados à cam
   Filtrar por status do afiliado
   
   **Valores possíveis:**
+  - `pending` - Apenas afiliados aguardando aprovação
   - `active` - Apenas afiliados ativos
   - `inactive` - Apenas afiliados inativos
   
@@ -88,7 +89,7 @@ Este endpoint retorna uma lista paginada de todos os afiliados associados à cam
     </ResponseField>
 
     <ResponseField name="status" type="string">
-      Status (`active` ou `inactive`)
+      Status (`pending`, `active` ou `inactive`)
     </ResponseField>
 
     <ResponseField name="createdAt" type="string">
@@ -427,7 +428,7 @@ const response = await fetch(
   </Accordion>
 
   <Accordion title="Filtre por status">
-    Use `status=active` para listar apenas afiliados que podem gerar conversões, ou `status=inactive` para revisar afiliados pausados.
+    Use `status=pending` para revisar cadastros aguardando aprovação, `status=active` para listar afiliados que podem gerar conversões, ou `status=inactive` para revisar afiliados pausados.
   </Accordion>
 
   <Accordion title="Combine filtros">
@@ -460,4 +461,5 @@ const response = await fetch(
     Visualize no dashboard
   </Card>
 </CardGroup>
+
 

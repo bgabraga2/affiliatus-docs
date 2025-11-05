@@ -37,6 +37,12 @@
               "integrations/woovi",
               "integrations/api-rest"
             ]
+          },
+          {
+            "group": "Dashboard",
+            "pages": [
+              "dashboard/affiliate-portal"
+            ]
           }
         ]
       },
